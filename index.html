@@ -146,6 +146,115 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-creatblog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/10/16/creatblog/">Mac下如何创建博客</a>
+    </h1>
+  
+
+        
+        <a href="/2019/10/16/creatblog/" class="archive-article-date">
+  	<time datetime="2019-10-15T16:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>既然拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。</p>
+<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="我电脑已经装有nvm，直接用nvm安装node的稳定版本"><a href="#我电脑已经装有nvm，直接用nvm安装node的稳定版本" class="headerlink" title="我电脑已经装有nvm，直接用nvm安装node的稳定版本"></a>我电脑已经装有nvm，直接用nvm安装node的稳定版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm install 12.5.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装hexo，并部署到git-page的deployer"><a href="#安装hexo，并部署到git-page的deployer" class="headerlink" title="安装hexo，并部署到git page的deployer"></a>安装hexo，并部署到git page的deployer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g </span><br><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<h3 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init iblog</span><br></pre></td></tr></table></figure>
+
+<p>这里我因为网络原因经常卡住，导致创造了很多遍iblog文件，这里会出现一个问题，在自动安装dependecies时报出npm ERR! cb() never called!的错误<br>这里需要清除你的npm缓存：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm cache clean -f</span><br></pre></td></tr></table></figure>
+
+<p>很有意思，会得到一个提醒 “希望你知道你在做什么”<br>之后到网络好的地方安装就完成了</p>
+<h3 id="创建github-io仓库并配置SSH密码"><a href="#创建github-io仓库并配置SSH密码" class="headerlink" title="创建github.io仓库并配置SSH密码"></a>创建github.io仓库并配置SSH密码</h3><p>我很早就创建好了，注意仓库名必须为 userName.github.io，我的用户名是LeoMarsX，即LeoMarsX.github.io<br>查看是否有SSH密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -al ~/.ssh</span><br><span class="line">$ No such file or directory</span><br></pre></td></tr></table></figure>
+
+<p>生成SSH密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C<span class="string">"your_email"</span></span><br><span class="line">//your_email:这是github注册时填的邮箱</span><br></pre></td></tr></table></figure>
+
+<p>添加SSH</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<p>查看SSH</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /Users/UserName/.ssh/id_rsa.pub</span><br><span class="line">//UserName :电脑用户名</span><br></pre></td></tr></table></figure>
+
+<p>然后将查看到的SSH复制到github中    Edit profile<br><img src="/picture/test1.png" alt="点击New SSH key"></p>
+<p>测试看是否测试成功</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">Hi XXXX You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="将本地的Hexo文件更新到GitHub仓库中"><a href="#将本地的Hexo文件更新到GitHub仓库中" class="headerlink" title="将本地的Hexo文件更新到GitHub仓库中"></a>将本地的Hexo文件更新到GitHub仓库中</h3><p>到iblog这个根目录打开_config.ymlb配置文件，拉到最下面更改配置信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"><span class="built_in">type</span>: git</span><br><span class="line">repo: https://github.com/userName/userName.github.io.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
+
+<p>注意 这里的冒号之后一定要有一个空格</p>
+<h3 id="快成功啦！"><a href="#快成功啦！" class="headerlink" title="快成功啦！"></a>快成功啦！</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br><span class="line">//如果这时候报错了,执行下面这行代码</span><br><span class="line">$ npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
+<p>就可以登陆访问网站啦</p>
+<h2 id="怎么写博客呢"><a href="#怎么写博客呢" class="headerlink" title="怎么写博客呢"></a>怎么写博客呢</h2><p>打开创建的iblog文件夹，其中的source文件里_posts文件里的markdown文件就是刚刚打开的hexo默认的第一篇文章的文件代码，自己进行修改内容就可以写自己的文章啦。直接新建一个md文件就可以新建一篇文章了。</p>
+<h3 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h3><p>在github里搜索 hexo themes即可看到很多优秀的前端工程师做的主题，根据他们提供的指南就可以让自己的博客更好看了！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/10/16/creatblog/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -298,6 +407,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">教程</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
@@ -347,7 +460,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">很惭愧&lt;br&gt;&lt;br&gt;只做了一点微小的工作&lt;br&gt;谢谢大家</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">慢慢一点点积累，希望能慢慢成长为一个厉害的人</div>
   	  	
     	</section>
     
