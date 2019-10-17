@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Leo的博客</title>
+  <title>puoj 1979 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Leo的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="这学期一时兴起选修选了个acm课，其实就想补补算法题，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力。 Leo本题是一道很简单的搜索题，也正好是课上刚巩固的内容">
+<meta name="keywords" content="算法题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="puoj 1979">
+<meta property="og:url" content="http://yoursite.com/2019/10/17/PekingOJ 1979/index.html">
 <meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="这学期一时兴起选修选了个acm课，其实就想补补算法题，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力。 Leo本题是一道很简单的搜索题，也正好是课上刚巩固的内容">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-17T08:36:08.019Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leo的博客">
+<meta name="twitter:title" content="puoj 1979">
+<meta name="twitter:description" content="这学期一时兴起选修选了个acm课，其实就想补补算法题，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力。 Leo本题是一道很简单的搜索题，也正好是课上刚巩固的内容">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -144,16 +149,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-PekingOJ 1979" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-PekingOJ 1979" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/17/PekingOJ 1979/">puoj 1979</a>
+    <h1 class="article-title" itemprop="name">
+      puoj 1979
     </h1>
   
 
@@ -167,10 +170,10 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>这学期一时兴起选修选了个acm课，其实就想补补算法题，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力。</p>
-<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="本题是一道很简单的搜索题，也正好是课上刚巩固的内容"><a href="#本题是一道很简单的搜索题，也正好是课上刚巩固的内容" class="headerlink" title="本题是一道很简单的搜索题，也正好是课上刚巩固的内容"></a>本题是一道很简单的搜索题，也正好是课上刚巩固的内容</h3>
-        
-          <a class="article-more-a" href="/2019/10/17/PekingOJ 1979/#more">more >></a>
-        
+<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="本题是一道很简单的搜索题，也正好是课上刚巩固的内容"><a href="#本题是一道很简单的搜索题，也正好是课上刚巩固的内容" class="headerlink" title="本题是一道很简单的搜索题，也正好是课上刚巩固的内容"></a>本题是一道很简单的搜索题，也正好是课上刚巩固的内容</h3><a id="more"></a>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  PekingOJ</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by leo on 2019/10/16.</span></span><br><span class="line"><span class="comment">//  Copyright © 2019 leo. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; qq;</span><br><span class="line"><span class="keyword">int</span> Maxstep=<span class="number">1000</span>;</span><br><span class="line"><span class="keyword">int</span> step=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">bool</span> mp[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> countt[<span class="number">1000</span>];</span><br><span class="line"><span class="keyword">char</span> <span class="built_in">map</span>[<span class="number">20</span>][<span class="number">20</span>];</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">-1</span>&#125;;</span><br><span class="line"><span class="keyword">int</span> b[<span class="number">4</span>]=&#123;<span class="number">1</span>,<span class="number">-1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line"><span class="comment">/*bool in(int a,int b,int m,int n)</span></span><br><span class="line"><span class="comment">&#123;</span></span><br><span class="line"><span class="comment">    if(a&gt;=0&amp;&amp;a&lt;=m-1&amp;&amp;b&gt;=0&amp;&amp;b&lt;=n-1)</span></span><br><span class="line"><span class="comment">        return true;</span></span><br><span class="line"><span class="comment">    return false;</span></span><br><span class="line"><span class="comment">&#125;*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> m,<span class="keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    qq.push(x);</span><br><span class="line">    qq.push(y);</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="keyword">int</span> x_coordinate,y_coordinate;</span><br><span class="line">    <span class="keyword">while</span>(!qq.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        x_coordinate=qq.front();</span><br><span class="line">        <span class="comment">//std::cout&lt;&lt;x_coordinate&lt;&lt;endl;</span></span><br><span class="line">        qq.pop();</span><br><span class="line">        y_coordinate=qq.front();</span><br><span class="line">        <span class="comment">//std::cout&lt;&lt;y_coordinate&lt;&lt;endl;</span></span><br><span class="line">        qq.pop();</span><br><span class="line">        countt[step]=countt[step]+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(k=<span class="number">0</span>;k&lt;<span class="number">4</span>;k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">map</span>[x_coordinate+a[k]][y_coordinate+b[k]]==<span class="string">'.'</span>&amp;&amp;!mp[x_coordinate+a[k]][y_coordinate+b[k]])</span><br><span class="line">            &#123;</span><br><span class="line">                mp[x_coordinate+a[k]][y_coordinate+b[k]]=<span class="literal">true</span>;</span><br><span class="line">                qq.push(x_coordinate+a[k]);</span><br><span class="line">                qq.push(y_coordinate+b[k]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m,n;</span><br><span class="line">    <span class="keyword">int</span> cishu=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> enter_x=<span class="number">0</span>,enter_y=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(;step&lt;Maxstep;step++)</span><br><span class="line">    &#123;</span><br><span class="line">        countt[step]=<span class="number">0</span>;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;m&gt;&gt;n;</span><br><span class="line">        <span class="keyword">if</span>(m==<span class="number">0</span>&amp;&amp;n==<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> e=<span class="number">0</span>;e&lt;n;e++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> r=<span class="number">0</span>;r&lt;m;r++)</span><br><span class="line">                mp[e][r]=<span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;m;j++)&#123;</span><br><span class="line">                <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;<span class="built_in">map</span>[i][j];</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">map</span>[i][j]==<span class="string">'@'</span>)&#123;</span><br><span class="line">                    enter_x=i;</span><br><span class="line">                    enter_y=j;</span><br><span class="line">                    mp[i][j]=<span class="literal">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//std::cout&lt;&lt;enter_x&lt;&lt;enter_y;</span></span><br><span class="line">    <span class="comment">//std::cout&lt;&lt;map[enter_x][enter_y];</span></span><br><span class="line"></span><br><span class="line">        cishu++;</span><br><span class="line">        bfs(enter_x,enter_y,m,n);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> ii=<span class="number">0</span>;ii&lt;<span class="number">20</span>;ii++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> jj=<span class="number">0</span>;jj&lt;<span class="number">20</span>;jj++)</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">map</span>[ii][jj]=<span class="string">'#'</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> l=<span class="number">0</span>;l&lt;cishu;l++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;countt[l]&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
       
 
       
@@ -192,16 +195,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/17/PekingOJ 1979/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/17/PekingOJ 1979/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/16/creatblog/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mac下如何创建博客</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -221,150 +283,14 @@
 
 
 
-
   
-    <article id="post-creatblog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/16/creatblog/">Mac下如何创建博客</a>
-    </h1>
   
 
-        
-        <a href="/2019/10/16/creatblog/" class="archive-article-date">
-  	<time datetime="2019-10-15T16:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。</p>
-<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"><a href="#我电脑已经装有nvm，可直接用nvm安装node的稳定版本" class="headerlink" title="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"></a>我电脑已经装有nvm，可直接用nvm安装node的稳定版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvm install 12.5.0</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2019/10/16/creatblog/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/16/creatblog/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/15/hello-world/">第一篇博客</a>
-    </h1>
   
 
-        
-        <a href="/2019/10/15/hello-world/" class="archive-article-date">
-  	<time datetime="2019-10-15T08:01:29.955Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>终于有了自己的一个博客啦！折腾了一个下午吧，后面整理一下把搭建这个博客的教程，遇到的问题整理下来。</p>
-<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="Really-Exicted"><a href="#Really-Exicted" class="headerlink" title="Really Exicted."></a>Really Exicted.</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Gonna to be a great person.</span><br></pre></td></tr></table></figure>
-
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2019/10/15/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -387,8 +313,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
