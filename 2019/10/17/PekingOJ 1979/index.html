@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Leo的博客">
 <meta property="og:description" content="这学期一时兴起选修选了个acm课，其实就想补补自己的数据结构和算法，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力，算法题我主要以C++来实现，因为自己C++没有系统的学习过，就以练代学吧！ Leo本题是一道很简单的搜索题，也正好是课上刚巩固的内容。这里我使用的是广度优先搜索，单纯因为想练练广搜的算法实现。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-20T07:17:55.585Z">
+<meta property="og:updated_time" content="2019-10-20T07:40:55.393Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PekingUniversityOJ No.1979">
 <meta name="twitter:description" content="这学期一时兴起选修选了个acm课，其实就想补补自己的数据结构和算法，大学前两年下来感觉代码功底不够扎实，希望借此机会巩固加强一下代码能力，算法题我主要以C++来实现，因为自己C++没有系统的学习过，就以练代学吧！ Leo本题是一道很简单的搜索题，也正好是课上刚巩固的内容。这里我使用的是广度优先搜索，单纯因为想练练广搜的算法实现。">
@@ -61,8 +61,6 @@
 			<ul>
 			
 				<li><a href="/">主页</a></li>
-	        
-				<li><a href="/tags/薛老师/">薛老师</a></li>
 	        
 			</ul>
 		</nav>
@@ -114,8 +112,6 @@
 			
 				
 			
-				
-			
 			
 			
 			<nav class="header-nav">
@@ -132,9 +128,7 @@
 				<ul style="width: 50%">
 				
 				
-					<li style="width: 50%"><a href="/">主页</a></li>
-		        
-					<li style="width: 50%"><a href="/tags/薛老师/">薛老师</a></li>
+					<li style="width: 100%"><a href="/">主页</a></li>
 		        
 				</ul>
 			</nav>
@@ -186,7 +180,7 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  main.cpp</span></span><br><span class="line"><span class="comment">//  PekingOJ</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//  Created by leo on 2019/10/18.</span></span><br><span class="line"><span class="comment">//  Copyright © 2019 leo. All rights reserved.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="built_in">queue</span>&lt;<span class="keyword">int</span>&gt; qq;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> countt;</span><br><span class="line"><span class="keyword">int</span> a[<span class="number">4</span>]=&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">-1</span>&#125;;      <span class="comment">//a和b数组定义了上下左右“走”的规则 课上老师讲了道例题是象棋马的搜索，只要修改这两个数组即可</span></span><br><span class="line"><span class="keyword">int</span> b[<span class="number">4</span>]=&#123;<span class="number">1</span>,<span class="number">-1</span>,<span class="number">0</span>,<span class="number">0</span>&#125;;</span><br><span class="line"><span class="keyword">char</span> <span class="built_in">map</span>[<span class="number">20</span>][<span class="number">20</span>];           <span class="comment">//最大是一个20*w20的盘子</span></span><br><span class="line"><span class="keyword">bool</span> mp[<span class="number">20</span>][<span class="number">20</span>];            <span class="comment">//防止状态重复</span></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">in</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b,<span class="keyword">int</span> m,<span class="keyword">int</span> n)</span>    <span class="comment">//判断是否有越界</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (a&gt;=<span class="number">0</span>&amp;&amp;a&lt;=n<span class="number">-1</span>&amp;&amp;b&gt;=<span class="number">0</span>&amp;&amp;b&lt;=m<span class="number">-1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bfs</span><span class="params">(<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> m,<span class="keyword">int</span> n)</span></span>&#123;      <span class="comment">//广度优先搜索主要就借助队列来实现</span></span><br><span class="line">    qq.push(x);</span><br><span class="line">    qq.push(y);</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">    <span class="keyword">int</span> x_coordinate,y_coordinate;</span><br><span class="line">    <span class="keyword">while</span>(!qq.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        x_coordinate=qq.front();</span><br><span class="line">        <span class="comment">//std::cout&lt;&lt;x_coordinate&lt;&lt;endl;</span></span><br><span class="line">        qq.pop();</span><br><span class="line">        y_coordinate=qq.front();</span><br><span class="line">        <span class="comment">//std::cout&lt;&lt;y_coordinate&lt;&lt;endl;</span></span><br><span class="line">        qq.pop();</span><br><span class="line">        countt=countt+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(k=<span class="number">0</span>;k&lt;<span class="number">4</span>;k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(<span class="built_in">map</span>[x_coordinate+a[k]][y_coordinate+b[k]]==<span class="string">'.'</span>&amp;&amp;!mp[x_coordinate+a[k]][y_coordinate+b[k]]&amp;&amp;in(x_coordinate+a[k],y_coordinate+b[k],m,n))</span><br><span class="line">            &#123;</span><br><span class="line">                mp[x_coordinate+a[k]][y_coordinate+b[k]]=<span class="literal">true</span>;</span><br><span class="line">                qq.push(x_coordinate+a[k]);</span><br><span class="line">                qq.push(y_coordinate+b[k]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">         </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> m,n;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> enter_x=<span class="number">0</span>,enter_y=<span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(<span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;m&gt;&gt;n)</span><br><span class="line">        &#123;</span><br><span class="line"></span><br><span class="line">            countt=<span class="number">0</span>;</span><br><span class="line">            <span class="keyword">if</span>(m==<span class="number">0</span>&amp;&amp;n==<span class="number">0</span>)&#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> e=<span class="number">0</span>;e&lt;n;e++)              <span class="comment">//初始化用于判重的矩阵</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> r=<span class="number">0</span>;r&lt;m;r++)</span><br><span class="line">                    mp[e][r]=<span class="literal">false</span>;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;m;j++)&#123;</span><br><span class="line">                    <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;<span class="built_in">map</span>[i][j];</span><br><span class="line">                    <span class="keyword">if</span> (<span class="built_in">map</span>[i][j]==<span class="string">'@'</span>)&#123;</span><br><span class="line">                        enter_x=i;</span><br><span class="line">                        enter_y=j;</span><br><span class="line">                        mp[i][j]=<span class="literal">true</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">    <span class="comment">//std::cout&lt;&lt;enter_x&lt;&lt;enter_y;</span></span><br><span class="line">    <span class="comment">//std::cout&lt;&lt;map[enter_x][enter_y];</span></span><br><span class="line">        bfs(enter_x,enter_y,m,n);</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;countt&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>很久没有写算法题了，代码自认为写得就不是很好看，其实中间还有很多可以改变的地方。看过别人写的这道题的代码。不使用单独的判重数组，每次访问到队列中的某个节点后将此节点上的内容改为‘#’，也就没法再次访问了，也是很好的想法。不过我还是倾向去将各个模块分割，重复状态的判断我认为还是在搜索算法里是一个很重要的模块。</p>
-<h3 id="coding期间出现的问题"><a href="#coding期间出现的问题" class="headerlink" title="coding期间出现的问题"></a>coding期间出现的问题</h3><p>忘记初始化判重数组【一开始我也没写bool in函数】，导致在从第二次瓦片读取后可能会出错。</p>
+<h3 id="coding期间出现的问题"><a href="#coding期间出现的问题" class="headerlink" title="coding期间出现的问题"></a>coding期间出现的问题</h3><p>忘记初始化判重数组【一开始我也没写bool in函数】，导致在从第二次及以后的瓦片读取后计算可能会出错（遗留下来的map会影响下一张map）。</p>
 
       
 
@@ -270,9 +264,18 @@
   
 <nav id="article-nav">
   
+    <a href="/2019/10/18/PekingOJ 1222/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          PekingUniversityOJ No.1222
+        
+      </div>
+    </a>
   
-    <a href="/2019/10/17/PekingOJ 1222/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">PekingUniversityOJ No.1222</div>
+  
+    <a href="/2019/10/16/creatblog/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mac下如何创建博客</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -394,11 +397,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">教程</a>
+                <a href="javascript:void(0)" class="js-tag color4">算法题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">算法题</a>
+                <a href="javascript:void(0)" class="js-tag color3">教程</a>
               </li>
             
             <div class="clearfix"></div>

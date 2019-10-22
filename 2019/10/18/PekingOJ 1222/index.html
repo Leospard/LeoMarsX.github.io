@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | Leo的博客</title>
+  <title>PekingUniversityOJ No.1222 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Leo的博客">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&amp;gt;暗/暗-&amp;gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！ Leo">
+<meta name="keywords" content="算法题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PekingUniversityOJ No.1222">
+<meta property="og:url" content="http://yoursite.com/2019/10/18/PekingOJ 1222/index.html">
 <meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&amp;gt;暗/暗-&amp;gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！ Leo">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-22T13:38:14.374Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leo的博客">
+<meta name="twitter:title" content="PekingUniversityOJ No.1222">
+<meta name="twitter:description" content="这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&amp;gt;暗/暗-&amp;gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！ Leo">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -138,36 +143,63 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-PekingOJ 1222" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      PekingUniversityOJ No.1222
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/18/PekingOJ 1222/" class="archive-article-date">
+
+        
+        <a href="/2019/10/18/PekingOJ 1222/" class="archive-article-date">
   	<time datetime="2019-10-18T09:02:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-18</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/18/PekingOJ 1222/">PekingUniversityOJ No.1222</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&gt;暗/暗-&gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！</p>
+<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><a id="more"></a>
+<p>Description</p>
+<p>In an extended version of the game Lights Out, is a puzzle with 5 rows of 6 buttons each (the actual puzzle has 5 rows of 5 buttons each). Each button has a light. When a button is pressed, that button and each of its (up to four) neighbors above, below, right and left, has the state of its light reversed. (If on, the light is turned off; if off, the light is turned on.) Buttons in the corners change the state of 3 buttons; buttons on an edge change the state of 4 buttons and other buttons change the state of 5. For example, if the buttons marked X on the left below were to be pressed,the display would change to the image on the right. </p>
+<p>The aim of the game is, starting from any initial set of lights on in the display, to press buttons to get the display to a state where all lights are off. When adjacent buttons are pressed, the action of one button can undo the effect of another. For instance, in the display below, pressing buttons marked X in the left display results in the right display.Note that the buttons in row 2 column 3 and row 2 column 5 both change the state of the button in row 2 column 4,so that, in the end, its state is unchanged. </p>
+<p>Note: </p>
+<ol>
+<li>It does not matter what order the buttons are pressed. </li>
+<li>If a button is pressed a second time, it exactly cancels the effect of the first press, so no button ever need be pressed more than once. </li>
+<li>As illustrated in the second diagram, all the lights in the first row may be turned off, by pressing the corresponding buttons in the second row. By repeating this process in each row, all the lights in the first<br>four rows may be turned out. Similarly, by pressing buttons in columns 2, 3 ?, all lights in the first 5 columns may be turned off.<br>Write a program to solve the puzzle.<br>Input</li>
+</ol>
+<p>The first line of the input is a positive integer n which is the number of puzzles that follow. Each puzzle will be five lines, each of which has six 0 or 1 separated by one or more spaces. A 0 indicates that the light is off, while a 1 indicates that the light is on initially.<br>Output</p>
+<p>For each puzzle, the output consists of a line with the string: “PUZZLE #m”, where m is the index of the puzzle in the input file. Following that line, is a puzzle-like display (in the same format as the input) . In this case, 1’s indicate buttons that must be pressed to solve the puzzle, while 0 indicate buttons, which are not pressed. There should be exactly one space between each 0 or 1 in the output puzzle-like display.<br>Sample Input</p>
+<p>2<br>0 1 1 0 1 0<br>1 0 0 1 1 1<br>0 0 1 0 0 1<br>1 0 0 1 0 1<br>0 1 1 1 0 0<br>0 0 1 0 1 0<br>1 0 1 0 1 1<br>0 0 1 0 1 1<br>1 0 1 1 0 0<br>0 1 0 1 0 0<br>Sample Output</p>
+<p>PUZZLE #1<br>1 0 1 0 0 1<br>1 1 0 1 0 1<br>0 0 1 0 1 1<br>1 0 0 1 0 0<br>0 1 0 0 0 0<br>PUZZLE #2<br>1 0 0 1 1 1<br>1 1 0 0 0 0<br>0 0 0 1 0 0<br>1 1 0 1 0 1<br>1 0 1 1 0 1<br>Source</p>
+<p>Greater New York 2002</p>
+<h1 id="总体思路：二进制枚举-贪心"><a href="#总体思路：二进制枚举-贪心" class="headerlink" title="总体思路：二进制枚举+贪心"></a>总体思路：<strong>二进制枚举+贪心</strong></h1><h2 id="首先介绍一下二进制枚举算法"><a href="#首先介绍一下二进制枚举算法" class="headerlink" title="首先介绍一下二进制枚举算法"></a>首先介绍一下二进制枚举算法</h2><p>这里要了解位运算，尤其是按位与还有移位运算。</p>
+<h3 id="移位运算"><a href="#移位运算" class="headerlink" title="移位运算"></a>移位运算</h3><p>a&lt;&lt;b运算就是，将二进制a向左移b位，也就是a右边添上b个0。如2的二进制是10，向左移一位就是100，则为十进制4，不难发现左移n位，及等价于乘上2^n<br>那么下面的代码即可遍历0到2^(n-1)之内的数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span> &lt;&lt; n); i++);</span><br></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
+<h3 id="按位与运算"><a href="#按位与运算" class="headerlink" title="按位与运算"></a>按位与运算</h3><p>运算规则：0&amp;0=0;  0&amp;1=0;   1&amp;0=0;    1&amp;1=1;<br>对于某个二进制数10100</p>
+<blockquote>
+<p>10100&amp;00001=00000<br>10100&amp;00010=00000<br>10100&amp;00100=00100<br>10100&amp;01000=00000<br>10100&amp;10000=10000<br>举上面的例子其实就是更好得解释二进制枚举<br>下面展示较完整的代码</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; (<span class="number">1</span>&lt;&lt;n); i++) <span class="comment">//从0～2^n-1个状态</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) <span class="comment">//遍历二进制的每一位</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(i &amp; (<span class="number">1</span> &lt;&lt; j))<span class="comment">//判断二进制第j位是否存在</span></span><br><span class="line">        &#123;</span><br><span class="line">        .............<span class="comment">//如果第j位存在，则改变相应状态变量【做题用】</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对于这个题目，我们其实只要二进制枚举第一行灯的按压状态，而之后的每一行直接运用贪心算法即可，即上一行哪个灯亮，就按对应下一行的灯，保证上一行的灯全暗。<br>其实有个小疑问，是否会出现一种初始状态，出现无解的情况呢。<br>下面附上全部代码，由于北大oj编译器版本较老，声明的数组维度中不能出现变量，所以代码oj是显示compile error的，但思路和解决方法我认为是没问题的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> press[<span class="number">5</span>][<span class="number">6</span>];</span><br><span class="line"><span class="keyword">int</span> puzzle[<span class="number">5</span>][<span class="number">6</span>];</span><br><span class="line"><span class="keyword">int</span> countt=<span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">tanxin</span><span class="params">(<span class="keyword">int</span> puzzle[<span class="number">5</span>][<span class="number">6</span>])</span></span>&#123;     <span class="comment">//贪心算法</span></span><br><span class="line">    <span class="keyword">int</span> i,j,flag=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">4</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(puzzle[i][j]==<span class="number">1</span>)&#123;</span><br><span class="line">                press[i+<span class="number">1</span>][j]=<span class="number">1</span>;</span><br><span class="line">                puzzle[i+<span class="number">1</span>][j]=(puzzle[i+<span class="number">1</span>][j]+<span class="number">1</span>)%<span class="number">2</span>;</span><br><span class="line">                <span class="keyword">if</span>(j!=<span class="number">0</span>)&#123;            <span class="comment">//第一列</span></span><br><span class="line">                    puzzle[i+<span class="number">1</span>][j<span class="number">-1</span>]=(puzzle[i+<span class="number">1</span>][j<span class="number">-1</span>]+<span class="number">1</span>)%<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(j!=<span class="number">5</span>)&#123;            <span class="comment">//最后一列</span></span><br><span class="line">                    puzzle[i+<span class="number">1</span>][j+<span class="number">1</span>]=(puzzle[i+<span class="number">1</span>][j+<span class="number">1</span>]+<span class="number">1</span>)%<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">if</span>(i!=<span class="number">3</span>)&#123;            <span class="comment">//倒数第二行</span></span><br><span class="line">                    puzzle[i+<span class="number">2</span>][j]=(puzzle[i+<span class="number">2</span>][j]+<span class="number">1</span>)%<span class="number">2</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;<span class="number">6</span>;j++)&#123;               <span class="comment">//仅需判断最后一行是否全0即可，因为是贪心算法做的</span></span><br><span class="line">        <span class="keyword">if</span>(puzzle[<span class="number">4</span>][j]==<span class="number">1</span>)&#123;</span><br><span class="line">            flag=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(flag)&#123;</span><br><span class="line">        countt++;</span><br><span class="line">        <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="string">"PUZZLE #"</span>&lt;&lt;countt&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line"></span><br><span class="line">                <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;press[i][j]&lt;&lt;<span class="string">' '</span>;</span><br><span class="line">            </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">cout</span>&lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(<span class="keyword">int</span> <span class="built_in">map</span>[][<span class="number">6</span>])</span></span>&#123;   <span class="comment">//枚举第一行，贪心剩余几行</span></span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> modd;</span><br><span class="line">        <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">64</span>;i++)&#123;        <span class="comment">//i&lt;(1&lt;&lt;6)</span></span><br><span class="line">            <span class="built_in">memcpy</span>(puzzle,<span class="built_in">map</span>,<span class="keyword">sizeof</span>(puzzle));</span><br><span class="line">            <span class="built_in">memset</span>(press,<span class="number">0</span>,<span class="keyword">sizeof</span>(press));</span><br><span class="line">            <span class="keyword">for</span>(modd=<span class="number">0</span>;modd&lt;<span class="number">6</span>;modd++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(i&amp;(<span class="number">1</span>&lt;&lt;modd))&#123;<span class="comment">//1&lt;&lt;mod 除了向左移的那一位1，剩余的都是0，所以我们就可以得到那一位是不是1</span></span><br><span class="line">                        puzzle[<span class="number">0</span>][modd]=(<span class="number">1</span>+puzzle[<span class="number">0</span>][modd])%<span class="number">2</span>;</span><br><span class="line">                        puzzle[<span class="number">1</span>][modd]=(<span class="number">1</span>+puzzle[<span class="number">1</span>][modd])%<span class="number">2</span>;</span><br><span class="line">                        <span class="keyword">if</span>(modd!=<span class="number">0</span>)&#123;</span><br><span class="line">                            puzzle[<span class="number">0</span>][modd<span class="number">-1</span>]=(<span class="number">1</span>+puzzle[<span class="number">0</span>][modd<span class="number">-1</span>])%<span class="number">2</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span>(modd!=<span class="number">5</span>)&#123;</span><br><span class="line">                            puzzle[<span class="number">0</span>][modd+<span class="number">1</span>]=(<span class="number">1</span>+puzzle[<span class="number">0</span>][modd+<span class="number">1</span>])%<span class="number">2</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        press[<span class="number">0</span>][modd]=<span class="number">1</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            tanxin(puzzle);        <span class="comment">//判断</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">const</span> <span class="keyword">char</span> * argv[])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> times=<span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> m,i,j;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;times;</span><br><span class="line">    m=<span class="number">5</span>*times;</span><br><span class="line">    <span class="keyword">int</span> puzzlee[m][<span class="number">6</span>];</span><br><span class="line">    <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;m;i++)&#123;</span><br><span class="line">        <span class="keyword">for</span>(j=<span class="number">0</span>;j&lt;<span class="number">6</span>;j++)&#123;</span><br><span class="line">            <span class="built_in">std</span>::<span class="built_in">cin</span>&gt;&gt;puzzlee[i][j];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">            </span><br><span class="line">   <span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;times;i++)</span><br><span class="line">        solve(puzzlee+i*<span class="number">5</span>);     <span class="comment">//每一次迭代，指向puzzle数组的next5行</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -179,122 +211,106 @@
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/18/PekingOJ 1222/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/17/PekingOJ 1979/" class="archive-article-date">
-  	<time datetime="2019-10-17T08:32:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-17</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/17/PekingOJ 1979/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">PekingUniversityOJ No.1979</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/17/PekingOJ 1979/">PekingUniversityOJ No.1979</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">算法题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/16/creatblog/" class="archive-article-date">
-  	<time datetime="2019-10-15T16:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/16/creatblog/">Mac下如何创建博客</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/10/15/hello-world/" class="archive-article-date">
-  	<time datetime="2019-10-15T08:01:29.955Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-15</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/10/15/hello-world/">第一篇博客</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -317,8 +333,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
