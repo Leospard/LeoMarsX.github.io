@@ -8,18 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>语法分析器 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。  主要工作：  设计函数绘图语言的文法，使其适合递归下降分析；设计语法树的节点，用于存放表达式的语法树；设计递归下降子程序，分析句子并构造表达式的语法树；设计测试程序和测试用例，检验分析器是否正确。  文法Program   → ε| Program Statement SEMICO Statement →">
+  <meta name="description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。">
 <meta name="keywords" content="编译原理">
 <meta property="og:type" content="article">
 <meta property="og:title" content="语法分析器">
 <meta property="og:url" content="http://yoursite.com/2019/11/10/compiler2/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。  主要工作：  设计函数绘图语言的文法，使其适合递归下降分析；设计语法树的节点，用于存放表达式的语法树；设计递归下降子程序，分析句子并构造表达式的语法树；设计测试程序和测试用例，检验分析器是否正确。  文法Program   → ε| Program Statement SEMICO Statement →">
+<meta property="og:description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-28T09:09:11.390Z">
+<meta property="og:image" content="http://yoursite.com/picture/Tree.png">
+<meta property="og:updated_time" content="2019-11-28T13:42:00.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="语法分析器">
-<meta name="twitter:description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。  主要工作：  设计函数绘图语言的文法，使其适合递归下降分析；设计语法树的节点，用于存放表达式的语法树；设计递归下降子程序，分析句子并构造表达式的语法树；设计测试程序和测试用例，检验分析器是否正确。  文法Program   → ε| Program Statement SEMICO Statement →">
+<meta name="twitter:description" content="语法分析器的构造两个任务：  为句子（表达式）构造语法树；检查程序（语句）中的语法错误。">
+<meta name="twitter:image" content="http://yoursite.com/picture/Tree.png">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -167,6 +169,7 @@
 <blockquote>
 <p>为句子（表达式）构造语法树；<br>检查程序（语句）中的语法错误。</p>
 </blockquote>
+<a id="more"></a>
 <p>主要工作：</p>
 <blockquote>
 <p>设计函数绘图语言的文法，使其适合递归下降分析；<br>设计语法树的节点，用于存放表达式的语法树；<br>设计递归下降子程序，分析句子并构造表达式的语法树；<br>设计测试程序和测试用例，检验分析器是否正确。</p>
@@ -205,7 +208,12 @@
 
 
 <h3 id="最终Expression"><a href="#最终Expression" class="headerlink" title="最终Expression"></a>最终Expression</h3><p>Expression     → Term  { ( PLUS | MINUS) Term }<br>Term           → Factor { ( MUL | DIV ) Factor }<br>Factor      → PLUS Factor | MINUS Factor | Component<br>Component     → Atom [POWER Component]<br>Atom → CONST_ID<br>            | T<br>            | FUNC L_BRACKET Expression R_BRACKET<br>            | L_BRACKET Expression R_BRACKET </p>
-<h2 id="Expression的语法树"><a href="#Expression的语法树" class="headerlink" title="Expression的语法树"></a>Expression的语法树</h2><h3 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h3><p>叶节点：常数、参数T等。<br>两个孩子的内部节点：二元运算如Plus、Mul等。<br>                                    一元加：+5转化为5；<br>                                    一元减：-5转化为0-5。<br>一个孩子的内部节点：函数调用，如cos(t)等。</p>
+<h2 id="构造Expression的语法树"><a href="#构造Expression的语法树" class="headerlink" title="构造Expression的语法树"></a>构造Expression的语法树</h2><p>通过构建语法树，才可在语义分析时</p>
+<h3 id="节点"><a href="#节点" class="headerlink" title="节点"></a>节点</h3><p>叶节点：常数、参数T等。<br>两个孩子的内部节点：二元运算如Plus、Mul等。<br>                                    一元加：+5转化为5；<br>                                    一元减：-5转化为0-5。<br>一个孩子的内部节点：函数调用，如cos(t)等。<br><img src="/picture/Tree.png" alt="示例"></p>
+<blockquote>
+<p>其实用c/c++做会较为简单，因为指针的存在二叉树很方便。java这里我构建了一个类，其中left,right是左子树或右子树的数组序，其实还是通过数组的序来确定这颗树的。</p>
+</blockquote>
+<p>这里代码在语义分析处附上，因为我将语义分析紧接着语法分析做了。因为比较方便,不用重复创建使用Tokens。</p>
 
       
 
