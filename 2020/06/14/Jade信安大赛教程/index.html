@@ -21,7 +21,7 @@
 <meta property="og:image" content="http://yoursite.com/picture/JADE/3.png">
 <meta property="og:image" content="http://yoursite.com/picture/JADE/4.png">
 <meta property="og:image" content="http://yoursite.com/picture/JADE/5.png">
-<meta property="og:updated_time" content="2020-06-14T03:44:25.509Z">
+<meta property="og:updated_time" content="2020-06-14T03:45:56.998Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="信安大赛作品使用指南">
 <meta name="twitter:description" content="本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。 JADE简介JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集">
@@ -182,14 +182,14 @@
 <blockquote>
 <p>JADE-bin-4.5.0（存放JADE的核心部件，它是JADE框架平台的支持文件）<br>JADE-doc-4.5.0（存放JADE的说明文档，其中包括各种程序说明与教程资料）<br>JADE-examples-4.5.0（存放 JADE 的实例源代码）<br>JADE-src-4.5.0（存放JADE框架平台的源代码，JADE为开源项目）</p>
 </blockquote>
-<h3 id="Eclipse开发"><a href="#Eclipse开发" class="headerlink" title="Eclipse开发"></a>Eclipse开发</h3><p>Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;User Libraries新建库，命名为jade，添加jade.jar进这个jade库里<br>新建工程，命名为jade，右击工程，Build Path-&gt;Configure Build Path-&gt;Libraries-&gt;Add Library-&gt;User Library，然后将jade库添加进去<br>在src目录下新建文件夹jadetest，然后将本作品的文件导入<br><img src="/picture/JADE/1.png" alt="Run Configurations"><br>右击AgentSelector.java，选择Run As，选择Run Configurations，选择Java Application，点击添加，Name起名为：Run In JADE（可任意），Project名不变，Main Class起名为：jade.Boot（固定，不可改变），Argument中Program arguments起名为：-gui selector:jadetest.AgentSelector（如果只想打开GUI管理器而不运行程序，则只要-gui即可），其中，selector为智能体的名字，jadetest为包名，AgentSeletor为类名。其他默认即可，配置完成，点击Run，运行如下：<br><img src="/picture/JADE/2.png" alt="GUI"></p>
+<h3 id="Eclipse开发"><a href="#Eclipse开发" class="headerlink" title="Eclipse开发"></a>Eclipse开发</h3><p>Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;User Libraries新建库，命名为jade，添加jade.jar进这个jade库里<br>新建工程，命名为jade，右击工程，Build Path-&gt;Configure Build Path-&gt;Libraries-&gt;Add Library-&gt;User Library，然后将jade库添加进去<br>在src目录下新建文件夹jadetest，然后将本作品的文件导入<br><img src="/picture/JADE/1.png" alt="Run Configurations"></p>
+<p>右击AgentSelector.java，选择Run As，选择Run Configurations，选择Java Application，点击添加，Name起名为：Run In JADE（可任意），Project名不变，Main Class起名为：jade.Boot（固定，不可改变），Argument中Program arguments起名为：-gui selector:jadetest.AgentSelector（如果只想打开GUI管理器而不运行程序，则只要-gui即可），其中，selector为智能体的名字，jadetest为包名，AgentSeletor为类名。其他默认即可，配置完成，点击Run，运行如下：</p>
+<p><img src="/picture/JADE/2.png" alt="GUI"></p>
 <p>可以看到创建出来的selector智能体。这里的selector是用来确定通信过程中哪个Agent智能体为主节点。<br>右击Main-Container点击Start New Agent即可创建一个新的Agent智能体。</p>
 <p><img src="/picture/JADE/3.png" alt="创建新的Agent"></p>
-<blockquote>
 <p>这里Class Name选择jadetest.NodeAgent，点击OK创建好一个Agent：</p>
-</blockquote>
 <p><img src="/picture/JADE/4.png" alt="作品运行UI"></p>
-<p>‘点击帮助了解作品使用方法’</p>
+<p>点击帮助了解作品使用方法</p>
 <p><img src="/picture/JADE/5.png" alt="帮助"></p>
 
       
@@ -402,15 +402,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">OS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">算法题</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">OS</a>
               </li>
             
             <div class="clearfix"></div>
