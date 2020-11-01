@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Leo的博客">
 <meta property="og:description" content="这个博客主要就记录自己在华为3个月实习的经历。总结一个月一做。9.25 -  职位华为Cloud BU 应用与运维域 算法工程师">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-11-01T15:25:47.976Z">
+<meta property="og:updated_time" content="2020-11-01T15:38:05.803Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="华为实习总结">
 <meta name="twitter:description" content="这个博客主要就记录自己在华为3个月实习的经历。总结一个月一做。9.25 -  职位华为Cloud BU 应用与运维域 算法工程师">
@@ -176,12 +176,14 @@
 <h4 id="开始工作"><a href="#开始工作" class="headerlink" title="开始工作"></a>开始工作</h4><p>其实已经到了10.12号，我才确定了自己的方向<br>对于算法的任务，首先就是要对数据有理解，有深刻的理解！我们能拿到什么数据，该怎么分析这些数据，这就是第一步：看懂数据。<br>然后对于数据，尤其在公司里，一定会和其他同事有所沟通交流，为了让别的同事能理解我们所做的工作，我们需要一个demo去展示。 <strong>其实数据可视化展示也可以帮助我们自己更好得理解数据！可视化其实也是一个很有深度的研究领域。</strong><br>最后可以不断对自己的算法进行优化，这种优化会在demo中有所体现。<br>对于我的这个项目，可以比较轻松的从普罗米修斯上获取到现网监控数据，所以不用担心数据的问题。<br>对于算法而言，参照一些论文，Google对于类似问题采用的是<strong>贪心算法</strong>，其实也达到了一个不错的效果，所以我们的想法就是MVP（最小可行性产品）就想采用贪心算法。<br>对于可视化，我才用python Flask+pyecharts绘制，确实都是从头学起，不过flask非常简单，主要要学习的其实是Javascript的DOM还有Jquery框架的使用。</p>
 <p>————————————————————————————————————————————</p>
 <blockquote>
-<p>获取数据+数据预处理<br>写爬虫，爬普罗的数据，其实出现很多问题。AOM限流，难以爬取，暂时沟通还没得到解决方案。</p>
+<p>获取数据+数据预处理</p>
 </blockquote>
+<p>写爬虫，爬普罗的数据，其实出现很多问题。AOM限流，难以爬取，暂时沟通还没得到解决方案。</p>
 <p>其实数据结构的设计，我们到底要存储什么样的数据，怎样存储感觉是非常有学问的。但其实自己真的理解不深刻，也不知道自己写的好不好… 这点是很难受的<br>例如路由表的存储结构<br>一开始我准备像快照一样存储，就分为routing_table和operation_table，定期生成一个完整的routing_table。但导师说这样我得单独开一个线程来做这个工作，消耗太大。最后就采取了单表存储流的所有路由信息。查询时只要挑选各个流距离查询时间最近的那条路由信息即可获得路由表。但其实这样的结构我也不知道未来放入ES中好不好查询，或许未来还得改数据结构..</p>
 <blockquote>
-<p>数据分析<br>以往路由的变更点分析<br>日志流流量分布<br>Topic流量分布</p>
+<p>数据分析</p>
 </blockquote>
+<p>以往路由的变更点分析<br>日志流流量分布<br>Topic流量分布</p>
 <p>其实自己不是很喜欢做这个，做得有点难受</p>
 <blockquote>
 <p>UI（这个伴随着整个项目的生命周期，各个阶段都有相应的可视化展示）<br>做UI前，要思考，要注意展示的点。<br>而此项目，其实就是要注重原来现网的检测数据和自己的算法数据的这种对比感！<br>所以用横向条形图，左侧现网右侧算法，这样对比度更加强烈来进行展示。</p>
@@ -402,15 +404,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">OS</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">教程</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">算法题</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">OS</a>
               </li>
              
               <li class="article-tag-list-item">
