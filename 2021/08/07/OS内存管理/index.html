@@ -6,22 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Mac下如何创建博客 | Leo的博客</title>
+  <title>操作系统内存管理 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
-<meta name="keywords" content="教程">
+  <meta name="description" content="自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。 内存管理目录  物理地址与虚拟地址 内存分段与分页管理 内存组织、分配与释放 小块内存的管理 虚拟内存技术 垃圾收集">
+<meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下如何创建博客">
-<meta property="og:url" content="http://yoursite.com/2019/10/16/creatblog/index.html">
+<meta property="og:title" content="操作系统内存管理">
+<meta property="og:url" content="http://yoursite.com/2021/08/07/OS内存管理/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
+<meta property="og:description" content="自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。 内存管理目录  物理地址与虚拟地址 内存分段与分页管理 内存组织、分配与释放 小块内存的管理 虚拟内存技术 垃圾收集">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/picture/test1.png">
-<meta property="og:updated_time" content="2019-10-16T12:11:03.965Z">
+<meta property="og:image" content="http://yoursite.com/picture/OS/1.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/2.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/3.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/4.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/5.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/6.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/7.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/8.jpg">
+<meta property="og:updated_time" content="2021-08-09T17:05:49.130Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下如何创建博客">
-<meta name="twitter:description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
-<meta name="twitter:image" content="http://yoursite.com/picture/test1.png">
+<meta name="twitter:title" content="操作系统内存管理">
+<meta name="twitter:description" content="自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。 内存管理目录  物理地址与虚拟地址 内存分段与分页管理 内存组织、分配与释放 小块内存的管理 虚拟内存技术 垃圾收集">
+<meta name="twitter:image" content="http://yoursite.com/picture/OS/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -145,63 +152,56 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-creatblog" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-OS内存管理" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Mac下如何创建博客
+      操作系统内存管理
     </h1>
   
 
         
-        <a href="/2019/10/16/creatblog/" class="archive-article-date">
-  	<time datetime="2019-10-15T16:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
+        <a href="/2021/08/07/OS内存管理/" class="archive-article-date">
+  	<time datetime="2021-08-07T07:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。</p>
-<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"><a href="#我电脑已经装有nvm，可直接用nvm安装node的稳定版本" class="headerlink" title="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"></a>我电脑已经装有nvm，可直接用nvm安装node的稳定版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvm install 12.5.0</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
-<h3 id="安装hexo，并部署到git-page的deployer"><a href="#安装hexo，并部署到git-page的deployer" class="headerlink" title="安装hexo，并部署到git page的deployer"></a>安装hexo，并部署到git page的deployer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g </span><br><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<h3 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init iblog</span><br></pre></td></tr></table></figure>
-
-<p>这里我因为网络原因经常卡住，导致创造了很多遍iblog文件，这里会出现一个问题，在自动安装dependecies时报出npm ERR! cb() never called!的错误<br>这里需要清除你的npm缓存：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm cache clean -f</span><br></pre></td></tr></table></figure>
-
-<p>很有意思，会得到一个提醒 “希望你知道你在做什么”<br>之后到网络好的地方安装就完成了</p>
-<h3 id="创建github-io仓库并配置SSH密码"><a href="#创建github-io仓库并配置SSH密码" class="headerlink" title="创建github.io仓库并配置SSH密码"></a>创建github.io仓库并配置SSH密码</h3><p>我很早就创建好了，注意仓库名必须为 userName.github.io，我的用户名是LeoMarsX，即LeoMarsX.github.io<br>查看是否有SSH密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -al ~/.ssh</span><br><span class="line">$ No such file or directory</span><br></pre></td></tr></table></figure>
-
-<p>生成SSH密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C<span class="string">"your_email"</span></span><br><span class="line">//your_email:这是github注册时填的邮箱</span><br></pre></td></tr></table></figure>
-
-<p>添加SSH</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
-
-<p>查看SSH</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /Users/UserName/.ssh/id_rsa.pub</span><br><span class="line">//UserName :电脑用户名</span><br></pre></td></tr></table></figure>
-
-<p>然后将查看到的SSH复制到github中    （先Edit profile，然后点击New SSH key）<br><img src="/picture/test1.png" alt="点击New SSH key"></p>
-<p>测试看是否测试成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">Hi XXXX You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="将本地的Hexo文件更新到GitHub仓库中"><a href="#将本地的Hexo文件更新到GitHub仓库中" class="headerlink" title="将本地的Hexo文件更新到GitHub仓库中"></a>将本地的Hexo文件更新到GitHub仓库中</h3><p>到iblog这个根目录打开_config.ymlb配置文件，拉到最下面更改配置信息</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"><span class="built_in">type</span>: git</span><br><span class="line">repo: https://github.com/userName/userName.github.io.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
-
-<p>注意 这里的所有冒号之后一定都要有一个空格</p>
-<h3 id="快成功啦！"><a href="#快成功啦！" class="headerlink" title="快成功啦！"></a>快成功啦！</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g  //generation生成</span><br><span class="line">$ hexo d  //deploy配置</span><br><span class="line">//如果这时候报错了,执行下面这行代码，再重新输入hexo d</span><br><span class="line">$ npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
-
-<p>就可以登陆访问网站啦</p>
-<h2 id="怎么写博客呢"><a href="#怎么写博客呢" class="headerlink" title="怎么写博客呢"></a>怎么写博客呢</h2><p>打开创建的iblog文件夹，其中的source/_posts文件里的markdown文件就是刚刚打开的hexo默认的第一篇文章的文件代码，自己进行修改内容就可以写自己的文章啦。直接新建一个md文件就可以新建一篇文章了。</p>
-<h3 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h3><p>在github里搜索 hexo themes即可看到很多优秀的前端工程师做的主题，根据他们提供的指南进行安装就可以让自己的博客更好看了！</p>
+        <p>自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。</p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p><strong>目录</strong></p>
+<ol>
+<li>物理地址与虚拟地址</li>
+<li>内存分段与分页管理</li>
+<li>内存组织、分配与释放</li>
+<li>小块内存的管理</li>
+<li>虚拟内存技术</li>
+<li>垃圾收集<a id="more"></a>
+<h2 id="物理地址与虚拟地址"><a href="#物理地址与虚拟地址" class="headerlink" title="物理地址与虚拟地址"></a>物理地址与虚拟地址</h2>在CPU实模式下（16位），程序对于内存的访问直接使用物理地址。随着地址线增多，程序并发要求变高，程序与程序之间地址冲突的各种问题就急需解决了。我们给每个程序一样的虚拟地址空间，通过翻译单元（硬件MMU）将虚拟地址翻译成物理地址。</li>
+</ol>
+<p><strong>那么如何设计这个映射关系表呢</strong>但是如果通过一一映射的地址翻译表。在32 位地址空间下，4GB 虚拟地址的地址关系转换表就会把整个 32 位物理地址空间用完，这显然不行。要是结合前面的保护模式下分段方式呢，地址关系转换表中存放：一个虚拟段基址对应一个物理段基址，这样看似可以，但是因为段长度各不相同，所以依然不可取。综合刚才的分析，系统设计者最后采用一个折中的方案，即把虚拟地址空间和物理地址空间都分成同等大小的块，也称为页，按照虚拟页和物理页进行转换。根据软件配置不同，这个页的大小可以设置为 4KB、2MB、4MB、1GB，这样就进入了现代内存管理模式——分页模型。<br><img src="/picture/OS/1.jpg" alt="分页模型"><br>一直存在内存中的地址关系转换表也就是我们熟悉的页表，其基地址放置在CR3寄存器当中，所以当程序切换（进程切换时）也要修改CR3寄存器的值。最后，当CPU接受到虚拟地址时，将虚拟地址与页表首地址传入MMU即可返回真正的物理地址。</p>
+<h2 id="内存分段与分页管理"><a href="#内存分段与分页管理" class="headerlink" title="内存分段与分页管理"></a>内存分段与分页管理</h2><p>前文已经讨论了一部分选择分段还是分页管理内存的问题，但还不足够。（我认为，分页是真正起效的内存管理模式，分段只是逻辑上的划分起到的作用极小甚至没有）。为何这么说，那得从分段的历史说起，分段最开始是从Intel的8086CPU，受限于价格和技术水平，当时的CPU和寄存器的宽度仍然为16位。那时还是直接访问物理地址的，为了便利地实现多道程序并发运行，也就需要支持对各个程序进行重定位，因为如果不支持重定位，凡是涉及到内存访问的地方都需要将地址硬编码，进而必须把某个程序加载到内存的固定区间。有了分段机制，程序中只需要使用基于段的相对地址，然后更改段基址，就可以方便地对程序进行重定位。当然，在8086CPU中，分段除了服务于重定位的目的，还有其他的作用。具体地说，8086CPU的地址线宽度是20位，可寻址的最大内存空间是1MB，但寄存器这些都是16位， 它是通过段加偏移的方式生成20位的地址，从而实现对1MB内存空间的寻址的。我们经常谈的程序可执行文件的分段，例如代码段数据段这些，在最开始其实就是为了跟上面描述的硬件上的内存分段机制对应，并且逻辑上能够更清晰有序地构造程序的组织结构。<br>但是分段管理从表示方式和状态确定角度、内存碎片、内存和硬盘的数据交换效率（段长度不同，很可能导致系统性能抖动）考虑来看均有很大的缺点，当然段最大的问题还是<strong>使得虚拟内存难以实施</strong>。虚拟内存会在之后的段落详细描述。<br>目前Linux的分段更多的是一种历史包袱，而不是能够提供多大实际作用的内存管理机制。</p>
+<h4 id="分页管理下的MMU页表原理"><a href="#分页管理下的MMU页表原理" class="headerlink" title="分页管理下的MMU页表原理"></a>分页管理下的MMU页表原理</h4><p><img src="/picture/OS/2.jpg" alt="虚拟地址翻译过程"><br>从上面可以看出，一个虚拟地址被分成从左至右四个位段。第一个位段索引顶级页目录中一个项，该项指向一个中级页目录，然后用第二个位段去索引中级页目录中的一个项，该项指向一个页目录，再用第三个位段去索引页目录中的项，该项指向一个物理页地址，最后用第四个位段作该物理页内的偏移去访问物理内存。这就是 MMU 的工作流程。<br><strong>为什么要分成这么多级的页表呢？</strong> 主要为了节省内存，页表也是需要占用空间的，一级页表是必须放在主存之中的，但页表分级之后二级页表便可以存储在磁盘之中，不用占用内存空间。同时，如果一级页表的某些页项为空，则对应的二级页表也无需进行创建。</p>
+<h2 id="内存组织、分配与释放"><a href="#内存组织、分配与释放" class="headerlink" title="内存组织、分配与释放"></a>内存组织、分配与释放</h2><p>这部分将详细介绍与设计一个实际的分页内存管理。此部分参考LMOS操作系统课程。<br>首先要想好页的数据结构需要包含哪些信息：页的状态、页的地址、页的分配记数，页的类型、页的链表。其中链表是方便挂入其他组织页面的数据结构之中所用。<br><img src="/picture/OS/3.jpg" alt="页面组织"><br>dm_mdmlielst 数组挂载连续 msadsc_t 结构的数量等于用 1 左移其数组下标，如数组下标为 3，那结果就是 8（1&lt;&lt;3）个连续的 msadsc_t 结构。因此页面数统统都是 2 的倍数，这样就能实现页内存对齐，减少内存分配时的碎片。同时，2的倍数意味着可以用位操作进行相应计算工作，这比乘法操作要节省较多的CPU时钟。<br>根据这个页面的组织结构，即可设计出相应的页面分配算法。<br><img src="/picture/OS/4.jpg" alt="页面分配"><br>假设现在需要分配一个页面。</p>
+<ol>
+<li>根据一个页面的请求，会返回 m_mdmlielst 数组中的第 0 个 bafhlst_t 结构。</li>
+<li>如果第 0 个 bafhlst_t 结构中有 msadsc_t 结构就直接返回，若没有 msadsc_t 结构，就会继续查找 m_mdmlielst 数组中的第 1 个 bafhlst_t 结构。</li>
+<li>如果第 1 个 bafhlst_t 结构中也没有 msadsc_t 结构，就会继续查找 m_mdmlielst 数组中的第 2 个 bafhlst_t 结构。</li>
+<li>如果第 2 个 bafhlst_t 结构中有 msadsc_t 结构，记住第 2 个 bafhlst_t 结构中对应是 4 个连续的 msadsc_t 结构。这时让这 4 个连续的 msadsc_t 结构从第 2 个 bafhlst_t 结构中脱离。</li>
+<li>把这 4 个连续的 msadsc_t 结构，对半分割成 2 个双 msadsc_t 结构，把其中一个双 msadsc_t 结构挂载到第 1 个 bafhlst_t 结构中。</li>
+<li>把剩下一个双 msadsc_t 结构，继续对半分割成两个单 msadsc_t 结构，把其中一个单 msadsc_t 结构挂载到第 0 个 bafhlst_t 结构中，剩下一个单 msadsc_t 结构返回给请求者，完成内存分配。<br>页面释放算法即是分配的逆算法，这里就不再阐述了。</li>
+</ol>
+<h2 id="小块内存的管理"><a href="#小块内存的管理" class="headerlink" title="小块内存的管理"></a>小块内存的管理</h2><p>内存是非常宝贵的，如果程序申请的内存远远小于一个页面的大小，此时该如何分配内存呢？<br>这部分直接介绍Linux的Slab分配器，我们来看看Linux是如何解决这个问题的。<br><img src="/picture/OS/5.jpg" alt="SLAB对象分配示意图"><br>在 SLAB 分配器中，它把一个内存页面或者一组连续的内存页面，划分成大小相同的块，其中这一个小的内存块就是 SLAB 对象，但是这一组连续的内存页面中不只是 SLAB 对象，还有 SLAB 管理头和着色区。这个着色区也是一块动态的内存块，建立 SLAB 时才会设置它的大小，目的是为了错开不同 SLAB 中的对象地址，降低硬件 Cache 行中的地址争用，以免导致 Cache 抖动效应，整个系统性能下降。<br>最后提及一下Slab对象的大小：Slab分配最小位32B，最大分配单元依赖体系架构。</p>
+<h2 id="虚拟内存技术"><a href="#虚拟内存技术" class="headerlink" title="虚拟内存技术"></a>虚拟内存技术</h2><p>一个英语往往拥有很大的连续地址空间，并且每个应用都是一样的，只有在运行时才能分配到真正的物理内存，在操作系统中这称为虚拟内存。<br>虚拟地址就是逻辑上的一个数值，而虚拟地址空间就是一堆数值的集合。通常情况下，32 位的处理器有 0～0xFFFFFFFF 的虚拟地址空间，而 64 位的虚拟地址空间则更大，有 0～0xFFFFFFFFFFFFFFFF 的虚拟地址空间。<br>虚拟地址空间某种角度也可以称为进程地址空间，关于进程地址空间的描述将留到下一篇操作系统进程中详解。<br>对于虚拟内存技术，便会存在页面存在内存之中与页面存在磁盘之中的区别。虚拟地址传入CPU后查询页表的过程中自然也就存在页命中与页丢失两种情况。下图展示了页命中的情况，图摘自CSAPP。<br><img src="/picture/OS/6.jpg" alt="页命中"><br>如果页缺失，则将调用内核中的缺页异常处理程序，该程序会选择一个牺牲页将其复制回磁盘（这里也涉及很多调换算法，常见的有LRU算法等），接下来将缺失的页面换到内存中。当异常处理程序返回时，CPU会重新启动导致缺页的指令，该指令会把导致缺页的虚拟地址重新发送到地址翻译硬件。此时就能页命中了。<br>或许到此就会产生一个感觉，虚拟内存技术效率有点低，因为不命中的惩罚很大，我们担心页面调度会破坏程序性能。实际上，虚拟内存工作得相当得好，这主要归功于<strong>局部性</strong>，关于局部性就不多说啦。</p>
+<h2 id="垃圾收集"><a href="#垃圾收集" class="headerlink" title="垃圾收集"></a>垃圾收集</h2><p>垃圾收集器将内存视为一张有向可达图，其中具有两种节点：</p>
+<ol>
+<li>根节点（Root Node）：对应于不在堆中但包含指向堆中的指针，可以是寄存器、栈中变量或全局变量等等。</li>
+<li>堆节点（Heap Node）：对应于堆中的一个已分配的块。<br><img src="/picture/OS/7.jpg" alt="垃圾收集器"><br>对于像ML和Java语言，其对指针创建和使用有严格的要求，由此来构建十分精确的可达图，所以能回收所有垃圾。而对于像C和C++这样的语言，垃圾收集器无法维护十分精确的可达图，只能正确地标记所有可达节点，而有一些不可达节点会被错误地标记为可达的，所以会遗留部分垃圾，这种垃圾收集器称为保守的垃圾收集器。<br>下面介绍具体的垃圾收集流程。<strong>Mark&amp;Sweep垃圾收集器</strong>由标记阶段与清除阶段组成，标记阶段标记出根节点的所有可达和以分配的后继，而后面的清除阶段释放每个未被标记的已分配块。块头部中空闲的低位中的一位通常用来表示这个块是否被标记了。<br>标记阶段为每个根节点都调用一次mark函数，首先会判断输入p是否为指针，如果是则返回p指向的堆节点b，然后判断b是否被标记，如果没有，则对其进行标记，并返回b中不包含头部的以字为单位的长度，这样就能依次遍历b中每个字是否指向其他堆节点，再递归地进行标记。这是对图进行DFS。<br>清除阶段会调用一次sweep函数，它会在所有堆节点上反复循环，如果堆节点b是已标记的，则消除它的标记，如果是未标记的已分配堆节点，则将其释放，然后指向b的后继节点。<br><img src="/picture/OS/8.jpg" alt="Mark&amp;Sweep示例"></li>
+</ol>
 
       
 
@@ -215,7 +215,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		
 		</ul>
@@ -271,7 +271,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/16/creatblog/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/08/07/OS内存管理/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -285,18 +285,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/10/17/PekingOJ 1979/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2021/08/13/OS进程/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          PekingUniversityOJ No.1979
+          操作系统进程管理
         
       </div>
     </a>
   
   
-    <a href="/2019/10/15/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">第一篇博客</div>
+    <a href="/2020/11/01/XX实习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">XX实习总结</div>
       <i class="icon-circle-right"></i>
     </a>
   

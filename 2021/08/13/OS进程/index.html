@@ -6,22 +6,25 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Mac下如何创建博客 | Leo的博客</title>
+  <title>操作系统进程管理 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
-<meta name="keywords" content="教程">
+  <meta name="description" content="进程管理目录  进程地址空间 进程切换 进程调度">
+<meta name="keywords" content="操作系统">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下如何创建博客">
-<meta property="og:url" content="http://yoursite.com/2019/10/16/creatblog/index.html">
+<meta property="og:title" content="操作系统进程管理">
+<meta property="og:url" content="http://yoursite.com/2021/08/13/OS进程/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
+<meta property="og:description" content="进程管理目录  进程地址空间 进程切换 进程调度">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/picture/test1.png">
-<meta property="og:updated_time" content="2019-10-16T12:11:03.965Z">
+<meta property="og:image" content="http://yoursite.com/picture/OS/2-1.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/2-2.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/2-3.jpg">
+<meta property="og:image" content="http://yoursite.com/picture/OS/2-4.jpg">
+<meta property="og:updated_time" content="2021-08-12T17:23:32.308Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下如何创建博客">
-<meta name="twitter:description" content="拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。 Leo我电脑已经装有nvm，可直接用nvm安装node的稳定版本1$ nvm install 12.5.0">
-<meta name="twitter:image" content="http://yoursite.com/picture/test1.png">
+<meta name="twitter:title" content="操作系统进程管理">
+<meta name="twitter:description" content="进程管理目录  进程地址空间 进程切换 进程调度">
+<meta name="twitter:image" content="http://yoursite.com/picture/OS/2-1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -145,63 +148,35 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-creatblog" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-OS进程" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Mac下如何创建博客
+      操作系统进程管理
     </h1>
   
 
         
-        <a href="/2019/10/16/creatblog/" class="archive-article-date">
-  	<time datetime="2019-10-15T16:35:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-16</time>
+        <a href="/2021/08/13/OS进程/" class="archive-article-date">
+  	<time datetime="2021-08-12T17:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>拥有了博客，虽然网上有很多很棒的教程了，但我这里想简略记录一下我自己创建博客的操作过程。这篇主要是写给自己看的。</p>
-<h2 id="Leo"><a href="#Leo" class="headerlink" title="Leo"></a>Leo</h2><h3 id="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"><a href="#我电脑已经装有nvm，可直接用nvm安装node的稳定版本" class="headerlink" title="我电脑已经装有nvm，可直接用nvm安装node的稳定版本"></a>我电脑已经装有nvm，可直接用nvm安装node的稳定版本</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvm install 12.5.0</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
-<h3 id="安装hexo，并部署到git-page的deployer"><a href="#安装hexo，并部署到git-page的deployer" class="headerlink" title="安装hexo，并部署到git page的deployer"></a>安装hexo，并部署到git page的deployer</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-cli -g </span><br><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-
-<h3 id="初始化博客"><a href="#初始化博客" class="headerlink" title="初始化博客"></a>初始化博客</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init iblog</span><br></pre></td></tr></table></figure>
-
-<p>这里我因为网络原因经常卡住，导致创造了很多遍iblog文件，这里会出现一个问题，在自动安装dependecies时报出npm ERR! cb() never called!的错误<br>这里需要清除你的npm缓存：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm cache clean -f</span><br></pre></td></tr></table></figure>
-
-<p>很有意思，会得到一个提醒 “希望你知道你在做什么”<br>之后到网络好的地方安装就完成了</p>
-<h3 id="创建github-io仓库并配置SSH密码"><a href="#创建github-io仓库并配置SSH密码" class="headerlink" title="创建github.io仓库并配置SSH密码"></a>创建github.io仓库并配置SSH密码</h3><p>我很早就创建好了，注意仓库名必须为 userName.github.io，我的用户名是LeoMarsX，即LeoMarsX.github.io<br>查看是否有SSH密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ls -al ~/.ssh</span><br><span class="line">$ No such file or directory</span><br></pre></td></tr></table></figure>
-
-<p>生成SSH密钥</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C<span class="string">"your_email"</span></span><br><span class="line">//your_email:这是github注册时填的邮箱</span><br></pre></td></tr></table></figure>
-
-<p>添加SSH</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
-
-<p>查看SSH</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cat /Users/UserName/.ssh/id_rsa.pub</span><br><span class="line">//UserName :电脑用户名</span><br></pre></td></tr></table></figure>
-
-<p>然后将查看到的SSH复制到github中    （先Edit profile，然后点击New SSH key）<br><img src="/picture/test1.png" alt="点击New SSH key"></p>
-<p>测试看是否测试成功</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">Hi XXXX You<span class="string">'ve successfully authenticated, but GitHub does not provide shell access.</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="将本地的Hexo文件更新到GitHub仓库中"><a href="#将本地的Hexo文件更新到GitHub仓库中" class="headerlink" title="将本地的Hexo文件更新到GitHub仓库中"></a>将本地的Hexo文件更新到GitHub仓库中</h3><p>到iblog这个根目录打开_config.ymlb配置文件，拉到最下面更改配置信息</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"><span class="built_in">type</span>: git</span><br><span class="line">repo: https://github.com/userName/userName.github.io.git</span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
-
-<p>注意 这里的所有冒号之后一定都要有一个空格</p>
-<h3 id="快成功啦！"><a href="#快成功啦！" class="headerlink" title="快成功啦！"></a>快成功啦！</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo g  //generation生成</span><br><span class="line">$ hexo d  //deploy配置</span><br><span class="line">//如果这时候报错了,执行下面这行代码，再重新输入hexo d</span><br><span class="line">$ npm install --save hexo-deployer-git</span><br></pre></td></tr></table></figure>
-
-<p>就可以登陆访问网站啦</p>
-<h2 id="怎么写博客呢"><a href="#怎么写博客呢" class="headerlink" title="怎么写博客呢"></a>怎么写博客呢</h2><p>打开创建的iblog文件夹，其中的source/_posts文件里的markdown文件就是刚刚打开的hexo默认的第一篇文章的文件代码，自己进行修改内容就可以写自己的文章啦。直接新建一个md文件就可以新建一篇文章了。</p>
-<h3 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h3><p>在github里搜索 hexo themes即可看到很多优秀的前端工程师做的主题，根据他们提供的指南进行安装就可以让自己的博客更好看了！</p>
+        <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p><strong>目录</strong></p>
+<ol>
+<li>进程地址空间</li>
+<li>进程切换</li>
+<li>进程调度<a id="more"></a>
+了解进程管理，首先就要了解什么进程，为什么会有进程这个概念。（<strong>计算机领域产生的概念/技术大多要从其解决的问题出发进行研究</strong>）<br>在计算机刚诞生的时候，我们利用CPU运行程序这个静态资源，反复做计算的任务，这时还用不到进程。慢慢得随着计算能力的提升，一台计算机在处理复杂任务时可能需要“同时”执行不同的程序，这时，如果没有一个描述程序运行时状态的结构，难以去切换不同程序的执行（无法保存运行状态），进程便因此诞生了。<h2 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h2>了解了进程的基本概念和诞生初衷，就知道进程是一个应用程序运行时刻的实例，它的目的就是操作系统用于管理和运行多个应用程序的；从之前我们研究的内存管理角度看，操作系统是给应用程序提供服务的。所以，从这两个角度看，进程必须要有一个地址空间，这个地址空间至少包括两部分内容：一部分是内核，一部分是用户的应用程序。<br><img src="/picture/OS/2-1.jpg" alt="进程地址结构"><br>上图中有 8 个进程，每个进程拥有 x86 CPU 的整个虚拟地址空间，这个虚拟地址空间被分成了两个部分，上半部分是所有进程都共享的内核部分 ，里面放着一份内核代码和数据，下半部分是应用程序，分别独立，互不干扰。<strong>其实所谓的用户态和内核态切换就要将用户页表切换为内核页表，从而运行内核代码</strong><br>细化的整个进程地址空间则由下图所示。<br><img src="/picture/OS/2-2.jpg" alt="进程地址结构细化示意图"><br>这里带 * 号是每个进程都有独立一份，有了这样的设计结构，多个进程就能并发运行了。</li>
+</ol>
+<h2 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h2><p>还记得上一部分在进程地址空间中的机器上下文结构嘛，这个部分会保存该进程下一次运行的开始地址与下一次运行时的内核栈地址。内核栈会保存各个CPU寄存器的值，当然也保存了内核函数的调用路径。在切换回原进程时，便会将原本保存在内核栈中的CPU数据pop弹出。<br>进程切换时只用两部即可完成1.保存进程的上下文结构，2.通过修改CR3页表地址切换资源（进程的虚拟地址空间）<br><img src="/picture/OS/2-3.jpg" alt="进程切换示意图"><br><strong>总结一下</strong>切换方式：首先，我们把当前进程的通用寄存器保存到当前进程的内核栈中；然后，保存 CPU 的 RSP 寄存器到当前进程的机器上下文结构中，并且读取保存在下一个进程机器上下文结构中的 RSP 的值，把它存到 CPU 的 RSP 寄存器中；接着，调用一个函数切换 MMU 页表；最后，从下一个进程的内核栈中恢复下一个进程的通用寄存器。</p>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><p>进程调度算法的设计是决定性能的一个关键。进程调度算法种类也非常多，这里不会详细介绍各个算法的优劣，主要介绍进程调度的机制。<br>首先<strong>为什么需要进程调度？</strong><br>第一，CPU 同一时刻只能运行一个进程，而 CPU 个数总是比进程个数少，这就需要让多进程共用一个 CPU，每个进程在这个 CPU 上运行一段时间。第二点原因，当一个进程不能获取某种资源，导致它不能继续运行时，就应该让出 CPU。当然你也可以把第一点中的 CPU 时间，也归纳为一种资源，这样就合并为一点：进程拿不到资源就要让出 CPU。<br>管理进程、调度进程就需要知道进程有哪些状态，从而组织进程。<br> <img src="/picture/OS/2-4.jpg" alt="进程状态切换示意图"><br> 其次如何组织进程？最简单的办法就是使用链表数据结构，而且我们的进程有优先级，所以我们可以设计成每个优先级对应一个链表头。<br> 然后就是进程调度器，主要思路就是确定当前正在运行的进程，然后选择下一个将要运行的进程（通过相应的调度算法选取进程，例如根据各个进程的优先级或等待时间），最后从当前运行的进程，切换到下一个将要运行的进程。<br> 根据这个思路我们就发现，内核的进程调度器需要有主动权才能实现其功能，但进程自己一般不会主动让出CPU（除非要等待资源），那么<strong>如何让进程调度器得到控制权呢？</strong> 其实我们的机器会有一个设备去定时发送中断信号，此时控制权就从进程转交给了内核，内核根据相应算法计算出下一个要调用的进程进行进程切换即可。本文不准备讨论相应算法，Linux支持多种调度器：CFS、RT、Dealine、Idle等，有机会单独讲解调度器算法。</p>
 
       
 
@@ -215,7 +190,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">教程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		
 		</ul>
@@ -271,7 +246,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/16/creatblog/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2021/08/13/OS进程/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -285,18 +260,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/10/17/PekingOJ 1979/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          PekingUniversityOJ No.1979
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/10/15/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">第一篇博客</div>
+    <a href="/2021/08/07/OS内存管理/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">操作系统内存管理</div>
       <i class="icon-circle-right"></i>
     </a>
   

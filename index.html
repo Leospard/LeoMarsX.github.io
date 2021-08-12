@@ -140,38 +140,33 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-Linux内存管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-OS进程" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/08/07/Linux内存管理/">操作系统内存管理</a>
+      <a class="article-title" href="/2021/08/13/OS进程/">操作系统进程管理</a>
     </h1>
   
 
         
-        <a href="/2021/08/07/Linux内存管理/" class="archive-article-date">
-  	<time datetime="2021-08-07T07:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-07</time>
+        <a href="/2021/08/13/OS进程/" class="archive-article-date">
+  	<time datetime="2021-08-12T17:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。</p>
-<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p><strong>目录</strong></p>
+        <h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><p><strong>目录</strong></p>
 <ol>
-<li>物理地址与虚拟地址</li>
-<li>内存分段与分页管理</li>
-<li>内存组织、分配与释放</li>
-<li>小块内存的管理</li>
-<li>虚拟内存技术</li>
-<li>垃圾收集</li>
-</ol>
+<li>进程地址空间</li>
+<li>进程切换</li>
+<li>进程调度
         
-          <a class="article-more-a" href="/2021/08/07/Linux内存管理/#more">more >></a>
+          <a class="article-more-a" href="/2021/08/13/OS进程/#more">more >></a>
         
       
 
@@ -195,7 +190,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/08/07/Linux内存管理/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/08/13/OS进程/">展开全文 >></a>
         </p>
       
 
@@ -225,29 +220,37 @@
 
 
   
-    <article id="post-GET与POST的区别" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-OS内存管理" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2021/03/06/GET与POST的区别/">GET与POST的区别</a>
+      <a class="article-title" href="/2021/08/07/OS内存管理/">操作系统内存管理</a>
     </h1>
   
 
         
-        <a href="/2021/03/06/GET与POST的区别/" class="archive-article-date">
-  	<time datetime="2021-03-06T03:25:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-03-06</time>
+        <a href="/2021/08/07/OS内存管理/" class="archive-article-date">
+  	<time datetime="2021-08-07T07:48:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-08-07</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id><a href="#" class="headerlink" title></a></h2><h2 id="-1"><a href="#-1" class="headerlink" title></a></h2><h4 id="-2"><a href="#-2" class="headerlink" title></a></h4><p><strong><em>TODO…..</em></strong></p>
+        <p>自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。</p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p><strong>目录</strong></p>
+<ol>
+<li>物理地址与虚拟地址</li>
+<li>内存分段与分页管理</li>
+<li>内存组织、分配与释放</li>
+<li>小块内存的管理</li>
+<li>虚拟内存技术</li>
+<li>垃圾收集
         
-          <a class="article-more-a" href="/2021/03/06/GET与POST的区别/#more">more >></a>
+          <a class="article-more-a" href="/2021/08/07/OS内存管理/#more">more >></a>
         
       
 
@@ -261,7 +264,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">技术区别</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">操作系统</a>
         		</li>
       		
 		</ul>
@@ -271,7 +274,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2021/03/06/GET与POST的区别/">展开全文 >></a>
+          <a class="article-more-a" href="/2021/08/07/OS内存管理/">展开全文 >></a>
         </p>
       
 
@@ -1022,7 +1025,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">技术区别</a>
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1030,7 +1033,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color4">算法题</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1038,15 +1041,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">算法题</a>
+                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
               </li>
              
               <li class="article-tag-list-item">
