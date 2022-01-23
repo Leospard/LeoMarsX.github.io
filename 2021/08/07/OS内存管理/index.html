@@ -24,7 +24,7 @@
 <meta property="og:image" content="http://yoursite.com/picture/OS/6.jpg">
 <meta property="og:image" content="http://yoursite.com/picture/OS/7.jpg">
 <meta property="og:image" content="http://yoursite.com/picture/OS/8.jpg">
-<meta property="og:updated_time" content="2021-08-09T17:05:49.130Z">
+<meta property="og:updated_time" content="2021-11-15T10:46:53.102Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统内存管理">
 <meta name="twitter:description" content="自实习结束已有近9个月没有更新博客了，这段时间主要在进行毕业设计和毕业旅行噗，毕设做的微服务相关内容暂时不准备整理至博客上。暑假主要稳固基础知识（计算机组成原理、操作系统、计算机网络、数据库原理），弥补本科的缺陷。接下来会更新关于操作系统内存、进程、设备IO、文件系统的内容分享。 内存管理目录  物理地址与虚拟地址 内存分段与分页管理 内存组织、分配与释放 小块内存的管理 虚拟内存技术 垃圾收集">
@@ -202,6 +202,7 @@
 <li>根节点（Root Node）：对应于不在堆中但包含指向堆中的指针，可以是寄存器、栈中变量或全局变量等等。</li>
 <li>堆节点（Heap Node）：对应于堆中的一个已分配的块。<br><img src="/picture/OS/7.jpg" alt="垃圾收集器"><br>对于像ML和Java语言，其对指针创建和使用有严格的要求，由此来构建十分精确的可达图，所以能回收所有垃圾。而对于像C和C++这样的语言，垃圾收集器无法维护十分精确的可达图，只能正确地标记所有可达节点，而有一些不可达节点会被错误地标记为可达的，所以会遗留部分垃圾，这种垃圾收集器称为保守的垃圾收集器。<br>下面介绍具体的垃圾收集流程。<strong>Mark&amp;Sweep垃圾收集器</strong>由标记阶段与清除阶段组成，标记阶段标记出根节点的所有可达和以分配的后继，而后面的清除阶段释放每个未被标记的已分配块。块头部中空闲的低位中的一位通常用来表示这个块是否被标记了。<br>标记阶段为每个根节点都调用一次mark函数，首先会判断输入p是否为指针，如果是则返回p指向的堆节点b，然后判断b是否被标记，如果没有，则对其进行标记，并返回b中不包含头部的以字为单位的长度，这样就能依次遍历b中每个字是否指向其他堆节点，再递归地进行标记。这是对图进行DFS。<br>清除阶段会调用一次sweep函数，它会在所有堆节点上反复循环，如果堆节点b是已标记的，则消除它的标记，如果是未标记的已分配堆节点，则将其释放，然后指向b的后继节点。<br><img src="/picture/OS/8.jpg" alt="Mark&amp;Sweep示例"></li>
 </ol>
+<h4 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h4><p><a href="https://time.geekbang.org/column/intro/100078401" target="_blank" rel="noopener">极客时间LMOS操作系统</a></p>
 
       
 
@@ -339,7 +340,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Leo Shen
+    		&copy; 2022 Leo Shen
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -418,11 +419,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color3">教程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">教程</a>
+                <a href="javascript:void(0)" class="js-tag color4">Lab</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -434,11 +439,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
+                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
+                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
               </li>
              
               <li class="article-tag-list-item">

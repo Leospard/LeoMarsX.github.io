@@ -20,7 +20,7 @@
 <meta property="og:image" content="http://yoursite.com/picture/OS/2-2.jpg">
 <meta property="og:image" content="http://yoursite.com/picture/OS/2-3.jpg">
 <meta property="og:image" content="http://yoursite.com/picture/OS/2-4.jpg">
-<meta property="og:updated_time" content="2021-08-12T17:23:32.308Z">
+<meta property="og:updated_time" content="2021-11-15T10:46:34.112Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="操作系统进程管理">
 <meta name="twitter:description" content="进程管理目录  进程地址空间 进程切换 进程调度">
@@ -176,7 +176,8 @@
 了解进程管理，首先就要了解什么进程，为什么会有进程这个概念。（<strong>计算机领域产生的概念/技术大多要从其解决的问题出发进行研究</strong>）<br>在计算机刚诞生的时候，我们利用CPU运行程序这个静态资源，反复做计算的任务，这时还用不到进程。慢慢得随着计算能力的提升，一台计算机在处理复杂任务时可能需要“同时”执行不同的程序，这时，如果没有一个描述程序运行时状态的结构，难以去切换不同程序的执行（无法保存运行状态），进程便因此诞生了。<h2 id="进程地址空间"><a href="#进程地址空间" class="headerlink" title="进程地址空间"></a>进程地址空间</h2>了解了进程的基本概念和诞生初衷，就知道进程是一个应用程序运行时刻的实例，它的目的就是操作系统用于管理和运行多个应用程序的；从之前我们研究的内存管理角度看，操作系统是给应用程序提供服务的。所以，从这两个角度看，进程必须要有一个地址空间，这个地址空间至少包括两部分内容：一部分是内核，一部分是用户的应用程序。<br><img src="/picture/OS/2-1.jpg" alt="进程地址结构"><br>上图中有 8 个进程，每个进程拥有 x86 CPU 的整个虚拟地址空间，这个虚拟地址空间被分成了两个部分，上半部分是所有进程都共享的内核部分 ，里面放着一份内核代码和数据，下半部分是应用程序，分别独立，互不干扰。<strong>其实所谓的用户态和内核态切换就要将用户页表切换为内核页表，从而运行内核代码</strong><br>细化的整个进程地址空间则由下图所示。<br><img src="/picture/OS/2-2.jpg" alt="进程地址结构细化示意图"><br>这里带 * 号是每个进程都有独立一份，有了这样的设计结构，多个进程就能并发运行了。</li>
 </ol>
 <h2 id="进程切换"><a href="#进程切换" class="headerlink" title="进程切换"></a>进程切换</h2><p>还记得上一部分在进程地址空间中的机器上下文结构嘛，这个部分会保存该进程下一次运行的开始地址与下一次运行时的内核栈地址。内核栈会保存各个CPU寄存器的值，当然也保存了内核函数的调用路径。在切换回原进程时，便会将原本保存在内核栈中的CPU数据pop弹出。<br>进程切换时只用两部即可完成1.保存进程的上下文结构，2.通过修改CR3页表地址切换资源（进程的虚拟地址空间）<br><img src="/picture/OS/2-3.jpg" alt="进程切换示意图"><br><strong>总结一下</strong>切换方式：首先，我们把当前进程的通用寄存器保存到当前进程的内核栈中；然后，保存 CPU 的 RSP 寄存器到当前进程的机器上下文结构中，并且读取保存在下一个进程机器上下文结构中的 RSP 的值，把它存到 CPU 的 RSP 寄存器中；接着，调用一个函数切换 MMU 页表；最后，从下一个进程的内核栈中恢复下一个进程的通用寄存器。</p>
-<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><p>进程调度算法的设计是决定性能的一个关键。进程调度算法种类也非常多，这里不会详细介绍各个算法的优劣，主要介绍进程调度的机制。<br>首先<strong>为什么需要进程调度？</strong><br>第一，CPU 同一时刻只能运行一个进程，而 CPU 个数总是比进程个数少，这就需要让多进程共用一个 CPU，每个进程在这个 CPU 上运行一段时间。第二点原因，当一个进程不能获取某种资源，导致它不能继续运行时，就应该让出 CPU。当然你也可以把第一点中的 CPU 时间，也归纳为一种资源，这样就合并为一点：进程拿不到资源就要让出 CPU。<br>管理进程、调度进程就需要知道进程有哪些状态，从而组织进程。<br> <img src="/picture/OS/2-4.jpg" alt="进程状态切换示意图"><br> 其次如何组织进程？最简单的办法就是使用链表数据结构，而且我们的进程有优先级，所以我们可以设计成每个优先级对应一个链表头。<br> 然后就是进程调度器，主要思路就是确定当前正在运行的进程，然后选择下一个将要运行的进程（通过相应的调度算法选取进程，例如根据各个进程的优先级或等待时间），最后从当前运行的进程，切换到下一个将要运行的进程。<br> 根据这个思路我们就发现，内核的进程调度器需要有主动权才能实现其功能，但进程自己一般不会主动让出CPU（除非要等待资源），那么<strong>如何让进程调度器得到控制权呢？</strong> 其实我们的机器会有一个设备去定时发送中断信号，此时控制权就从进程转交给了内核，内核根据相应算法计算出下一个要调用的进程进行进程切换即可。本文不准备讨论相应算法，Linux支持多种调度器：CFS、RT、Dealine、Idle等，有机会单独讲解调度器算法。</p>
+<h2 id="进程调度"><a href="#进程调度" class="headerlink" title="进程调度"></a>进程调度</h2><p>进程调度算法的设计是决定性能的一个关键。进程调度算法种类也非常多，这里不会详细介绍各个算法的优劣，主要介绍进程调度的机制。<br>首先<strong>为什么需要进程调度？</strong><br>第一，CPU 同一时刻只能运行一个进程，而 CPU 个数总是比进程个数少，这就需要让多进程共用一个 CPU，每个进程在这个 CPU 上运行一段时间。第二点原因，当一个进程不能获取某种资源，导致它不能继续运行时，就应该让出 CPU。当然你也可以把第一点中的 CPU 时间，也归纳为一种资源，这样就合并为一点：进程拿不到资源就要让出 CPU。<br>管理进程、调度进程就需要知道进程有哪些状态，从而组织进程。<br> <img src="/picture/OS/2-4.jpg" alt="进程状态切换示意图"><br> 其次如何组织进程？最简单的办法就是使用链表数据结构，而且我们的进程有优先级，所以我们可以设计成每个优先级对应一个链表头。<br> 然后就是进程调度器，主要思路就是确定当前正在运行的进程，然后选择下一个将要运行的进程（通过相应的调度算法选取进程，例如根据各个进程的优先级或等待时间），最后从当前运行的进程，切换到下一个将要运行的进程。<br> 根据这个思路我们就发现，内核的进程调度器需要有主动权才能实现其功能，但进程自己一般不会主动让出CPU（除非要等待资源)，那么<strong>如何让进程调度器得到控制权呢？</strong> 其实我们的机器会有一个设备去定时发送中断信号，此时控制权就从进程转交给了内核，内核根据相应算法计算出下一个要调用的进程进行进程切换即可。本文不准备讨论相应算法，Linux支持多种调度器：CFS、RT、Dealine、Idle等，有机会单独讲解调度器算法。</p>
+<h4 id="参考内容"><a href="#参考内容" class="headerlink" title="参考内容"></a>参考内容</h4><p><a href="https://time.geekbang.org/column/intro/100078401" target="_blank" rel="noopener">极客时间LMOS操作系统</a></p>
 
       
 
@@ -260,6 +261,15 @@
   
 <nav id="article-nav">
   
+    <a href="/2021/10/20/MIT6.S081部分Lab总结上/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          MIT6.S081 backtrace &amp; Alarm &amp; Lazy...
+        
+      </div>
+    </a>
+  
   
     <a href="/2021/08/07/OS内存管理/" id="article-nav-older" class="article-nav-link-wrap">
       <div class="article-nav-title">操作系统内存管理</div>
@@ -305,7 +315,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2021 Leo Shen
+    		&copy; 2022 Leo Shen
     	</div>
       	<div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
@@ -384,11 +394,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
+                <a href="javascript:void(0)" class="js-tag color3">教程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">教程</a>
+                <a href="javascript:void(0)" class="js-tag color4">Lab</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">操作系统</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -400,11 +414,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
+                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
+                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
               </li>
              
               <li class="article-tag-list-item">
