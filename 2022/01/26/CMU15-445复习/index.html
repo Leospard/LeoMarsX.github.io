@@ -6,15 +6,26 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/11 | Leo的博客</title>
+  <title>CMU15-445课程知识点复习 | Leo的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Leo的博客">
-<meta property="og:url" content="http://yoursite.com/archives/2019/11/index.html">
+  <meta name="description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
+<meta name="keywords" content="数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445课程知识点复习">
+<meta property="og:url" content="http://yoursite.com/2022/01/26/CMU15-445复习/index.html">
 <meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/slotted_page.png">
+<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/log_structed_page.png">
+<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/chained_hash.png">
+<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/extenible_hash.png">
+<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/linear_hash.png">
+<meta property="og:updated_time" content="2022-01-26T17:01:17.386Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Leo的博客">
+<meta name="twitter:title" content="CMU15-445课程知识点复习">
+<meta name="twitter:description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
+<meta name="twitter:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/slotted_page.png">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -138,212 +149,220 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-CMU15-445复习" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CMU15-445课程知识点复习
+    </h1>
+  
+
+        
+        <a href="/2022/01/26/CMU15-445复习/" class="archive-article-date">
+  	<time datetime="2022-01-26T15:23:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-01-26</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文将进行CMU15-445的知识点巩固与复习。</p>
+<p>复习点参考<code>博主：西部小笼包</code>的整理，我进行了参考并加入了一点自己的见解。</p>
+<a id="more"></a>    
+
+<h4 id="数据库存储"><a href="#数据库存储" class="headerlink" title="数据库存储"></a>数据库存储</h4><h5 id="1-为什么需要数据库系统？文件系统不够吗？"><a href="#1-为什么需要数据库系统？文件系统不够吗？" class="headerlink" title="1. 为什么需要数据库系统？文件系统不够吗？"></a>1. 为什么需要数据库系统？文件系统不够吗？</h5><p>首先是更好得解耦，对所需存储的数据的建模（不同场景不同模型）这些逻辑可与物理存储层分离。并且类似查询检查保证数据一致性的逻辑也可以与业务代码分离。</p>
+<p>其次磁盘IO是比较昂贵的，相较于基于操作系统mmap等机制对于内存磁盘的交互，数据库系统拥有更多的信息去更好地决定何时将内存页刷入磁盘。数据库会有一个Buffer Pool Manager组件进行管理，制定专属的淘汰策略。</p>
+<h5 id="2-数据库底层是如何存储的？"><a href="#2-数据库底层是如何存储的？" class="headerlink" title="2. 数据库底层是如何存储的？"></a>2. 数据库底层是如何存储的？</h5><p>数据库的存储为了移植性一般基于文件系统。DBMS 通常将自己的所有数据作为一个或多个文件存储在磁盘中，而 OS 只当它们是普通文件，并不知道如何解读这些文件。</p>
+<p>数据库会按照Page为存储单位进行存储（类似文件系统Block的概念）。每个 Page 带着一个唯一的 id。数据库会用一个间接层做通过PageID &lt;—&gt; 物理实际地址的映射。</p>
+<p>数据库会有一个storage manager模块负责读写磁盘上的对应Page，同时保持较好的空间和时间的局部性。数据文件在底层会有不同的组织形式，比较常见的是无序的HEAP FILE， 或者是有序的聚集索引（B树），还有一种是HASH FILE。</p>
+<h5 id="3-HEAP-FILE-内部是怎么组织变成一个数据库的？"><a href="#3-HEAP-FILE-内部是怎么组织变成一个数据库的？" class="headerlink" title="3.HEAP FILE 内部是怎么组织变成一个数据库的？"></a>3.HEAP FILE 内部是怎么组织变成一个数据库的？</h5><p>这里不讨论链表的方式，主要讨论页目录（Page Directory）的方式。</p>
+<p>这种方式会有一些页目录会记录全部数据文件的位置，同时也记录了每一个页的FREE SLOT数量（即使用情况）。</p>
+<p>具体数据页的存储有两种方式，一种记录数据本身采用Slotted Page（下左图），另一种记录操作数据的日志（定期会压缩日志）。</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/Users/leo/iblog/source/picture/Database/slotted_page.png" style="zoom:20%;"></th>
+<th align="center"><img src="/Users/leo/iblog/source/picture/Database/log_structed_page.png" style="zoom:20%;"></th>
+</tr>
+</thead>
+</table>
+<p>对于Slotted Page，每一个TUPLE 在DBMS里会即会有以page_id + offset/slot的二元组唯一定位。</p>
+<h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><h5 id="4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"><a href="#4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？" class="headerlink" title="4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"></a>4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？</h5><p>Hash 函数的选择，就是在性能和冲突率之间的TRADE OFF。另外就是冲突之后的策略选择。其实是在开一个更大的表和找到其他地方去插KEY的TRADE OFF。</p>
+<p>静态Hash算法（要求事先知道存多少元素，否则就需要在一定时间对整个表做扩容和缩容然后rehash）：</p>
+<ol>
+<li><p>线性扫描</p>
+</li>
+<li><p>Robin（目的是让每次扫描次数差不多）</p>
+</li>
+<li><p>Cuckoo（两张表）</p>
+</li>
+</ol>
+<p>动态扩容的Hash算法：</p>
+<ol>
+<li><p>Chained Hash （桶满了加桶）</p>
+</li>
+<li><p>Extenible Hash（桶满了后增加hash匹配位数，变相增加桶数）</p>
+</li>
+<li><p>Linear Hash（维护一个指针指向下一个被拆分的桶）</p>
+</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><img src="/Users/leo/iblog/source/picture/Database/chained_hash.png" style="zoom:20%;"></th>
+<th><img src="/Users/leo/iblog/source/picture/Database/extenible_hash.png" style="zoom:20%;"></th>
+<th><img src="/Users/leo/iblog/source/picture/Database/linear_hash.png" style="zoom:20%;"></th>
+</tr>
+</thead>
+</table>
+<h5 id="5-B-树有哪些性质？"><a href="#5-B-树有哪些性质？" class="headerlink" title="5. B+树有哪些性质？"></a>5. B+树有哪些性质？</h5><ol>
+<li>他是完美平衡的，所有叶子节点的深度一致。</li>
+<li>每个非根节点至少是半满的。（如果最多有M个孩子，那么至少会有[M / 2 - 1, M - 1]个key ）</li>
+<li>每个内部节点有K个KEY，就会有K + 1个孩子。</li>
+</ol>
+<h5 id="6-B-树的设计策略：B树节点的SIZE如何选择？合并阈值？"><a href="#6-B-树的设计策略：B树节点的SIZE如何选择？合并阈值？" class="headerlink" title="6. B+树的设计策略：B树节点的SIZE如何选择？合并阈值？"></a>6. B+树的设计策略：B树节点的SIZE如何选择？合并阈值？</h5><p>一般存储设备IO开销越大，速度越慢，节点就需要越大。具体情境下的最优大小由 workload 决定。</p>
+<p>对于节点的合并有些 DBMS 选择延迟 merge 操作的发生时间，甚至可以利用其它进程来负责周期性地重建 table index。</p>
+<h5 id="7-B-树有哪些常见优化？"><a href="#7-B-树有哪些常见优化？" class="headerlink" title="7. B+树有哪些常见优化？"></a>7. B+树有哪些常见优化？</h5><p>1． 前缀压缩，如果这个节点的STRING 都是以ABC，开头，可以把这个ABC提出来，这样之后的信息都会少，就能存更多。</p>
+<p>2． 后缀截断【较常用】。如果后缀的信息没有区分度，则在中间节点的时候可以砍掉。</p>
+<p>3． 指针调整，如果一个PAGE已经再BUFFER POOL 里PINNED了，我们可以存直接的指针来代替原来存的PAGE ID。来避免去PAGE TABLE 查ADDRESS。</p>
+<p>4． 批量插入【常用】。如果一开始你就知道要插的所有KEY，可以对他们先排序，然后对这些KEY去构建INDEX BOTTOM UP。这样性能最好。</p>
+<h5 id="8-什么是隐式索引，局部索引，覆盖索引，包含索引-index-include-column-？"><a href="#8-什么是隐式索引，局部索引，覆盖索引，包含索引-index-include-column-？" class="headerlink" title="8. 什么是隐式索引，局部索引，覆盖索引，包含索引(index include column)？"></a>8. 什么是隐式索引，局部索引，覆盖索引，包含索引(index include column)？</h5><blockquote>
+<p>Todo…</p>
+</blockquote>
+<h5 id="9-什么是Latch-Crabbing，此方法是如何加锁索引的？"><a href="#9-什么是Latch-Crabbing，此方法是如何加锁索引的？" class="headerlink" title="9. 什么是Latch Crabbing，此方法是如何加锁索引的？"></a>9. 什么是Latch Crabbing，此方法是如何加锁索引的？</h5><p>首先拿父PAGE的LATCH， 然后拿孩子的LATCH。如果父节点是SAFE（不会引起分裂、合并操作）的则释放父PAGE的LATCH。</p>
+<p>查的时候，拿到孩子的读锁就可以释放父亲的读锁。</p>
+<p>删增的时候，拿写锁，如果某一个孩子是SAFE的，可以释放祖先持有的全部锁</p>
+<p>其余一个优化是可以先假设叶子节点是安全的，在一开始可以只上读锁。如果发现这个假设是错的，再重头来一遍写锁。</p>
+<p>如果要同时支持LEFT-&gt;RIGHT， TOP-&gt;BOTTM <strong>两个方向</strong>的节点查找，当发现锁被占有了，最好的方式是等一小会然后杀掉自己，重头开始。</p>
+<p>另一个优化是把PARENT节点的更新延迟到下次获取写锁的时候再更新（通过一个全局变量记录需要更新的节点）。</p>
+<h4 id="排序、聚合和Join"><a href="#排序、聚合和Join" class="headerlink" title="排序、聚合和Join"></a>排序、聚合和Join</h4><h5 id="10-如果有108个页，内存只能容下5页，如何做硬盘外排序？"><a href="#10-如果有108个页，内存只能容下5页，如何做硬盘外排序？" class="headerlink" title="10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？"></a>10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？</h5><p>首先每次放进内存5个页，对5个页排序，写到磁盘的一个文件里。这样最后会有22个文件。</p>
+<p>下一次开始做K路归并，把4个文件放进去BUFFER里，然后流式读文件。还余下的一个文件的位置是用来当PQ，每次输出一个最小的写进磁盘。这样搞完之后。就还有22/4 = 6个文件。</p>
+<p>下一步同样，变成2个文件。最后合到一个有序文件。</p>
+<h5 id="11-GROUP-BY-、DISTINCT-应该怎么做？"><a href="#11-GROUP-BY-、DISTINCT-应该怎么做？" class="headerlink" title="11. GROUP BY 、DISTINCT 应该怎么做？"></a>11. GROUP BY 、DISTINCT 应该怎么做？</h5><h5 id="12-Join如何做？"><a href="#12-Join如何做？" class="headerlink" title="12. Join如何做？"></a>12. Join如何做？</h5><blockquote>
+<p>Todo…</p>
+</blockquote>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/29/PekingOJ1485/" class="archive-article-date">
-  	<time datetime="2019-11-29T06:36:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-29</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/29/PekingOJ1485/">PekingUniversityOJ No.1485</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">算法题</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">数据库</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2022/01/26/CMU15-445复习/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/19/compiler3/" class="archive-article-date">
-  	<time datetime="2019-11-19T03:30:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-19</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2022/01/23/爬虫踩坑/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">爬虫踩坑</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/19/compiler3/">语义分析器</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编译原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/10/compiler2/" class="archive-article-date">
-  	<time datetime="2019-11-10T04:23:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-10</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/10/compiler2/">语法分析器</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编译原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/05/compiler1/" class="archive-article-date">
-  	<time datetime="2019-11-05T07:18:14.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/05/compiler1/">词法分析器</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">编译原理</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/11/01/OS-Problems/" class="archive-article-date">
-  	<time datetime="2019-11-01T08:52:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/11/01/OS-Problems/">linux3.8.13编译内核的小问题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">OS</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -366,8 +385,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
