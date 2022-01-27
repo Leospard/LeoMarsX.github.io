@@ -16,16 +16,16 @@
 <meta property="og:site_name" content="Leo的博客">
 <meta property="og:description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/slotted_page.png">
-<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/log_structed_page.png">
-<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/chained_hash.png">
-<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/extenible_hash.png">
-<meta property="og:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/linear_hash.png">
-<meta property="og:updated_time" content="2022-01-26T17:01:17.386Z">
+<meta property="og:image" content="http://yoursite.com/picture/Database/slotted_page.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/log_structed_page.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/chained_hash.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/extenible_hash.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/linear_hash.png">
+<meta property="og:updated_time" content="2022-01-27T03:08:42.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMU15-445课程知识点复习">
 <meta name="twitter:description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
-<meta name="twitter:image" content="http://yoursite.com/Users/leo/iblog/source/picture/Database/slotted_page.png">
+<meta name="twitter:image" content="http://yoursite.com/picture/Database/slotted_page.png">
   
     <link rel="alternative" href="/atom.xml" title="Leo的博客" type="application/atom+xml">
   
@@ -184,8 +184,8 @@
 <table>
 <thead>
 <tr>
-<th align="center"><img src="/Users/leo/iblog/source/picture/Database/slotted_page.png" style="zoom:20%;"></th>
-<th align="center"><img src="/Users/leo/iblog/source/picture/Database/log_structed_page.png" style="zoom:20%;"></th>
+<th align="center"><img src="/picture/Database/slotted_page.png" style="zoom:20%;"></th>
+<th align="center"><img src="/picture/Database/log_structed_page.png" style="zoom:20%;"></th>
 </tr>
 </thead>
 </table>
@@ -193,28 +193,22 @@
 <h4 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h4><h5 id="4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"><a href="#4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？" class="headerlink" title="4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"></a>4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？</h5><p>Hash 函数的选择，就是在性能和冲突率之间的TRADE OFF。另外就是冲突之后的策略选择。其实是在开一个更大的表和找到其他地方去插KEY的TRADE OFF。</p>
 <p>静态Hash算法（要求事先知道存多少元素，否则就需要在一定时间对整个表做扩容和缩容然后rehash）：</p>
 <ol>
-<li><p>线性扫描</p>
-</li>
-<li><p>Robin（目的是让每次扫描次数差不多）</p>
-</li>
-<li><p>Cuckoo（两张表）</p>
-</li>
+<li>线性扫描</li>
+<li>Robin（目的是让每次扫描次数差不多）</li>
+<li>Cuckoo（两张表）</li>
 </ol>
 <p>动态扩容的Hash算法：</p>
 <ol>
-<li><p>Chained Hash （桶满了加桶）</p>
-</li>
-<li><p>Extenible Hash（桶满了后增加hash匹配位数，变相增加桶数）</p>
-</li>
-<li><p>Linear Hash（维护一个指针指向下一个被拆分的桶）</p>
-</li>
+<li>Chained Hash （桶满了加桶）</li>
+<li>Extenible Hash（桶满了后增加hash匹配位数，变相增加桶数）</li>
+<li>Linear Hash（维护一个指针指向下一个被拆分的桶）</li>
 </ol>
 <table>
 <thead>
 <tr>
-<th><img src="/Users/leo/iblog/source/picture/Database/chained_hash.png" style="zoom:20%;"></th>
-<th><img src="/Users/leo/iblog/source/picture/Database/extenible_hash.png" style="zoom:20%;"></th>
-<th><img src="/Users/leo/iblog/source/picture/Database/linear_hash.png" style="zoom:20%;"></th>
+<th><img src="/picture/Database/chained_hash.png" style="zoom:20%;"></th>
+<th><img src="/picture/Database/extenible_hash.png" style="zoom:20%;"></th>
+<th><img src="/picture/Database/linear_hash.png" style="zoom:20%;"></th>
 </tr>
 </thead>
 </table>
@@ -455,15 +449,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Lab</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">教程</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">OS</a>
+                <a href="javascript:void(0)" class="js-tag color4">Lab</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -471,15 +461,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">OS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">算法题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
+                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">编译原理</a>
+                <a href="javascript:void(0)" class="js-tag color1">感悟与记录</a>
               </li>
              
               <li class="article-tag-list-item">
