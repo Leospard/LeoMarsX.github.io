@@ -1,0 +1,470 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&gt;暗&#x2F;暗-&gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PekingUniversityOJ No.1222">
+<meta property="og:url" content="http://yoursite.com/2019/10/18/PekingOJ%201222/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&gt;暗&#x2F;暗-&gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-10-18T09:02:00.000Z">
+<meta property="article:modified_time" content="2019-11-28T13:08:07.828Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="算法题">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>PekingUniversityOJ No.1222 - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="PekingUniversityOJ No.1222">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-10-18 17:02" pubdate>
+        2019年10月18日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      5.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      44 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">PekingUniversityOJ No.1222</h1>
+            
+            <div class="markdown-body">
+              <p>这是一个很经典的小游戏，在一个m*n的格子，每按一下一个格子，包括自己这个格子和上下左右共5个格子的灯都会转变状态（亮-&gt;暗/暗-&gt;亮） 记得不久之前和薛老师去玩一个以“未闻花名”为主题的密室里，也有这个游戏，我当时就瞎捣鼓，莫名其妙全点灭了，没想到这次做题竟然又遇到了这个游戏！</p>
+<span id="more"></span>
+
+<p>Description</p>
+<p>In an extended version of the game Lights Out, is a puzzle with 5 rows of 6 buttons each (the actual puzzle has 5 rows of 5 buttons each). Each button has a light. When a button is pressed, that button and each of its (up to four) neighbors above, below, right and left, has the state of its light reversed. (If on, the light is turned off; if off, the light is turned on.) Buttons in the corners change the state of 3 buttons; buttons on an edge change the state of 4 buttons and other buttons change the state of 5. For example, if the buttons marked X on the left below were to be pressed,the display would change to the image on the right. </p>
+<p>The aim of the game is, starting from any initial set of lights on in the display, to press buttons to get the display to a state where all lights are off. When adjacent buttons are pressed, the action of one button can undo the effect of another. For instance, in the display below, pressing buttons marked X in the left display results in the right display.Note that the buttons in row 2 column 3 and row 2 column 5 both change the state of the button in row 2 column 4,so that, in the end, its state is unchanged. </p>
+<p>Note: </p>
+<ol>
+<li>It does not matter what order the buttons are pressed. </li>
+<li>If a button is pressed a second time, it exactly cancels the effect of the first press, so no button ever need be pressed more than once. </li>
+<li>As illustrated in the second diagram, all the lights in the first row may be turned off, by pressing the corresponding buttons in the second row. By repeating this process in each row, all the lights in the first<br>four rows may be turned out. Similarly, by pressing buttons in columns 2, 3 ?, all lights in the first 5 columns may be turned off.<br>Write a program to solve the puzzle.<br>Input</li>
+</ol>
+<p>The first line of the input is a positive integer n which is the number of puzzles that follow. Each puzzle will be five lines, each of which has six 0 or 1 separated by one or more spaces. A 0 indicates that the light is off, while a 1 indicates that the light is on initially.<br>Output</p>
+<p>For each puzzle, the output consists of a line with the string: “PUZZLE #m”, where m is the index of the puzzle in the input file. Following that line, is a puzzle-like display (in the same format as the input) . In this case, 1’s indicate buttons that must be pressed to solve the puzzle, while 0 indicate buttons, which are not pressed. There should be exactly one space between each 0 or 1 in the output puzzle-like display.<br>Sample Input</p>
+<p>2<br>0 1 1 0 1 0<br>1 0 0 1 1 1<br>0 0 1 0 0 1<br>1 0 0 1 0 1<br>0 1 1 1 0 0<br>0 0 1 0 1 0<br>1 0 1 0 1 1<br>0 0 1 0 1 1<br>1 0 1 1 0 0<br>0 1 0 1 0 0<br>Sample Output</p>
+<p>PUZZLE #1<br>1 0 1 0 0 1<br>1 1 0 1 0 1<br>0 0 1 0 1 1<br>1 0 0 1 0 0<br>0 1 0 0 0 0<br>PUZZLE #2<br>1 0 0 1 1 1<br>1 1 0 0 0 0<br>0 0 0 1 0 0<br>1 1 0 1 0 1<br>1 0 1 1 0 1<br>Source</p>
+<p>Greater New York 2002</p>
+<h1 id="总体思路：二进制枚举-贪心"><a href="#总体思路：二进制枚举-贪心" class="headerlink" title="总体思路：二进制枚举+贪心"></a>总体思路：<strong>二进制枚举+贪心</strong></h1><h2 id="首先介绍一下二进制枚举算法"><a href="#首先介绍一下二进制枚举算法" class="headerlink" title="首先介绍一下二进制枚举算法"></a>首先介绍一下二进制枚举算法</h2><p>这里要了解位运算，尤其是按位与还有移位运算。</p>
+<h3 id="移位运算"><a href="#移位运算" class="headerlink" title="移位运算"></a>移位运算</h3><p>a&lt;&lt;b运算就是，将二进制a向左移b位，也就是a右边添上b个0。如2的二进制是10，向左移一位就是100，则为十进制4，不难发现左移n位，及等价于乘上2^n<br>那么下面的代码即可遍历0到2^(n-1)之内的数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br></pre></div></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; (<span class="hljs-number">1</span> &lt;&lt; n); i++);<br></code></pre></td></tr></table></figure>
+<h3 id="按位与运算"><a href="#按位与运算" class="headerlink" title="按位与运算"></a>按位与运算</h3><p>运算规则：0&amp;0=0;  0&amp;1=0;   1&amp;0=0;    1&amp;1=1;<br>对于某个二进制数10100</p>
+<blockquote>
+<p>10100&amp;00001=00000<br>10100&amp;00010=00000<br>10100&amp;00100=00100<br>10100&amp;01000=00000<br>10100&amp;10000=10000<br>举上面的例子其实就是更好得解释二进制枚举<br>下面展示较完整的代码</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-keyword">int</span> n;<br>cin &gt;&gt; n;<br><span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; (<span class="hljs-number">1</span>&lt;&lt;n); i++) <span class="hljs-comment">//从0～2^n-1个状态</span><br>&#123;<br>    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; n; j++) <span class="hljs-comment">//遍历二进制的每一位</span><br>    &#123;<br>        <span class="hljs-keyword">if</span>(i &amp; (<span class="hljs-number">1</span> &lt;&lt; j))<span class="hljs-comment">//判断二进制第j位是否存在</span><br>        &#123;<br>        .............<span class="hljs-comment">//如果第j位存在，则改变相应状态变量【做题用】</span><br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>对于这个题目，我们其实只要二进制枚举第一行灯的按压状态，而之后的每一行直接运用贪心算法即可，即上一行哪个灯亮，就按对应下一行的灯，保证上一行的灯全暗。<br>其实有个小疑问，是否会出现一种初始状态，出现无解的情况呢。<br>下面附上全部代码，由于北大oj编译器版本较老，声明的数组维度中不能出现变量，所以代码oj是显示compile error的，但思路和解决方法我认为是没问题的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><code class="hljs c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstdio&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span><span class="hljs-meta-string">&lt;cstring&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-keyword">int</span> press[<span class="hljs-number">5</span>][<span class="hljs-number">6</span>];<br><span class="hljs-keyword">int</span> puzzle[<span class="hljs-number">5</span>][<span class="hljs-number">6</span>];<br><span class="hljs-keyword">int</span> countt=<span class="hljs-number">0</span>;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">tanxin</span><span class="hljs-params">(<span class="hljs-keyword">int</span> puzzle[<span class="hljs-number">5</span>][<span class="hljs-number">6</span>])</span></span>&#123;     <span class="hljs-comment">//贪心算法</span><br>    <span class="hljs-keyword">int</span> i,j,flag=<span class="hljs-number">1</span>;<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">4</span>;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;<span class="hljs-number">6</span>;j++)&#123;<br>            <span class="hljs-keyword">if</span>(puzzle[i][j]==<span class="hljs-number">1</span>)&#123;<br>                press[i+<span class="hljs-number">1</span>][j]=<span class="hljs-number">1</span>;<br>                puzzle[i+<span class="hljs-number">1</span>][j]=(puzzle[i+<span class="hljs-number">1</span>][j]+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>;<br>                <span class="hljs-keyword">if</span>(j!=<span class="hljs-number">0</span>)&#123;            <span class="hljs-comment">//第一列</span><br>                    puzzle[i+<span class="hljs-number">1</span>][j<span class="hljs-number">-1</span>]=(puzzle[i+<span class="hljs-number">1</span>][j<span class="hljs-number">-1</span>]+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>;<br>                &#125;<br>                <span class="hljs-keyword">if</span>(j!=<span class="hljs-number">5</span>)&#123;            <span class="hljs-comment">//最后一列</span><br>                    puzzle[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>]=(puzzle[i+<span class="hljs-number">1</span>][j+<span class="hljs-number">1</span>]+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>;<br>                &#125;<br>                <span class="hljs-keyword">if</span>(i!=<span class="hljs-number">3</span>)&#123;            <span class="hljs-comment">//倒数第二行</span><br>                    puzzle[i+<span class="hljs-number">2</span>][j]=(puzzle[i+<span class="hljs-number">2</span>][j]+<span class="hljs-number">1</span>)%<span class="hljs-number">2</span>;<br>                &#125;<br>            &#125;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;<span class="hljs-number">6</span>;j++)&#123;               <span class="hljs-comment">//仅需判断最后一行是否全0即可，因为是贪心算法做的</span><br>        <span class="hljs-keyword">if</span>(puzzle[<span class="hljs-number">4</span>][j]==<span class="hljs-number">1</span>)&#123;<br>            flag=<span class="hljs-number">0</span>;<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">if</span>(flag)&#123;<br>        countt++;<br>        std::cout&lt;&lt;<span class="hljs-string">&quot;PUZZLE #&quot;</span>&lt;&lt;countt&lt;&lt;endl;<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">5</span>;i++)&#123;<br>            <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;<span class="hljs-number">6</span>;j++)&#123;<br><br>                std::cout&lt;&lt;press[i][j]&lt;&lt;<span class="hljs-string">&#x27; &#x27;</span>;<br>            <br>            &#125;<br>            std::cout&lt;&lt;endl;<br>        &#125;<br>    &#125;<br>    <br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">solve</span><span class="hljs-params">(<span class="hljs-keyword">int</span> map[][<span class="hljs-number">6</span>])</span></span>&#123;   <span class="hljs-comment">//枚举第一行，贪心剩余几行</span><br>    <span class="hljs-keyword">int</span> i;<br>    <span class="hljs-keyword">int</span> modd;<br>        <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;<span class="hljs-number">64</span>;i++)&#123;        <span class="hljs-comment">//i&lt;(1&lt;&lt;6)</span><br>            <span class="hljs-built_in">memcpy</span>(puzzle,map,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(puzzle));<br>            <span class="hljs-built_in">memset</span>(press,<span class="hljs-number">0</span>,<span class="hljs-built_in"><span class="hljs-keyword">sizeof</span></span>(press));<br>            <span class="hljs-keyword">for</span>(modd=<span class="hljs-number">0</span>;modd&lt;<span class="hljs-number">6</span>;modd++)&#123;<br>                <span class="hljs-keyword">if</span>(i&amp;(<span class="hljs-number">1</span>&lt;&lt;modd))&#123;<span class="hljs-comment">//1&lt;&lt;mod 除了向左移的那一位1，剩余的都是0，所以我们就可以得到那一位是不是1</span><br>                        puzzle[<span class="hljs-number">0</span>][modd]=(<span class="hljs-number">1</span>+puzzle[<span class="hljs-number">0</span>][modd])%<span class="hljs-number">2</span>;<br>                        puzzle[<span class="hljs-number">1</span>][modd]=(<span class="hljs-number">1</span>+puzzle[<span class="hljs-number">1</span>][modd])%<span class="hljs-number">2</span>;<br>                        <span class="hljs-keyword">if</span>(modd!=<span class="hljs-number">0</span>)&#123;<br>                            puzzle[<span class="hljs-number">0</span>][modd<span class="hljs-number">-1</span>]=(<span class="hljs-number">1</span>+puzzle[<span class="hljs-number">0</span>][modd<span class="hljs-number">-1</span>])%<span class="hljs-number">2</span>;<br>                        &#125;<br>                        <span class="hljs-keyword">if</span>(modd!=<span class="hljs-number">5</span>)&#123;<br>                            puzzle[<span class="hljs-number">0</span>][modd+<span class="hljs-number">1</span>]=(<span class="hljs-number">1</span>+puzzle[<span class="hljs-number">0</span>][modd+<span class="hljs-number">1</span>])%<span class="hljs-number">2</span>;<br>                        &#125;<br>                        press[<span class="hljs-number">0</span>][modd]=<span class="hljs-number">1</span>;<br>                    &#125;<br>            &#125;<br>            <span class="hljs-built_in">tanxin</span>(puzzle);        <span class="hljs-comment">//判断</span><br>        &#125;<br>&#125;<br><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> * argv[])</span> </span>&#123;<br>    <span class="hljs-keyword">int</span> times=<span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">int</span> m,i,j;<br>    std::cin&gt;&gt;times;<br>    m=<span class="hljs-number">5</span>*times;<br>    <span class="hljs-keyword">int</span> puzzlee[m][<span class="hljs-number">6</span>];<br>    <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;m;i++)&#123;<br>        <span class="hljs-keyword">for</span>(j=<span class="hljs-number">0</span>;j&lt;<span class="hljs-number">6</span>;j++)&#123;<br>            std::cin&gt;&gt;puzzlee[i][j];<br>        &#125;<br>    &#125;<br>            <br>   <span class="hljs-keyword">for</span>(i=<span class="hljs-number">0</span>;i&lt;times;i++)<br>        <span class="hljs-built_in">solve</span>(puzzlee+i*<span class="hljs-number">5</span>);     <span class="hljs-comment">//每一次迭代，指向puzzle数组的next5行</span><br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>因为是课上老师捎带提过的题目，思路很快就出来了，但在coding阶段主要就遇到了原来不曾用过的二进制枚举问题。我一开始的想法是通过把第一行六列所有的组合通过一个状态矩阵的判重循环出来，但其实有很大的漏洞。后来我就想到我可以求{0,1,2,3,4,5}的幂集，即构造一个二叉树，左右子树分别对应“取，舍”两种状态，然后分别对6个元素一一做取舍，最后的子树即位这2^6个集合…但，有点麻烦。求出幂集后还得变为相应二进制状态。最后查阅资料学习了二进制枚举，解决了这道题。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95%E9%A2%98/">算法题</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/10/29/PekingOJ/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">PekingOJ 1363&1125&1564&1511</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/10/17/PekingOJ%201979/">
+                        <span class="hidden-mobile">PekingUniversityOJ No.1979</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

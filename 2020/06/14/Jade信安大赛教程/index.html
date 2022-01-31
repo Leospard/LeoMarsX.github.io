@@ -1,0 +1,468 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。 JADE简介JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信安大赛作品使用指南">
+<meta property="og:url" content="http://yoursite.com/2020/06/14/Jade%E4%BF%A1%E5%AE%89%E5%A4%A7%E8%B5%9B%E6%95%99%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。 JADE简介JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/picture/JADE/1.png">
+<meta property="og:image" content="http://yoursite.com/picture/JADE/2.png">
+<meta property="og:image" content="http://yoursite.com/picture/JADE/3.png">
+<meta property="og:image" content="http://yoursite.com/picture/JADE/4.png">
+<meta property="og:image" content="http://yoursite.com/picture/JADE/5.png">
+<meta property="article:published_time" content="2020-06-14T02:25:00.000Z">
+<meta property="article:modified_time" content="2020-06-14T03:45:56.998Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="教程">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/picture/JADE/1.png">
+  
+  
+  <title>信安大赛作品使用指南 - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="信安大赛作品使用指南">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-06-14 10:25" pubdate>
+        2020年6月14日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      18 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">信安大赛作品使用指南</h1>
+            
+            <div class="markdown-body">
+              <p>本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。</p>
+<h3 id="JADE简介"><a href="#JADE简介" class="headerlink" title="JADE简介"></a>JADE简介</h3><p>JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集成到一起，比如：Net和Java EE。它包括一个Agent赖以生存的运行环境，开发Agent应用的类库和用来调试和配置的一套图形化的工具，简化了一个多Agent系统的开发过程。</p>
+<span id="more"></span>
+
+<h3 id="JADE功能"><a href="#JADE功能" class="headerlink" title="JADE功能"></a>JADE功能</h3><p>JADE为多Agent系统提供了以下功能: </p>
+<blockquote>
+<p>(1)Agent管理系统(Agent Management System，简称AMS)，负责控制平台内Agent的活动、 生存周期及外部应用程序与平台的交互，规范Agent在平台上用独一无二的名字来标识；<br>(2)目录服务器(Dilectoly Facilitatol，简称DF)，负责对平台内的Agent提供黄页服务，注册服务类型以供查找；<br>(3)消息传送系统，也称为Agent交流通道(Agent Communication Channel，简称ACC)，控制平台内或不同平台之间的消息传输、消息编码、消息解析等。<br>JADE定义了Agentclass作为其他Agent的父类，其他Agent均继承自Agentclass。Agentclass中定义了setup方法，用于初始化Agent；定义了takeDown方法，用于结束Agent的运行；定义了doDelete方法，用于终止Agent；定义了Behaviour类以及addBehaviour方法用于添加Agent任务。为了保证Agent的分布式计算和协作机制，JADE构建行为池(Behaviour Pool)来存储所有添加的Behaviour，这些Behaviour呈队列排列，按照进入行为池的顺序依次被调用。Behaviour方法被调用时，首先执行Action方法，然后判断Done函数返回的布尔值，如果为真则将Behaviour移出行为池，继续下一个Behaviour的执行。JADE提供了这样一个基类，其他Agent所需要做的是重载setup，action，done，takeDown 这几个方法来实现特定的功能模块。</p>
+</blockquote>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p><strong>安装JADE前需要先安装jdk并配置好Java环境</strong></p>
+<p>从JADE的官方网站JADE官网上下载JADE的最新版本，目前最新的是4.5.0，我下载的是包含全部文件的JADE-all-4.5.0.zip，先解压这个压缩包，解压得到的文件夹中的所有压缩包也解压到各自的文件夹。建立文件夹起名为jade（存放位置和命名自己喜欢和习惯即可），用来存放JADE的相关文件，我把刚才解压缩的四个文件夹都拷贝到在这个jade文件夹中。<br>四个文件夹说明： </p>
+<blockquote>
+<p>JADE-bin-4.5.0（存放JADE的核心部件，它是JADE框架平台的支持文件）<br>JADE-doc-4.5.0（存放JADE的说明文档，其中包括各种程序说明与教程资料）<br>JADE-examples-4.5.0（存放 JADE 的实例源代码）<br>JADE-src-4.5.0（存放JADE框架平台的源代码，JADE为开源项目）</p>
+</blockquote>
+<h3 id="Eclipse开发"><a href="#Eclipse开发" class="headerlink" title="Eclipse开发"></a>Eclipse开发</h3><p>Window-&gt;Preferences-&gt;Java-&gt;Build Path-&gt;User Libraries新建库，命名为jade，添加jade.jar进这个jade库里<br>新建工程，命名为jade，右击工程，Build Path-&gt;Configure Build Path-&gt;Libraries-&gt;Add Library-&gt;User Library，然后将jade库添加进去<br>在src目录下新建文件夹jadetest，然后将本作品的文件导入<br><img src="/picture/JADE/1.png" srcset="/img/loading.gif" lazyload alt="Run Configurations"></p>
+<p>右击AgentSelector.java，选择Run As，选择Run Configurations，选择Java Application，点击添加，Name起名为：Run In JADE（可任意），Project名不变，Main Class起名为：jade.Boot（固定，不可改变），Argument中Program arguments起名为：-gui selector:jadetest.AgentSelector（如果只想打开GUI管理器而不运行程序，则只要-gui即可），其中，selector为智能体的名字，jadetest为包名，AgentSeletor为类名。其他默认即可，配置完成，点击Run，运行如下：</p>
+<p><img src="/picture/JADE/2.png" srcset="/img/loading.gif" lazyload alt="GUI"></p>
+<p>可以看到创建出来的selector智能体。这里的selector是用来确定通信过程中哪个Agent智能体为主节点。<br>右击Main-Container点击Start New Agent即可创建一个新的Agent智能体。</p>
+<p><img src="/picture/JADE/3.png" srcset="/img/loading.gif" lazyload alt="创建新的Agent"></p>
+<p>这里Class Name选择jadetest.NodeAgent，点击OK创建好一个Agent：</p>
+<p><img src="/picture/JADE/4.png" srcset="/img/loading.gif" lazyload alt="作品运行UI"></p>
+<p>点击帮助了解作品使用方法</p>
+<p><img src="/picture/JADE/5.png" srcset="/img/loading.gif" lazyload alt="帮助"></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/08/26/%E4%BA%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">云平台管理系统</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/11/29/PekingOJ1485/">
+                        <span class="hidden-mobile">PekingUniversityOJ No.1485</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

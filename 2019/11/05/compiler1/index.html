@@ -1,0 +1,488 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="绘图语言介绍&lt;1&gt; 实现简单函数绘图的语句  循环绘图（FOR-DRAW） 比例设置（SCALE） 角度旋转（ROT） 坐标平移（ORIGIN） 注释        （– 或 &#x2F;&#x2F;）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="词法分析器">
+<meta property="og:url" content="http://yoursite.com/2019/11/05/compiler1/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="绘图语言介绍&lt;1&gt; 实现简单函数绘图的语句  循环绘图（FOR-DRAW） 比例设置（SCALE） 角度旋转（ROT） 坐标平移（ORIGIN） 注释        （– 或 &#x2F;&#x2F;）">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/picture/DFA.png">
+<meta property="article:published_time" content="2019-11-05T07:18:14.000Z">
+<meta property="article:modified_time" content="2019-11-28T13:07:34.961Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="编译原理">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/picture/DFA.png">
+  
+  
+  <title>词法分析器 - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="词法分析器">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2019-11-05 15:18" pubdate>
+        2019年11月5日 下午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      7.8k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      65 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">词法分析器</h1>
+            
+            <div class="markdown-body">
+              <h1 id="绘图语言介绍"><a href="#绘图语言介绍" class="headerlink" title="绘图语言介绍"></a>绘图语言介绍</h1><p>&lt;1&gt; 实现简单函数绘图的语句</p>
+<ul>
+<li>循环绘图（FOR-DRAW）</li>
+<li>比例设置（SCALE）</li>
+<li>角度旋转（ROT）</li>
+<li>坐标平移（ORIGIN）</li>
+<li>注释        （– 或 //）<span id="more"></span>
+</li>
+</ul>
+<hr>
+<p>&lt;2&gt; 屏幕（窗口）的坐标系</p>
+<ul>
+<li>左上角为原点</li>
+<li>x方向从左向右增长</li>
+<li>y方向从上到下增长(与一般的坐标系方向相反)</li>
+</ul>
+<hr>
+<p>&lt;3&gt; 函数绘图源程序举例<br>————— 函数f(t)=t的图形<br>origin is (100, 300);    – 设置原点的偏移量<br>rot is 0;            – 设置旋转角度(不旋转)<br>scale is (1, 1);        – 设置横坐标和纵坐标的比例<br>for T from 0 to 200 step 1 draw (t, 0);<br>                – 横坐标的轨迹（纵坐标为0）<br>for T from 0 to 150 step 1 draw (0, -t);<br>                – 纵坐标的轨迹（横坐标为0）<br>for T from 0 to 120 step 1 draw (t, -t);<br>                – 函数f(t)=t的轨迹<br>//默认值：<br>//  origin is (0, 0)<br>// rot is 0;<br>// scale is (1, 1)</p>
+<blockquote>
+<p>FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标, 纵坐标);</p>
+</blockquote>
+<blockquote>
+<p>令T从起点到终点、每次改变一个步长，绘制出由(横坐标，纵坐标)所规定的点的轨迹。</p>
+</blockquote>
+<blockquote>
+<p>FOR T FROM 0 TO 2*PI STEP PI/50 DRAW (cos(T), sin(T));</p>
+</blockquote>
+<blockquote>
+<p>该语句的作用是令T从0到2*PI、步长 PI/50，绘制出各个点的坐标(cos(T)，sin(T))，即一个单位圆。</p>
+</blockquote>
+<p>语句满足下述规定(原则)：<br>&lt;1&gt;各类语句可以按任意次序书写，且语句以分号结尾。源程序中的语句以它们出现的先后顺序处。<br>&lt;2&gt;ORIGIN、ROT和SCALE语句只影响其后的绘图语句，且遵循最后出现的语句有效的原则。例如，若有下述ROT语句序列：     ROT IS 0.7 ；<br>                                            ROT IS 1.57 ；<br>则随后的绘图语句将按1.57而不是0.7弧度旋转。<br>&lt;3&gt;无论ORIGIN、ROT和SCALE语句的出现顺序如何，图形的变换顺序总是：比例变换→旋转变换→平移变换<br>&lt;4&gt; 语言对大小写不敏感，例如for、For、FOR等，均被认为是同一个保留字。<br>&lt;5&gt; 语句中表达式的值均为双精度类型，旋转角度单位为弧度且为逆时针旋转，平移单位为点。  </p>
+<h2 id="词法分析器的构造"><a href="#词法分析器的构造" class="headerlink" title="词法分析器的构造"></a>词法分析器的构造</h2><blockquote>
+<p>步骤：正规式－NFA－DFA－最小DFA－编写程序－测试 </p>
+</blockquote>
+<p>三个任务</p>
+<blockquote>
+<p>滤掉源程序中的无用成分<br>输出记号供语法分析器使用<br>识别非法输入，并将其标记为“出错记号”。</p>
+</blockquote>
+<p>记号的组成：记号的<strong>类别</strong>和<strong>属性</strong></p>
+<p><strong><em>本简易编译器使用java来构造</em></strong><br>public class Token {<br>    public String type=””;     //类别<br>    public String lexeme=””; //词义，这里是输入的字符串<br>    public double value;  //如果是常数则为常数的值，否则无意义<br>}</p>
+<h4 id="函数绘图语言中记号的分类与表示"><a href="#函数绘图语言中记号的分类与表示" class="headerlink" title="函数绘图语言中记号的分类与表示"></a>函数绘图语言中记号的分类与表示</h4><p>private static final String[] Token_Type = {<br>        “ORIGIN”, “SCALE”, “ROT”, “IS”,      // 保留字（一字一码）<br>        “TO”, “STEP”, “DRAW”, “FOR”, “FROM”, //保留字<br>        “T”,                  // 参数<br>        “SEMICO”, “L_BRACKET”, “R_BRACKET”, “COMMA”,// 分隔符<br>        “PLUS”, “MINUS”, “MUL”, “DIV”, “POWER”,        // 运算符<br>        “FUNC”,                  // 函数（调用）<br>        “CONST_ID”,              // 常数<br>        “NONTOKEN”,              // 空记号（源程序结束）<br>        “ERRTOKEN”              //出错记号（非法符号）<br>};</p>
+<h4 id="正规式"><a href="#正规式" class="headerlink" title="正规式"></a>正规式</h4><p>letter    = [a-zA-Z]<br>digit    = [0-9] </p>
+<p>COMMENT       = “//“|”–”<br>WHITE_SPACE     = (“ “|\t|\n)+<br>SEMICO        = “;”<br>L_BRACKET     = “(“<br>R_BRACKET     = “)”<br>COMMA         = “,”<br>PLUS          = “+”<br>MINUS         = “-“<br>MUL          = “<em>“<br>DIV           = “/“<br>POWER         = “**”<br>CONST_ID        = digit+(“.” digit</em>)?<br>ID            = letter+<br>（去除注释与白空有11个正规式）</p>
+<h4 id="DFA"><a href="#DFA" class="headerlink" title="DFA"></a>DFA</h4><p><img src="/picture/DFA.png" srcset="/img/loading.gif" lazyload alt="DFA"></p>
+<h3 id="程序思路及代码"><a href="#程序思路及代码" class="headerlink" title="程序思路及代码"></a>程序思路及代码</h3><p>思路非常简单，单个单个读取字符，根据DFA匹配，并赋值给Token，以产生记号流给予语法分析器分析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br></pre></div></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> java.io.*;<br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Token</span> </span>&#123;<br>    <span class="hljs-keyword">public</span> String type=<span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">public</span> String lexeme=<span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">double</span> value;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OutputToken</span> </span>&#123;<br>    <span class="hljs-keyword">static</span> Token[] tokens = <span class="hljs-keyword">new</span> Token[<span class="hljs-number">1000</span>];<span class="hljs-comment">//开辟数组空间</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> String[] Token_Type = &#123;<br>            <span class="hljs-string">&quot;ORIGIN&quot;</span>, <span class="hljs-string">&quot;SCALE&quot;</span>, <span class="hljs-string">&quot;ROT&quot;</span>, <span class="hljs-string">&quot;IS&quot;</span>,      <span class="hljs-comment">// 保留字（一字一码）</span><br>            <span class="hljs-string">&quot;TO&quot;</span>, <span class="hljs-string">&quot;STEP&quot;</span>, <span class="hljs-string">&quot;DRAW&quot;</span>, <span class="hljs-string">&quot;FOR&quot;</span>, <span class="hljs-string">&quot;FROM&quot;</span>, <span class="hljs-comment">//保留字</span><br>            <span class="hljs-string">&quot;T&quot;</span>,                  <span class="hljs-comment">// 参数</span><br>            <span class="hljs-string">&quot;SEMICO&quot;</span>, <span class="hljs-string">&quot;L_BRACKET&quot;</span>, <span class="hljs-string">&quot;R_BRACKET&quot;</span>, <span class="hljs-string">&quot;COMMA&quot;</span>,<span class="hljs-comment">// 分隔符</span><br>            <span class="hljs-string">&quot;PLUS&quot;</span>, <span class="hljs-string">&quot;MINUS&quot;</span>, <span class="hljs-string">&quot;MUL&quot;</span>, <span class="hljs-string">&quot;DIV&quot;</span>, <span class="hljs-string">&quot;POWER&quot;</span>,        <span class="hljs-comment">// 运算符</span><br>            <span class="hljs-string">&quot;FUNC&quot;</span>,                  <span class="hljs-comment">// 函数（调用）</span><br>            <span class="hljs-string">&quot;CONST_ID&quot;</span>,              <span class="hljs-comment">// 常数</span><br>            <span class="hljs-string">&quot;NONTOKEN&quot;</span>,              <span class="hljs-comment">// 空记号（源程序结束）</span><br>            <span class="hljs-string">&quot;ERRTOKEN&quot;</span>              <span class="hljs-comment">//出错记号（非法符号）</span><br>    &#125;;<br><br><br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">Cifa_Analyzer</span><span class="hljs-params">()</span> <span class="hljs-keyword">throws</span> IOException </span>&#123;<br><br>        String pathName = <span class="hljs-string">&quot;/Users/leo/Desktop/test.txt&quot;</span>;<br>        FileInputStream fis = <span class="hljs-keyword">new</span> FileInputStream(pathName);<br>        BufferedReader br = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(fis));<br>        String temp = <span class="hljs-string">&quot;&quot;</span>;<br>        String string2 = <span class="hljs-string">&quot;&quot;</span>;<br>        <span class="hljs-keyword">while</span> ((temp = br.readLine()) != <span class="hljs-keyword">null</span>) &#123;<br>            string2 = string2 + temp + <span class="hljs-string">&#x27;\n&#x27;</span>;<br>        &#125;<br>        <span class="hljs-keyword">char</span>[] chars = string2.toCharArray();<br><span class="hljs-comment">//        OutputToken test=new OutputToken(string);</span><br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">1000</span>; j++) <span class="hljs-comment">//对象需要分别初始化</span><br>        &#123;<br>            tokens[j] = <span class="hljs-keyword">new</span> Token();<br>        &#125;<br>        <span class="hljs-keyword">int</span> k = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; string2.length(); ) &#123;<br>            <span class="hljs-keyword">if</span> ((chars[i] &gt;= <span class="hljs-number">65</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">90</span>) || (chars[i] &lt;= <span class="hljs-number">122</span> &amp;&amp; chars[i] &gt;= <span class="hljs-number">97</span>)) &#123;<br>                tokens[k].type += <span class="hljs-string">&quot;ID&quot;</span>;<br>                tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                <span class="hljs-keyword">while</span> ((chars[i] &gt;= <span class="hljs-number">65</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">90</span>) || (chars[i] &lt;= <span class="hljs-number">122</span> &amp;&amp; chars[i] &gt;= <span class="hljs-number">97</span>)) &#123;<br>                    tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                    i++;<br>                &#125;<br>                k++;<br>            &#125;   <span class="hljs-comment">//letter</span><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] &gt;= <span class="hljs-number">48</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">57</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;CONST_ID&quot;</span>;<br>                tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                i++;<br>                <span class="hljs-keyword">while</span> (chars[i] &gt;= <span class="hljs-number">48</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">57</span>) &#123;<br>                    tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                    i++;<br>                &#125;<br>                <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;.&#x27;</span>) &#123;<br>                    tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                    i++;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    tokens[k].value = Double.parseDouble(tokens[k].lexeme);<br>                    k++;<br>                    <span class="hljs-keyword">continue</span>;<br>                &#125;<br>                <span class="hljs-keyword">if</span> (chars[i] &gt;= <span class="hljs-number">48</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">57</span>) &#123;<br>                    <span class="hljs-keyword">while</span> (chars[i] &gt;= <span class="hljs-number">48</span> &amp;&amp; chars[i] &lt;= <span class="hljs-number">57</span>) &#123;<br>                        tokens[k].lexeme = tokens[k].lexeme + chars[i];<br>                        i++;<br>                    &#125;<br>                    tokens[k].value = Double.parseDouble(tokens[k].lexeme);<br>                    k++;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    System.out.println(tokens[k].lexeme);<br>                    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>                &#125;<br><br>            &#125;<span class="hljs-comment">//digit</span><br><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;*&#x27;</span>) &#123;<br>                <span class="hljs-keyword">if</span> (chars[i + <span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;*&#x27;</span>) &#123;<br>                    tokens[k].type = <span class="hljs-string">&quot;POWER&quot;</span>;<br>                    tokens[k].lexeme = <span class="hljs-string">&quot;**&quot;</span>;<br>                    tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                    i = i + <span class="hljs-number">2</span>;<br>                    k++;<br><br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    tokens[k].type = <span class="hljs-string">&quot;MUL&quot;</span>;<br>                    tokens[k].lexeme = <span class="hljs-string">&quot;*&quot;</span>;<br>                    tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                    i++;<br>                    k++;<br>                &#125;<br>            &#125;<span class="hljs-comment">// MUL and POWER</span><br><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;/&#x27;</span>) &#123;<br>                <span class="hljs-keyword">if</span> (chars[i + <span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;/&#x27;</span>) &#123;<br>                    <span class="hljs-comment">//tokens[k].type = &quot;COMMENT&quot;;</span><br>                    <span class="hljs-comment">//tokens[k].lexeme = &quot;//&quot;;</span><br>                    <span class="hljs-comment">//tokens[k].value = 0.0d;</span><br>                    i = i + <span class="hljs-number">2</span>;<br>                    <span class="hljs-comment">//k++;</span><br>                    <span class="hljs-keyword">while</span> (chars[i] != <span class="hljs-string">&#x27;\n&#x27;</span>) &#123;   <span class="hljs-comment">//直接跳到换行符之后</span><br>                        i++;<br>                        <span class="hljs-keyword">if</span> (i == string2.length()) &#123;<br>                            <span class="hljs-keyword">return</span> k;<br>                        &#125;<br>                    &#125;<br>                    i++;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    tokens[k].type = <span class="hljs-string">&quot;DIV&quot;</span>;<br>                    tokens[k].lexeme = <span class="hljs-string">&quot;/&quot;</span>;<br>                    tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                    i++;<br>                    k++;<br>                &#125;<br>            &#125;<span class="hljs-comment">// 注释或者除</span><br><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;-&#x27;</span>) &#123;<br>                <span class="hljs-keyword">if</span> (chars[i + <span class="hljs-number">1</span>] == <span class="hljs-string">&#x27;-&#x27;</span>) &#123;<br>                    tokens[k].type = <span class="hljs-string">&quot;COMMENT&quot;</span>;<br>                    tokens[k].lexeme = <span class="hljs-string">&quot;--&quot;</span>;<br>                    tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                    i = i + <span class="hljs-number">2</span>;<br>                    k++;<br>                    <span class="hljs-keyword">while</span> (chars[i] != <span class="hljs-string">&#x27;\n&#x27;</span>) &#123;   <span class="hljs-comment">//直接跳到换行符之后</span><br>                        i++;<br>                        <span class="hljs-keyword">if</span> (i == string2.length()) &#123;<br>                            <span class="hljs-keyword">return</span> k;<br>                        &#125;<br>                    &#125;<br>                    i++;<br>                &#125; <span class="hljs-keyword">else</span> &#123;<br>                    tokens[k].type = <span class="hljs-string">&quot;MINUS&quot;</span>;<br>                    tokens[k].lexeme = <span class="hljs-string">&quot;-&quot;</span>;<br>                    tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                    i++;<br>                    k++;<br>                &#125;<br>            &#125;<span class="hljs-comment">// 注释或者减</span><br><br>            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;+&#x27;</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;PLUS&quot;</span>;<br>                tokens[k].lexeme = <span class="hljs-string">&quot;+&quot;</span>;<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                k++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;,&#x27;</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;COMMA&quot;</span>;<br>                tokens[k].lexeme = <span class="hljs-string">&quot;,&quot;</span>;<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                k++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;;&#x27;</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;SEMICO&quot;</span>;<br>                tokens[k].lexeme = <span class="hljs-string">&quot;;&quot;</span>;<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                k++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;(&#x27;</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;L_BRACKET&quot;</span>;<br>                tokens[k].lexeme = <span class="hljs-string">&quot;(&quot;</span>;<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                k++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-string">&#x27;)&#x27;</span>) &#123;<br>                tokens[k].type = <span class="hljs-string">&quot;R_BRACKET&quot;</span>;<br>                tokens[k].lexeme = <span class="hljs-string">&quot;)&quot;</span>;<br>                tokens[k].value = <span class="hljs-number">0.0d</span>;<br>                i++;<br>                k++;<br>            &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (chars[i] == <span class="hljs-number">9</span> || chars[i] == <span class="hljs-string">&#x27;\n&#x27;</span> || chars[i] == <span class="hljs-string">&#x27; &#x27;</span>) &#123;<br>                <span class="hljs-comment">//tokens[k].type=&quot;WHITE_SPACE&quot;;</span><br>                <span class="hljs-comment">//tokens[k].lexeme+=chars[i];</span><br>                <span class="hljs-comment">//tokens[k].value=0.0d;</span><br>                i++;<br>                <span class="hljs-comment">//k++;</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br>                System.out.println(chars[i] + <span class="hljs-string">&quot; 词法错误 &quot;</span> + <span class="hljs-string">&quot;位置：&quot;</span> + k);<br>                <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>            &#125;<br>        &#125;<br>        String functions[] = &#123;<span class="hljs-string">&quot;SIN&quot;</span>, <span class="hljs-string">&quot;COS&quot;</span>, <span class="hljs-string">&quot;TAN&quot;</span>, <span class="hljs-string">&quot;LN&quot;</span>, <span class="hljs-string">&quot;EXP&quot;</span>, <span class="hljs-string">&quot;SQRT&quot;</span>&#125;;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> kk = <span class="hljs-number">0</span>; kk &lt; k; kk++) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> ii = <span class="hljs-number">0</span>; ii &lt; <span class="hljs-number">10</span>; ii++) &#123;<br>                <span class="hljs-keyword">if</span> (tokens[kk].lexeme.toUpperCase().equals(Token_Type[ii])) &#123;<br>                    tokens[kk].type = Token_Type[ii];<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> ii = <span class="hljs-number">0</span>; ii &lt; functions.length; ii++) &#123;<br>                <span class="hljs-keyword">if</span> (tokens[kk].lexeme.toUpperCase().equals(functions[ii])) &#123;<br>                    tokens[kk].type = <span class="hljs-string">&quot;FUNC&quot;</span>;<br>                &#125;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (tokens[kk].lexeme.toUpperCase().equals(<span class="hljs-string">&quot;PI&quot;</span>)) &#123;<br>                tokens[kk].type = <span class="hljs-string">&quot;CONST_ID&quot;</span>;<br>                tokens[kk].value = <span class="hljs-number">3.1415926d</span>;<br>            &#125;<br>            <span class="hljs-keyword">if</span> (tokens[kk].lexeme.toUpperCase().equals(<span class="hljs-string">&quot;E&quot;</span>)) &#123;<br>                tokens[kk].type = <span class="hljs-string">&quot;CONST_ID&quot;</span>;<br>                tokens[kk].value = <span class="hljs-number">2.71828d</span>;<br>            &#125;<br>        &#125;<br><br>        tokens[k].type=<span class="hljs-string">&quot;NONTOKEN&quot;</span>;<br>        tokens[k].value=<span class="hljs-number">0.0d</span>;<br>        tokens[k].lexeme=<span class="hljs-string">&quot;NONTOKEN&quot;</span>;<br>        <span class="hljs-keyword">if</span> (k &gt; <span class="hljs-number">0</span>) &#123;<br>            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; k+<span class="hljs-number">1</span>; i++) &#123;<br>                System.out.print(tokens[i].type);<br>                System.out.print(<span class="hljs-string">&quot;    &quot;</span>);<br>                System.out.print(tokens[i].lexeme);<br>                System.out.print(<span class="hljs-string">&quot;    &quot;</span>);<br>                System.out.println(tokens[i].value);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> k;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2019/11/10/compiler2/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">语法分析器</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2019/11/01/OS-Problems/">
+                        <span class="hidden-mobile">linux3.8.13编译内核的小问题</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

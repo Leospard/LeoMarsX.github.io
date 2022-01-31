@@ -1,0 +1,514 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CMU15-445课程知识点复习 &amp; 总结">
+<meta property="og:url" content="http://yoursite.com/2022/01/26/CMU15-445%E5%A4%8D%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="本文将进行CMU15-445的知识点巩固与复习。 复习点参考博主：西部小笼包的整理，我进行了参考并加入了一点自己的见解。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/picture/Database/slotted_page.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/log_structed_page.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/chained_hash.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/extenible_hash.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/linear_hash.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/2-way.png">
+<meta property="article:published_time" content="2022-01-26T15:23:00.000Z">
+<meta property="article:modified_time" content="2022-01-31T07:08:02.434Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="数据库">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/picture/Database/slotted_page.png">
+  
+  
+  <title>CMU15-445课程知识点复习 &amp; 总结 - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="CMU15-445课程知识点复习 &amp; 总结">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-26 23:23" pubdate>
+        2022年1月26日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.3k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      20 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">CMU15-445课程知识点复习 &amp; 总结</h1>
+            
+            <div class="markdown-body">
+              <p>本文将进行CMU15-445的知识点巩固与复习。</p>
+<p>复习点参考<code>博主：西部小笼包</code>的整理，我进行了参考并加入了一点自己的见解。</p>
+<span id="more"></span>    
+
+<h2 id="数据库存储"><a href="#数据库存储" class="headerlink" title="数据库存储"></a>数据库存储</h2><h5 id="1-为什么需要数据库系统？文件系统不够吗？"><a href="#1-为什么需要数据库系统？文件系统不够吗？" class="headerlink" title="1. 为什么需要数据库系统？文件系统不够吗？"></a>1. 为什么需要数据库系统？文件系统不够吗？</h5><p>首先是更好得解耦，对所需存储的数据的建模（不同场景不同模型）这些逻辑可与物理存储层分离。并且类似查询检查保证数据一致性的逻辑也可以与业务代码分离。</p>
+<p>其次磁盘IO是比较昂贵的，相较于基于操作系统mmap等机制对于内存磁盘的交互，数据库系统拥有更多的信息去更好地决定何时将内存页刷入磁盘。数据库会有一个Buffer Pool Manager组件进行管理，制定专属的淘汰策略。</p>
+<h5 id="2-数据库底层是如何存储的？"><a href="#2-数据库底层是如何存储的？" class="headerlink" title="2. 数据库底层是如何存储的？"></a>2. 数据库底层是如何存储的？</h5><p>数据库的存储为了移植性一般基于文件系统。DBMS 通常将自己的所有数据作为一个或多个文件存储在磁盘中，而 OS 只当它们是普通文件，并不知道如何解读这些文件。</p>
+<p>数据库会按照Page为存储单位进行存储（类似文件系统Block的概念）。每个 Page 带着一个唯一的 id。数据库会用一个间接层做通过PageID &lt;—&gt; 物理实际地址的映射。</p>
+<p>数据库会有一个storage manager模块负责读写磁盘上的对应Page，同时保持较好的空间和时间的局部性。数据文件在底层会有不同的组织形式，比较常见的是无序的HEAP FILE， 或者是有序的聚集索引（B树），还有一种是HASH FILE。</p>
+<h5 id="3-HEAP-FILE-内部是怎么组织变成一个数据库的？"><a href="#3-HEAP-FILE-内部是怎么组织变成一个数据库的？" class="headerlink" title="3.HEAP FILE 内部是怎么组织变成一个数据库的？"></a>3.HEAP FILE 内部是怎么组织变成一个数据库的？</h5><p>这里不讨论链表的方式，主要讨论页目录（Page Directory）的方式。</p>
+<p>这种方式会有一些页目录会记录全部数据文件的位置，同时也记录了每一个页的FREE SLOT数量（即使用情况）。</p>
+<p>具体数据页的存储有两种方式，一种记录数据本身采用Slotted Page（下左图），另一种记录操作数据的日志（定期会压缩日志）。</p>
+<table>
+<thead>
+<tr>
+<th align="center"><img src="/picture/Database/slotted_page.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
+<th align="center"><img src="/picture/Database/log_structed_page.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
+</tr>
+</thead>
+</table>
+<p>对于Slotted Page，每一个TUPLE 在DBMS里会即会有以page_id + offset/slot的二元组唯一定位。</p>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><h5 id="4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"><a href="#4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？" class="headerlink" title="4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"></a>4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？</h5><p>Hash 函数的选择，就是在性能和冲突率之间的TRADE OFF。另外就是冲突之后的策略选择。其实是在开一个更大的表和找到其他地方去插KEY的TRADE OFF。</p>
+<p>静态Hash算法（要求事先知道存多少元素，否则就需要在一定时间对整个表做扩容和缩容然后rehash）：</p>
+<ol>
+<li>线性扫描</li>
+<li>Robin（目的是让每次扫描次数差不多）</li>
+<li>Cuckoo（两张表）</li>
+</ol>
+<p>动态扩容的Hash算法：</p>
+<ol>
+<li>Chained Hash （桶满了加桶）</li>
+<li>Extenible Hash（桶满了后增加hash匹配位数，变相增加桶数）</li>
+<li>Linear Hash（维护一个指针指向下一个被拆分的桶）</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th><img src="/picture/Database/chained_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
+<th><img src="/picture/Database/extenible_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
+<th><img src="/picture/Database/linear_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
+</tr>
+</thead>
+</table>
+<h5 id="5-B-树有哪些性质？"><a href="#5-B-树有哪些性质？" class="headerlink" title="5. B+树有哪些性质？"></a>5. B+树有哪些性质？</h5><ol>
+<li>他是完美平衡的，所有叶子节点的深度一致。</li>
+<li>每个非根节点至少是半满的。（如果最多有M个孩子，那么至少会有[M / 2 - 1, M - 1]个key ）</li>
+<li>每个内部节点有K个KEY，就会有K + 1个孩子。</li>
+</ol>
+<h5 id="6-B-树的设计策略：B树节点的SIZE如何选择？合并阈值？"><a href="#6-B-树的设计策略：B树节点的SIZE如何选择？合并阈值？" class="headerlink" title="6. B+树的设计策略：B树节点的SIZE如何选择？合并阈值？"></a>6. B+树的设计策略：B树节点的SIZE如何选择？合并阈值？</h5><p>一般存储设备IO开销越大，速度越慢，节点就需要越大。具体情境下的最优大小由 workload 决定。</p>
+<p>对于节点的合并有些 DBMS 选择延迟 merge 操作的发生时间，甚至可以利用其它进程来负责周期性地重建 table index。</p>
+<h5 id="7-B-树有哪些常见优化？"><a href="#7-B-树有哪些常见优化？" class="headerlink" title="7. B+树有哪些常见优化？"></a>7. B+树有哪些常见优化？</h5><p>1． 前缀压缩，如果这个节点的STRING 都是以ABC，开头，可以把这个ABC提出来，这样之后的信息都会少，就能存更多。</p>
+<p>2． 后缀截断【较常用】。如果后缀的信息没有区分度，则在中间节点的时候可以砍掉。</p>
+<p>3． 指针调整，如果一个PAGE已经再BUFFER POOL 里PINNED了，我们可以存直接的指针来代替原来存的PAGE ID。来避免去PAGE TABLE 查ADDRESS。</p>
+<p>4． 批量插入【常用】。如果一开始你就知道要插的所有KEY，可以对他们先排序，然后对这些KEY去构建INDEX BOTTOM UP。这样性能最好。</p>
+<h5 id="8-什么是隐式索引，局部索引，覆盖索引，包含索引-index-include-column-？"><a href="#8-什么是隐式索引，局部索引，覆盖索引，包含索引-index-include-column-？" class="headerlink" title="8. 什么是隐式索引，局部索引，覆盖索引，包含索引(index include column)？"></a>8. 什么是隐式索引，局部索引，覆盖索引，包含索引(index include column)？</h5><blockquote>
+<p>Todo…</p>
+</blockquote>
+<h5 id="9-什么是Latch-Crabbing，此方法是如何加锁索引的？"><a href="#9-什么是Latch-Crabbing，此方法是如何加锁索引的？" class="headerlink" title="9. 什么是Latch Crabbing，此方法是如何加锁索引的？"></a>9. 什么是Latch Crabbing，此方法是如何加锁索引的？</h5><p>首先拿父PAGE的LATCH， 然后拿孩子的LATCH。如果父节点是SAFE（不会引起分裂、合并操作）的则释放父PAGE的LATCH。</p>
+<p>查的时候，拿到孩子的读锁就可以释放父亲的读锁。</p>
+<p>删增的时候，拿写锁，如果某一个孩子是SAFE的，可以释放祖先持有的全部锁</p>
+<p>其余一个优化是可以先假设叶子节点是安全的，在一开始可以只上读锁。如果发现这个假设是错的，再重头来一遍写锁。</p>
+<p>如果要同时支持LEFT-&gt;RIGHT， TOP-&gt;BOTTM <strong>两个方向</strong>的节点查找，当发现锁被占有了，最好的方式是等一小会然后杀掉自己，重头开始。</p>
+<p>另一个优化是把PARENT节点的更新延迟到下次获取写锁的时候再更新（通过一个全局变量记录需要更新的节点）。</p>
+<h2 id="排序、聚合和Join"><a href="#排序、聚合和Join" class="headerlink" title="排序、聚合和Join"></a>排序、聚合和Join</h2><h5 id="10-如果有108个页，内存只能容下5页，如何做硬盘外排序？"><a href="#10-如果有108个页，内存只能容下5页，如何做硬盘外排序？" class="headerlink" title="10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？"></a>10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？</h5><p>首先每次放进内存5个页，对5个页排序，写到磁盘的一个文件里。这样最后会有22个文件。</p>
+<p>下一次开始做K路归并，把4个文件放进去BUFFER里，然后流式读文件。还余下的一个文件的位置是用来当PQ，每次输出一个最小的写进磁盘。这样搞完之后。就还有22/4 = 6个文件。</p>
+<p>下一步同样，变成2个文件。最后合到一个有序文件。</p>
+<img src="/picture/Database/2-way.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" />
+
+<h5 id="11-GROUP-BY-、DISTINCT-应该怎么做？"><a href="#11-GROUP-BY-、DISTINCT-应该怎么做？" class="headerlink" title="11. GROUP BY 、DISTINCT 应该怎么做？"></a>11. GROUP BY 、DISTINCT 应该怎么做？</h5><p>一般有两种聚合方法，一种是Sorting Aggregation，另一种是Hashing Aggregation。</p>
+<p>当然排序聚合需要做一遍</p>
+<h5 id="12-Join如何做？"><a href="#12-Join如何做？" class="headerlink" title="12. Join如何做？"></a>12. Join如何做？</h5><blockquote>
+<p>Todo…</p>
+</blockquote>
+<h2 id="CMU15-445课程总结"><a href="#CMU15-445课程总结" class="headerlink" title="CMU15-445课程总结"></a>CMU15-445课程总结</h2>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/23/%E7%88%AC%E8%99%AB%E8%B8%A9%E5%9D%91/">
+                        <span class="hidden-mobile">爬虫踩坑</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
