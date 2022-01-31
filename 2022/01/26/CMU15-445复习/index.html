@@ -27,10 +27,10 @@
 <meta property="og:image" content="http://yoursite.com/picture/Database/log_structed_page.png">
 <meta property="og:image" content="http://yoursite.com/picture/Database/chained_hash.png">
 <meta property="og:image" content="http://yoursite.com/picture/Database/extenible_hash.png">
-<meta property="og:image" content="http://yoursite.com/picture/Database/linear_hash.png">
 <meta property="og:image" content="http://yoursite.com/picture/Database/2-way.png">
+<meta property="og:image" content="http://yoursite.com/picture/Database/hash_aggregation.png">
 <meta property="article:published_time" content="2022-01-26T15:23:00.000Z">
-<meta property="article:modified_time" content="2022-01-31T07:08:02.434Z">
+<meta property="article:modified_time" content="2022-01-31T08:57:15.614Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="数据库">
 <meta name="twitter:card" content="summary_large_image">
@@ -74,7 +74,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -86,7 +86,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Leo Shen</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -204,7 +204,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.3k 字
+      2.7k 字
     </span>
   
 
@@ -213,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      20 分钟
+      23 分钟
     </span>
   
 
@@ -257,14 +257,8 @@
 <h5 id="3-HEAP-FILE-内部是怎么组织变成一个数据库的？"><a href="#3-HEAP-FILE-内部是怎么组织变成一个数据库的？" class="headerlink" title="3.HEAP FILE 内部是怎么组织变成一个数据库的？"></a>3.HEAP FILE 内部是怎么组织变成一个数据库的？</h5><p>这里不讨论链表的方式，主要讨论页目录（Page Directory）的方式。</p>
 <p>这种方式会有一些页目录会记录全部数据文件的位置，同时也记录了每一个页的FREE SLOT数量（即使用情况）。</p>
 <p>具体数据页的存储有两种方式，一种记录数据本身采用Slotted Page（下左图），另一种记录操作数据的日志（定期会压缩日志）。</p>
-<table>
-<thead>
-<tr>
-<th align="center"><img src="/picture/Database/slotted_page.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
-<th align="center"><img src="/picture/Database/log_structed_page.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
-</tr>
-</thead>
-</table>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/picture/Database/slotted_page.png" srcset="/img/loading.gif" lazyload alt="slotted page"></div><div class="group-image-wrap"><img src="/picture/Database/log_structed_page.png" srcset="/img/loading.gif" lazyload alt="log structed page"></div></div></div>
+
 <p>对于Slotted Page，每一个TUPLE 在DBMS里会即会有以page_id + offset/slot的二元组唯一定位。</p>
 <h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><h5 id="4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"><a href="#4-Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？" class="headerlink" title="4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？"></a>4.Hash表主要关注什么？静态、动态HASH算法有哪些区别是什么？</h5><p>Hash 函数的选择，就是在性能和冲突率之间的TRADE OFF。另外就是冲突之后的策略选择。其实是在开一个更大的表和找到其他地方去插KEY的TRADE OFF。</p>
 <p>静态Hash算法（要求事先知道存多少元素，否则就需要在一定时间对整个表做扩容和缩容然后rehash）：</p>
@@ -279,15 +273,9 @@
 <li>Extenible Hash（桶满了后增加hash匹配位数，变相增加桶数）</li>
 <li>Linear Hash（维护一个指针指向下一个被拆分的桶）</li>
 </ol>
-<table>
-<thead>
-<tr>
-<th><img src="/picture/Database/chained_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
-<th><img src="/picture/Database/extenible_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
-<th><img src="/picture/Database/linear_hash.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" /></th>
-</tr>
-</thead>
-</table>
+<div class="group-image-container"><div class="group-image-row"><div class="group-image-wrap"><img src="/picture/Database/chained_hash.png" srcset="/img/loading.gif" lazyload alt="chained hash"></div><div class="group-image-wrap"><img src="/picture/Database/extenible_hash.png" srcset="/img/loading.gif" lazyload alt="extenible_hash"></div></div></div>
+
+
 <h5 id="5-B-树有哪些性质？"><a href="#5-B-树有哪些性质？" class="headerlink" title="5. B+树有哪些性质？"></a>5. B+树有哪些性质？</h5><ol>
 <li>他是完美平衡的，所有叶子节点的深度一致。</li>
 <li>每个非根节点至少是半满的。（如果最多有M个孩子，那么至少会有[M / 2 - 1, M - 1]个key ）</li>
@@ -310,11 +298,21 @@
 <p>另一个优化是把PARENT节点的更新延迟到下次获取写锁的时候再更新（通过一个全局变量记录需要更新的节点）。</p>
 <h2 id="排序、聚合和Join"><a href="#排序、聚合和Join" class="headerlink" title="排序、聚合和Join"></a>排序、聚合和Join</h2><h5 id="10-如果有108个页，内存只能容下5页，如何做硬盘外排序？"><a href="#10-如果有108个页，内存只能容下5页，如何做硬盘外排序？" class="headerlink" title="10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？"></a>10. 如果有108个页，内存只能容下5页，如何做硬盘外排序？</h5><p>首先每次放进内存5个页，对5个页排序，写到磁盘的一个文件里。这样最后会有22个文件。</p>
 <p>下一次开始做K路归并，把4个文件放进去BUFFER里，然后流式读文件。还余下的一个文件的位置是用来当PQ，每次输出一个最小的写进磁盘。这样搞完之后。就还有22/4 = 6个文件。</p>
-<p>下一步同样，变成2个文件。最后合到一个有序文件。</p>
-<img src="/picture/Database/2-way.png" srcset="/img/loading.gif" lazyload style="zoom:20%;" />
-
+<p>下一步同样，变成2个文件。最后合到一个有序文件。<br><img src="/picture/Database/2-way.png" srcset="/img/loading.gif" lazyload alt="2-way外排"></p>
 <h5 id="11-GROUP-BY-、DISTINCT-应该怎么做？"><a href="#11-GROUP-BY-、DISTINCT-应该怎么做？" class="headerlink" title="11. GROUP BY 、DISTINCT 应该怎么做？"></a>11. GROUP BY 、DISTINCT 应该怎么做？</h5><p>一般有两种聚合方法，一种是Sorting Aggregation，另一种是Hashing Aggregation。</p>
-<p>当然排序聚合需要做一遍</p>
+<p>当然第一种排序聚合的方法需要做一遍外排，然后按顺序即可轻松进行GroupBy和Distinct操作，不过这样的方法开销会大一点，一般对于无排序要求的情况会采用Hash聚合。</p>
+<p>Hash聚合<strong>利用一个临时的Hash Table</strong>来记录必要的信息。</p>
+<ul>
+<li>首先将相同的key哈希进一个partition中（使用 1 个 page 读数据，B-1 个 page 写出 B-1 个 partition 的数据），partition满了就刷进磁盘。</li>
+<li>在内存中针对每个 partition 利用一个临时的Hash Table计算 aggregation 的结果<ul>
+<li>如果我们发现相应的 GroupKey 已经在内存中，只需要更新 RunningVal 就可以</li>
+<li>反之，则插入新的 GroupKey 到 RunningVal 的键值对</li>
+</ul>
+</li>
+</ul>
+<p>由于这里的两阶段假设一个Partition可以被完整得读入内存之中因此能够聚合的表最大为 B × (B − 1)。</p>
+<p>如果表更大，则阶段要更复杂一点，需要更多轮。</p>
+<p><img src="/picture/Database/hash_aggregation.png" srcset="/img/loading.gif" lazyload alt="Hash Aggregation"></p>
 <h5 id="12-Join如何做？"><a href="#12-Join如何做？" class="headerlink" title="12. Join如何做？"></a>12. Join如何做？</h5><blockquote>
 <p>Todo…</p>
 </blockquote>

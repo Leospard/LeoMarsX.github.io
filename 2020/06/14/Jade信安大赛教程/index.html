@@ -16,12 +16,12 @@
   <meta name="author" content="Leo Shen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。 JADE简介JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集">
+    <meta name="description" content="本作品基于JADE（Java智能体开发框架），是一个实现共识算法的通信框架，用于进行威胁信息共享。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="信安大赛作品使用指南">
 <meta property="og:url" content="http://yoursite.com/2020/06/14/Jade%E4%BF%A1%E5%AE%89%E5%A4%A7%E8%B5%9B%E6%95%99%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。 JADE简介JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集">
+<meta property="og:description" content="本作品基于JADE（Java智能体开发框架），是一个实现共识算法的通信框架，用于进行威胁信息共享。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/JADE/1.png">
 <meta property="og:image" content="http://yoursite.com/picture/JADE/2.png">
@@ -29,7 +29,7 @@
 <meta property="og:image" content="http://yoursite.com/picture/JADE/4.png">
 <meta property="og:image" content="http://yoursite.com/picture/JADE/5.png">
 <meta property="article:published_time" content="2020-06-14T02:25:00.000Z">
-<meta property="article:modified_time" content="2020-06-14T03:45:56.998Z">
+<meta property="article:modified_time" content="2022-01-31T07:45:18.229Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="教程">
 <meta name="twitter:card" content="summary_large_image">
@@ -73,7 +73,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -85,7 +85,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Leo Shen</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -244,10 +244,10 @@
             <h1 style="display: none">信安大赛作品使用指南</h1>
             
             <div class="markdown-body">
-              <p>本作品基于JADE（Java智能体开发框架）,是一个实现共识算法的通信框架。</p>
-<h3 id="JADE简介"><a href="#JADE简介" class="headerlink" title="JADE简介"></a>JADE简介</h3><p>JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集成到一起，比如：Net和Java EE。它包括一个Agent赖以生存的运行环境，开发Agent应用的类库和用来调试和配置的一套图形化的工具，简化了一个多Agent系统的开发过程。</p>
+              <p>本作品基于JADE（Java智能体开发框架），是一个实现共识算法的通信框架，用于进行威胁信息共享。</p>
 <span id="more"></span>
 
+<h3 id="JADE简介"><a href="#JADE简介" class="headerlink" title="JADE简介"></a>JADE简介</h3><p>JADE是基于Java 语言的Agent开发框架，是由TILAB 开发的开放源代码的自由软件。JADE是多Agent开发框架，遵循FIPA规范，它提供了基本的命名服务，黄业服务，通讯机制等，可以有效地与其它Java开发平台和技术集成。 JADE架构适应性很强，不仅可以在受限资源环境中运行，而且与其他复杂架构集成到一起，比如：Net和Java EE。它包括一个Agent赖以生存的运行环境，开发Agent应用的类库和用来调试和配置的一套图形化的工具，简化了一个多Agent系统的开发过程。</p>
 <h3 id="JADE功能"><a href="#JADE功能" class="headerlink" title="JADE功能"></a>JADE功能</h3><p>JADE为多Agent系统提供了以下功能: </p>
 <blockquote>
 <p>(1)Agent管理系统(Agent Management System，简称AMS)，负责控制平台内Agent的活动、 生存周期及外部应用程序与平台的交互，规范Agent在平台上用独一无二的名字来标识；<br>(2)目录服务器(Dilectoly Facilitatol，简称DF)，负责对平台内的Agent提供黄页服务，注册服务类型以供查找；<br>(3)消息传送系统，也称为Agent交流通道(Agent Communication Channel，简称ACC)，控制平台内或不同平台之间的消息传输、消息编码、消息解析等。<br>JADE定义了Agentclass作为其他Agent的父类，其他Agent均继承自Agentclass。Agentclass中定义了setup方法，用于初始化Agent；定义了takeDown方法，用于结束Agent的运行；定义了doDelete方法，用于终止Agent；定义了Behaviour类以及addBehaviour方法用于添加Agent任务。为了保证Agent的分布式计算和协作机制，JADE构建行为池(Behaviour Pool)来存储所有添加的Behaviour，这些Behaviour呈队列排列，按照进入行为池的顺序依次被调用。Behaviour方法被调用时，首先执行Action方法，然后判断Done函数返回的布尔值，如果为真则将Behaviour移出行为池，继续下一个Behaviour的执行。JADE提供了这样一个基类，其他Agent所需要做的是重载setup，action，done，takeDown 这几个方法来实现特定的功能模块。</p>

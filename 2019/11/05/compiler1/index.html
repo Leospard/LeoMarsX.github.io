@@ -16,16 +16,16 @@
   <meta name="author" content="Leo Shen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="绘图语言介绍&lt;1&gt; 实现简单函数绘图的语句  循环绘图（FOR-DRAW） 比例设置（SCALE） 角度旋转（ROT） 坐标平移（ORIGIN） 注释        （– 或 &#x2F;&#x2F;）">
+    <meta name="description" content="接下来三篇博客将回顾编译原理课程的大作业（编译一个语义极简的画图语言），分别从词法、语法、语义三部分进行梳理。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="词法分析器">
 <meta property="og:url" content="http://yoursite.com/2019/11/05/compiler1/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="绘图语言介绍&lt;1&gt; 实现简单函数绘图的语句  循环绘图（FOR-DRAW） 比例设置（SCALE） 角度旋转（ROT） 坐标平移（ORIGIN） 注释        （– 或 &#x2F;&#x2F;）">
+<meta property="og:description" content="接下来三篇博客将回顾编译原理课程的大作业（编译一个语义极简的画图语言），分别从词法、语法、语义三部分进行梳理。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/DFA.png">
 <meta property="article:published_time" content="2019-11-05T07:18:14.000Z">
-<meta property="article:modified_time" content="2019-11-28T13:07:34.961Z">
+<meta property="article:modified_time" content="2022-01-31T07:40:54.553Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="编译原理">
 <meta name="twitter:card" content="summary_large_image">
@@ -69,7 +69,7 @@
 
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
-    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
   </script>
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
@@ -81,7 +81,7 @@
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Leo Shen</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -208,7 +208,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      65 分钟
+      66 分钟
     </span>
   
 
@@ -240,14 +240,16 @@
             <h1 style="display: none">词法分析器</h1>
             
             <div class="markdown-body">
-              <h1 id="绘图语言介绍"><a href="#绘图语言介绍" class="headerlink" title="绘图语言介绍"></a>绘图语言介绍</h1><p>&lt;1&gt; 实现简单函数绘图的语句</p>
+              <p>接下来三篇博客将回顾编译原理课程的大作业（编译一个语义极简的画图语言），分别从词法、语法、语义三部分进行梳理。</p>
+<span id="more"></span>
+
+<h2 id="绘图语言介绍"><a href="#绘图语言介绍" class="headerlink" title="绘图语言介绍"></a>绘图语言介绍</h2><p>&lt;1&gt; 实现简单函数绘图的语句</p>
 <ul>
 <li>循环绘图（FOR-DRAW）</li>
 <li>比例设置（SCALE）</li>
 <li>角度旋转（ROT）</li>
 <li>坐标平移（ORIGIN）</li>
-<li>注释        （– 或 //）<span id="more"></span>
-</li>
+<li>注释        （– 或 //）</li>
 </ul>
 <hr>
 <p>&lt;2&gt; 屏幕（窗口）的坐标系</p>
@@ -257,7 +259,7 @@
 <li>y方向从上到下增长(与一般的坐标系方向相反)</li>
 </ul>
 <hr>
-<p>&lt;3&gt; 函数绘图源程序举例<br>————— 函数f(t)=t的图形<br>origin is (100, 300);    – 设置原点的偏移量<br>rot is 0;            – 设置旋转角度(不旋转)<br>scale is (1, 1);        – 设置横坐标和纵坐标的比例<br>for T from 0 to 200 step 1 draw (t, 0);<br>                – 横坐标的轨迹（纵坐标为0）<br>for T from 0 to 150 step 1 draw (0, -t);<br>                – 纵坐标的轨迹（横坐标为0）<br>for T from 0 to 120 step 1 draw (t, -t);<br>                – 函数f(t)=t的轨迹<br>//默认值：<br>//  origin is (0, 0)<br>// rot is 0;<br>// scale is (1, 1)</p>
+<p>&lt;3&gt; 函数绘图源程序举例<br>————— 函数f(t)=t的图形 —————<br>origin is (100, 300);    – 设置原点的偏移量<br>rot is 0;            – 设置旋转角度(不旋转)<br>scale is (1, 1);        – 设置横坐标和纵坐标的比例<br>for T from 0 to 200 step 1 draw (t, 0);<br>                – 横坐标的轨迹（纵坐标为0）<br>for T from 0 to 150 step 1 draw (0, -t);<br>                – 纵坐标的轨迹（横坐标为0）<br>for T from 0 to 120 step 1 draw (t, -t);<br>                – 函数f(t)=t的轨迹<br>//默认值：<br>//  origin is (0, 0)<br>// rot is 0;<br>// scale is (1, 1)</p>
 <blockquote>
 <p>FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标, 纵坐标);</p>
 </blockquote>
