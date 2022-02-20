@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/Network/surface.png">
 <meta property="article:published_time" content="2022-02-07T17:04:00.000Z">
-<meta property="article:modified_time" content="2022-02-20T05:30:22.961Z">
+<meta property="article:modified_time" content="2022-02-20T11:25:18.069Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="Lab">
 <meta property="article:tag" content="计算机网络">
@@ -267,7 +267,8 @@
 </blockquote>
 <p>在第二种方法中，A邀请B给其发送一个UDP请求，在邀请的信息中，A指明了B的UDP请求的目标端口，因为在锥型NAT中，主机A的一个端口和NAT网关的映射是固定的，所以<strong>主机A可以通过Server知道自己给B发送请求是打开的端口是哪一个，也可以知道B给自己发送请求是打开的端口是哪一个</strong>，但是当换到对称NAT中时，由于一个连接对应NAT网关上的一个端口，所以主机A无法确定自己通过哪一个端口给B发信息，同样无法确定B会通过哪一个端口给自己发信息，所以二者无法建立连接。</p>
 <p>那么端口限制型又为什么不能和对称型进行穿透呢，因为端口限制型对端口存在要求，但是我们无法确定对称型中分配的端口是哪一个，<strong>对称型NAT新建的映射信息是会被锥型NAT拒收的，数据无法进入内网，这个新的映射端口就只能靠猜了</strong>。</p>
-<h5 id="简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。"><a href="#简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。" class="headerlink" title="简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。"></a>简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。</h5><blockquote>
+<p><u><strong><em>简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。</em></strong></u></p>
+<blockquote>
 <p>如果这里对称NAT使用顺序增加策略，那么，B将两次被分配的NAT端口发送给Server后，Server就可以通知A在这个端口范围内猜测刚才B发送给它的socket中被NAT映射后的端口，A很有可能在孔有效期内成功猜测到端口号，从而和B成功通信。</p>
 </blockquote>
 <h4 id="NAT打洞与P2P的关系"><a href="#NAT打洞与P2P的关系" class="headerlink" title="NAT打洞与P2P的关系"></a>NAT打洞与P2P的关系</h4><p>由于目前大多数端设备都在NAT网关之后，所以若两台设备想要进行P2P连接就必须先进行NAT打洞操作。</p>
