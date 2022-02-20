@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/Network/surface.png">
 <meta property="article:published_time" content="2022-02-07T17:04:00.000Z">
-<meta property="article:modified_time" content="2022-02-07T17:25:18.140Z">
+<meta property="article:modified_time" content="2022-02-20T05:30:22.961Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="Lab">
 <meta property="article:tag" content="计算机网络">
@@ -188,7 +188,7 @@
   
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.5k 字
+      3.6k 字
     </span>
   
 
@@ -197,7 +197,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      29 分钟
+      31 分钟
     </span>
   
 
@@ -259,15 +259,15 @@
 <p>第一种：完全锥型NAT和完全锥型NAT进行穿透</p>
 <p>假设A和B都是完全锥型NAT，在A和B都连接到server后，A和B都可以借助server的转发互相发送消息，那么此刻A和B就可以知道对方的公网ip，以及对方和server连接的时候，使用的端口是什么（假设是100），因为两者和server1进行通信的端口已经进行了NAT映射，所以二者的100端口其实已经完成映射，又因为二者都在完全锥型NAT下，此刻A只需要直接给B的100端口发送建立连接的请求，B给A的100端口回复同意建立连接的请求，二者即可建立UDP连接（当然UDP连接建立要比这复杂点，不过本文重点不在于如何建立UDP连接）</p>
 <p>第二种：IP/端口限制型NAT和IP/端口限制型NAT进行穿透</p>
-<p>假设A和B都是ip限制型NAT，在A和B都连接到server后，A和B都可以借助server的转发互相发送消息，A会先发送一个UDP请求（假设自己的端口用100，目标端口用200）到B的公网ip上，理论上来说，因为B的NAT网关中，200端口没有建立NAT映射，所以这个数据包会被丢弃，但是在A发送给B的UDP请求后，A会通过server给B发送一个邀请，邀请B也发送一个UDP请求给A（此刻B自己用的端口是200，目标端口是100），注意，<strong>在B收到来自A的UDP请求后，虽然A的数据包被B丢弃了，但是此刻，网关A暂时的建立了一个NAT映射，等待B返回的信息，虽然数据包已经被丢弃了，但是A不知道，所以A会稍微等一会B。这时，B收到了A的邀请，给A发送了一个建立连接的请求，此刻A的NAT网关恰巧暂时建立了NAT映射，所以A就可以收到B的UDP请求，接着A会给B发送一个同意建立连接的请求，因为此刻B刚发完请求在等A的回信，所以B的NAT网关也会暂时的建立一个NAT映射，所以A同意建立连接的请求就不会被B的NAT网关丢弃，最终，二者就建立了一个稳定的UDP连接</strong>。</p>
+<p>假设A和B都是ip限制型NAT，在A和B都连接到server后，A和B都可以借助server的转发互相发送消息<strong>同样由于已经和Server建立连接，目前A、B都可以通过Server知道彼此NAT网关的IP及转换后的端口</strong>，A会先发送一个UDP请求（假设自己的NAT网关端口为100，目标NAT网关端口为200）到B的公网ip上，理论上来说，因为B的NAT网关中，200端口没有建立NAT映射，所以这个数据包会被丢弃，但是在A发送给B的UDP请求后，A会通过server给B发送一个邀请，邀请B也发送一个UDP请求给A（此刻B自己用的端口是200，目标端口是100），注意，<strong>在B收到来自A的UDP请求后，虽然A的数据包被B丢弃了，但是此刻，网关A暂时的建立了一个NAT映射，等待B返回的信息，虽然数据包已经被丢弃了，但是A不知道，所以A会稍微等一会B。这时，B收到了A的邀请，给A发送了一个建立连接的请求，此刻A的NAT网关恰巧暂时建立了NAT映射，所以A就可以收到B的UDP请求，接着A会给B发送一个同意建立连接的请求，因为此刻B刚发完请求在等A的回信，所以B的NAT网关也会暂时的建立一个NAT映射，所以A同意建立连接的请求就不会被B的NAT网关丢弃，最终，二者就建立了一个稳定的UDP连接</strong>。</p>
 <p><img src="/picture/Network/nat.png" srcset="/img/loading.gif" lazyload alt="NAT穿透"></p>
 <p>第三种：对称型NAT与端口限制型/对称型NAT的穿透</p>
 <blockquote>
 <p>借助上述思想，我们就可以完成不需要服务器一直进行中转的内网穿透，那么为什么对称型NAT不能使用上述思想和对称型NAT穿透呢。 </p>
 </blockquote>
-<p>在第二种方法中，A邀请B给其发送一个UDP请求，在邀请的信息中，A指明了B的UDP请求的目标端口，因为在锥型NAT中，主机A的一个端口和NAT网关的映射是固定的，所以主机A可以通过server知道自己给B发送请求是打开的端口是哪一个，也可以知道B给自己发送请求是打开的端口是哪一个，但是当换到对称NAT中时，由于一个连接对应NAT网关上的一个端口，所以主机A无法确定自己通过哪一个端口给B发信息，同样无法确定B会通过哪一个端口给自己发信息，所以二者无法建立连接。</p>
+<p>在第二种方法中，A邀请B给其发送一个UDP请求，在邀请的信息中，A指明了B的UDP请求的目标端口，因为在锥型NAT中，主机A的一个端口和NAT网关的映射是固定的，所以<strong>主机A可以通过Server知道自己给B发送请求是打开的端口是哪一个，也可以知道B给自己发送请求是打开的端口是哪一个</strong>，但是当换到对称NAT中时，由于一个连接对应NAT网关上的一个端口，所以主机A无法确定自己通过哪一个端口给B发信息，同样无法确定B会通过哪一个端口给自己发信息，所以二者无法建立连接。</p>
 <p>那么端口限制型又为什么不能和对称型进行穿透呢，因为端口限制型对端口存在要求，但是我们无法确定对称型中分配的端口是哪一个，<strong>对称型NAT新建的映射信息是会被锥型NAT拒收的，数据无法进入内网，这个新的映射端口就只能靠猜了</strong>。</p>
-<blockquote>
+<h5 id="简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。"><a href="#简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。" class="headerlink" title="简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。"></a>简单说就是网关后的主机没法直接知道网关分配的端口是什么，如果锥型网关可以借助Server获取分配的端口信息，而对称型的由于无法确定这个分配的端口而难以进行打洞。</h5><blockquote>
 <p>如果这里对称NAT使用顺序增加策略，那么，B将两次被分配的NAT端口发送给Server后，Server就可以通知A在这个端口范围内猜测刚才B发送给它的socket中被NAT映射后的端口，A很有可能在孔有效期内成功猜测到端口号，从而和B成功通信。</p>
 </blockquote>
 <h4 id="NAT打洞与P2P的关系"><a href="#NAT打洞与P2P的关系" class="headerlink" title="NAT打洞与P2P的关系"></a>NAT打洞与P2P的关系</h4><p>由于目前大多数端设备都在NAT网关之后，所以若两台设备想要进行P2P连接就必须先进行NAT打洞操作。</p>
