@@ -18,22 +18,22 @@
   
     <meta name="description" content="有幸得知开源之夏这个项目，并有机会参与到Dubbo-go的社区建设中。这里便记录自己对于Dubbo-go的源码阅读。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Dubbo-go Provider helloworld">
-<meta property="og:url" content="http://yoursite.com/2022/05/13/Dubbo-go%20Server/index.html">
+<meta property="og:title" content="Dubbo-go Provider">
+<meta property="og:url" content="http://yoursite.com/2022/05/13/Dubbo-go%20Provider/index.html">
 <meta property="og:site_name" content="Leo的博客">
 <meta property="og:description" content="有幸得知开源之夏这个项目，并有机会参与到Dubbo-go的社区建设中。这里便记录自己对于Dubbo-go的源码阅读。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220613180915767.png">
+<meta property="og:image" content="http://yoursite.com/picture/Dubbo/surface.png">
 <meta property="article:published_time" content="2022-05-13T11:33:00.000Z">
-<meta property="article:modified_time" content="2022-06-20T09:16:36.670Z">
+<meta property="article:modified_time" content="2022-06-20T09:26:12.620Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="RPC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220613180915767.png">
+<meta name="twitter:image" content="http://yoursite.com/picture/Dubbo/surface.png">
   
   
-  <title>Dubbo-go Provider helloworld - Leo的博客</title>
+  <title>Dubbo-go Provider - Leo的博客</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
 
@@ -167,7 +167,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Dubbo-go Provider helloworld">
+            <span class="h2" id="subtitle" title="Dubbo-go Provider">
               
             </span>
 
@@ -226,11 +226,11 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Dubbo-go Provider helloworld</h1>
+            <h1 style="display: none">Dubbo-go Provider</h1>
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 分钟前
+                  本文最后更新于：几秒前
                 
               </p>
             
@@ -245,8 +245,7 @@
 <h3 id="一-加载配置：将Service封装入ServiceConfig（着重服务provider端）"><a href="#一-加载配置：将Service封装入ServiceConfig（着重服务provider端）" class="headerlink" title="一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）"></a>一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）</h3><p>运行dubbo-sample中的helloworld示例demo，这是demo的服务端提供了GreeterProvider接口的实现，客户端则去调用该接口服务。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs GO"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	config.SetProviderService(&amp;GreeterProvider&#123;&#125;)<br>  <span class="hljs-comment">// 读入配置文件，根据配置文件的内容，将注册的 service 实现到配置结构里，再调用 Export 暴露给特定的 registry，进而开启特定的 service 进行对应端口的 tcp 监听，成功启动并且暴露服务。</span><br>	<span class="hljs-keyword">if</span> err := config.Load(); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-built_in">panic</span>(err)<br>	&#125;<br>	<span class="hljs-keyword">select</span> &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<img src="/Users/leo/Library/Application Support/typora-user-images/image-20220613180915767.png" srcset="/img/loading.gif" lazyload alt="image-20220613180915767" style="zoom:50%;" />
-
+<p><img src="/picture/Dubbo/frame.png" srcset="/img/loading.gif" lazyload alt="Dubbo Frame"></p>
 <p>上图是Dubbo-java官网给出的框架设计，在Service层之下就是Config层读取相应配置信息，最后逐层向下注册，最终实现服务端的暴露。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// SetProviderService is called by init() of implement of RPCService</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SetProviderService</span><span class="hljs-params">(service common.RPCService)</span></span> &#123;<br>  <span class="hljs-comment">// ref就是传入的类的string name，并建立好对应的map</span><br>	ref := common.GetReference(service)<br>	proServicesLock.Lock()<br>	<span class="hljs-keyword">defer</span> proServicesLock.Unlock()<br>	proServices[ref] = service<br>&#125;<br></code></pre></td></tr></table></figure>
 
