@@ -1,0 +1,586 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="有幸得知开源之夏这个项目，并有机会参与到Dubbo-go的社区建设中。这里便记录自己对于Dubbo-go的源码阅读。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo-go Provider helloworld">
+<meta property="og:url" content="http://yoursite.com/2022/05/13/Dubbo-go%20Server/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="有幸得知开源之夏这个项目，并有机会参与到Dubbo-go的社区建设中。这里便记录自己对于Dubbo-go的源码阅读。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220613180915767.png">
+<meta property="article:published_time" content="2022-05-13T11:33:00.000Z">
+<meta property="article:modified_time" content="2022-06-20T09:16:36.670Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="RPC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220613180915767.png">
+  
+  
+  <title>Dubbo-go Provider helloworld - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo Shen</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Dubbo-go Provider helloworld">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-13 19:33" pubdate>
+        2022年5月13日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      13k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      107 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Dubbo-go Provider helloworld</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：1 分钟前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>有幸得知开源之夏这个项目，并有机会参与到Dubbo-go的社区建设中。这里便记录自己对于Dubbo-go的源码阅读。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>当拿到一款框架之后，一种不错的源码阅读方式大致如下：从运行最基础的 helloworld demo 源码开始 —&gt; 再查看配置文件 —&gt; 开启各种依赖服务（比如zk、consul） —&gt; 开启服务端 —&gt; 再到通过 client 调用服务端 —&gt; 打印完整请求日志和回包。调用成功之后，再根据框架的设计模型，从配置文件解析开始，自顶向下递阅读整个框架的调用栈。                                                                                                                  ——志信</p>
+</blockquote>
+<p>由于Dubbo是一个服务端暴露接口的实现服务，消费端远程调用服务端提供的服务的一个RPC框架，所以分析源码也将分别从服务端服务是如何暴露的、消费端是如何调用服务的两个方面进行分析</p>
+<h3 id="一-加载配置：将Service封装入ServiceConfig（着重服务provider端）"><a href="#一-加载配置：将Service封装入ServiceConfig（着重服务provider端）" class="headerlink" title="一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）"></a>一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）</h3><p>运行dubbo-sample中的helloworld示例demo，这是demo的服务端提供了GreeterProvider接口的实现，客户端则去调用该接口服务。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs GO"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	config.SetProviderService(&amp;GreeterProvider&#123;&#125;)<br>  <span class="hljs-comment">// 读入配置文件，根据配置文件的内容，将注册的 service 实现到配置结构里，再调用 Export 暴露给特定的 registry，进而开启特定的 service 进行对应端口的 tcp 监听，成功启动并且暴露服务。</span><br>	<span class="hljs-keyword">if</span> err := config.Load(); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-built_in">panic</span>(err)<br>	&#125;<br>	<span class="hljs-keyword">select</span> &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<img src="/Users/leo/Library/Application Support/typora-user-images/image-20220613180915767.png" srcset="/img/loading.gif" lazyload alt="image-20220613180915767" style="zoom:50%;" />
+
+<p>上图是Dubbo-java官网给出的框架设计，在Service层之下就是Config层读取相应配置信息，最后逐层向下注册，最终实现服务端的暴露。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// SetProviderService is called by init() of implement of RPCService</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">SetProviderService</span><span class="hljs-params">(service common.RPCService)</span></span> &#123;<br>  <span class="hljs-comment">// ref就是传入的类的string name，并建立好对应的map</span><br>	ref := common.GetReference(service)<br>	proServicesLock.Lock()<br>	<span class="hljs-keyword">defer</span> proServicesLock.Unlock()<br>	proServices[ref] = service<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><code>config.Load()</code>读入配置文件，并初始化rootConfig，再分别Load Provider、Consumer，暴露MetaDataService与注册服务实例。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Load</span><span class="hljs-params">(opts ...LoaderConfOption)</span> <span class="hljs-title">error</span></span> &#123;<br>	<span class="hljs-comment">// conf</span><br>	conf := NewLoaderConf(opts...)<br>	<span class="hljs-keyword">if</span> conf.rc == <span class="hljs-literal">nil</span> &#123;<br>		koan := GetConfigResolver(conf)<br>		koan = conf.MergeConfig(koan)<br>		<span class="hljs-keyword">if</span> err := koan.UnmarshalWithConf(rootConfig.Prefix(),<br>			rootConfig, koanf.UnmarshalConf&#123;Tag: <span class="hljs-string">&quot;yaml&quot;</span>&#125;); err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">return</span> err<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		rootConfig = conf.rc<br>	&#125;<br>	<span class="hljs-comment">// 这是关键，初始化dubbo-go</span><br>	<span class="hljs-keyword">if</span> err := rootConfig.Init(); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> err<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>rootConfig.Init()中最后会初始化Provider、Consumer。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// provider、consumer must last init</span><br><span class="hljs-keyword">if</span> err := rc.Provider.Init(rc); err != <span class="hljs-literal">nil</span> &#123;<br>  <span class="hljs-keyword">return</span> err<br>&#125;<br><span class="hljs-keyword">if</span> err := rc.Consumer.Init(rc); err != <span class="hljs-literal">nil</span> &#123;<br>  <span class="hljs-keyword">return</span> err<br>&#125;<br><span class="hljs-keyword">if</span> err := rc.Shutdown.Init(); err != <span class="hljs-literal">nil</span> &#123;<br>  <span class="hljs-keyword">return</span> err<br>&#125;<br><span class="hljs-comment">// todo if we can remove this from Init in the future?</span><br>rc.Start()<br></code></pre></td></tr></table></figure>
+
+<p>其中Provider.Init()逻辑如下，会做一些检查</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// 先init再Load</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *ProviderConfig)</span> <span class="hljs-title">Init</span><span class="hljs-params">(rc *RootConfig)</span> <span class="hljs-title">error</span></span> &#123;<br>  ...<br>  ...<br>  <span class="hljs-keyword">for</span> key, serviceConfig := <span class="hljs-keyword">range</span> c.Services &#123;<br>		<span class="hljs-keyword">if</span> serviceConfig.Interface == <span class="hljs-string">&quot;&quot;</span> &#123;<br>      <span class="hljs-comment">// // 这个GetProviderService便是利用我们第一步SetProviderService的map[string]service实例通过配置文件的name key拿出实例去做相应配置</span><br>			service := GetProviderService(key)<br>			<span class="hljs-comment">// try to use interface name defined by pb</span><br>			supportPBPackagerNameSerivce, ok := service.(common.TriplePBService)<br>			<span class="hljs-keyword">if</span> !ok &#123;<br>				...<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				<span class="hljs-comment">// use interface name defined by pb</span><br>				serviceConfig.Interface = supportPBPackagerNameSerivce.XXX_InterfaceName()<br>			&#125;<br>		&#125;<br>    <span class="hljs-comment">// </span><br>		<span class="hljs-keyword">if</span> err := serviceConfig.Init(rc); err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">return</span> err<br>		&#125;<br><br>		serviceConfig.adaptiveService = c.AdaptiveService<br>	&#125;<br>  ...<br>  ...<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>回到rootConfig.Init()的<code>rc.Start()</code>中，即最关键的部分！</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(rc *RootConfig)</span> <span class="hljs-title">Start</span><span class="hljs-params">()</span></span> &#123;<br>	startOnce.Do(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		gracefulShutdownInit()<br>		rc.Consumer.Load()<br>		rc.Provider.Load()<br>		<span class="hljs-comment">// todo if register consumer instance or has exported services</span><br>		exportMetadataService()<br>		registerServiceInstance()<br>	&#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>先关注服务提供者的Load()函数。 svs即serviceConfig，由框架图也能看出对于服务Service封装的第一层就是Config层。</p>
+<p>ServiceConfig包含了标示Service的Name与实现类的实例，然后调用Export()暴露服务。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(c *ProviderConfig)</span> <span class="hljs-title">Load</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">for</span> key, svs := <span class="hljs-keyword">range</span> c.Services &#123;<br>    <span class="hljs-comment">// rpcService就是用户new的服务实例</span><br>		rpcService := GetProviderService(key)<br>		<span class="hljs-keyword">if</span> rpcService == <span class="hljs-literal">nil</span> &#123;<br>			logger.Warnf(<span class="hljs-string">&quot;Service reference key %s does not exist, please check if this key &quot;</span>+<br>				<span class="hljs-string">&quot;matches your provider struct type name, or matches the returned valued of your provider struct&#x27;s Reference() function.&quot;</span>+<br>				<span class="hljs-string">&quot;View https://www.yuque.com/u772707/eqpff0/pqfgz3#zxdw0 for details&quot;</span>, key)<br>			<span class="hljs-keyword">continue</span><br>		&#125;<br>		svs.id = key<br>    <span class="hljs-comment">// svs.rpcService = rpcService 即将实例写入ServiceConfig</span><br>		svs.Implement(rpcService)<br>    <span class="hljs-comment">// Export()去暴露服务</span><br>		<span class="hljs-keyword">if</span> err := svs.Export(); err != <span class="hljs-literal">nil</span> &#123;<br>			logger.Errorf(fmt.Sprintf(<span class="hljs-string">&quot;service %s export failed! err: %#v&quot;</span>, key, err))<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="二-将ServiceConfig-封装入-ProxyInvoker"><a href="#二-将ServiceConfig-封装入-ProxyInvoker" class="headerlink" title="二. 将ServiceConfig 封装入 ProxyInvoker"></a>二. 将ServiceConfig 封装入 ProxyInvoker</h2><blockquote>
+<p>ServiceConfig.Export()</p>
+</blockquote>
+<ol>
+<li>首先通过配置生成对应 registryUrl</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">regUrls := loadRegistries(s.RegistryIDs, s.RCRegistriesMap, common.PROVIDER)<br></code></pre></td></tr></table></figure>
+
+<p>regUrl 是用来向中心注册组件发起注册请求的，对于 zookeeper 的话，会传入其 ip 和端口号，以及附加的用户名密码等信息。</p>
+<p>然后会为不同的协议分配随机端口，如果指定了多个中心注册协议，则会将服务通过多个中心注册协议的 registryProtocol 暴露出去。</p>
+<ol start="2">
+<li>对于一个注册协议，将用户传入的 rpcService 实例注册在 common.ServiceMap</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">methods, err := common.ServiceMap.Register(s.Interface, proto.Name, s.Group, s.Version, s.rpcService)<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>通过反射实现服务注册功能</p>
+</blockquote>
+<p>这个 Register 函数将服务实例注册了两次，一次是以 Interface 为 key 写入接口服务组内，一次是以 interface 和 proto 为 key 写入特定的一个唯一的服务。</p>
+<p>后续会从 common.Map 里面取出来Service实例。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Service is description of service</span><br><span class="hljs-keyword">type</span> Service <span class="hljs-keyword">struct</span> &#123;<br>	name     <span class="hljs-keyword">string</span><br>	rcvr     reflect.Value<br>	rcvrType reflect.Type<br>	methods  <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]*MethodType<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>所谓服务注册就是由用户提供的实例创建Service实例的过程，并会通过哈希表ServiceMap保存以在服务调用时找到相应实例。</p>
+</blockquote>
+<ol start="3">
+<li>生成ivkURL即服务暴露的URL</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs go">ivkURL := common.NewURLWithOptions(<br>  common.WithPath(s.Interface),<br>  common.WithProtocol(proto.Name),<br>  common.WithIp(proto.Ip),<br>  common.WithPort(port),<br>  common.WithParams(urlMap),<br>  common.WithParamsValue(constant.BeanNameKey, s.id),<br>  <span class="hljs-comment">//common.WithParamsValue(constant.SslEnabledKey, strconv.FormatBool(config.GetSslEnabled())),</span><br>  common.WithMethods(strings.Split(methods, <span class="hljs-string">&quot;,&quot;</span>)),<br>  common.WithToken(s.Token),<br>  common.WithParamsValue(constant.MetadataTypeKey, s.metadataType),<br>)<br><span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(s.Tag) &gt; <span class="hljs-number">0</span> &#123;<br>  ivkURL.AddParam(constant.Tagkey, s.Tag)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>获取默认Proxy工厂，将实例封装入代理 invoker</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs go">proxyFactory := extension.GetProxyFactory(s.ProxyFactoryKey)<br><span class="hljs-comment">// 把ivkURL嵌在regURL下</span><br>setRegistrySubURL(ivkURL, regUrl)<br><span class="hljs-comment">// ProxyFactory通过ivkURL、regURL生成invoker</span><br>invoker := proxyFactory.GetInvoker(regUrl)<br><span class="hljs-comment">// 一般cacheProtocol为此：s.cacheProtocol = extension.GetProtocol(&quot;registry&quot;)</span><br><span class="hljs-comment">// Export() 生成exporter,开启tcp监听</span><br>exporter := s.cacheProtocol.Export(invoker)<br></code></pre></td></tr></table></figure>
+
+<p>invoker实现的Invoke方法未来将由invoker.invoke(invocation)去执行服务【invocation是消费者请求最外层的抽象，包含所有请求参数（方法参数 + Attachment）】，invoker封装了许多过程：</p>
+<p>1⃣️获取provider暴露的url，并通过url获取协议</p>
+<p>2⃣️通过协议与invocation解析的请求接口从common.ServiceMap拿到Service实例</p>
+<p>3⃣️通过Service实例内的方法与参数构建真正调用方法的参数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs go">method := svc.Method()[methodName]<br>in := []reflect.Value&#123;svc.Rcvr()&#125;<br>... <span class="hljs-comment">// 一堆append</span><br>returnValues := method.Method().Func.Call(in)<br></code></pre></td></tr></table></figure>
+
+<p>其实一句话来说就是invoke()封装了真正调用实例的逻辑。</p>
+<h2 id="三-registry-协议在-zkRegistry-上暴露上面的-ProxyInvoker"><a href="#三-registry-协议在-zkRegistry-上暴露上面的-ProxyInvoker" class="headerlink" title="三. registry 协议在 zkRegistry 上暴露上面的 ProxyInvoker"></a>三. registry 协议在 zkRegistry 上暴露上面的 ProxyInvoker</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs go">exporter := s.cacheProtocol.Export(invoker)<br></code></pre></td></tr></table></figure>
+
+<p>这里的cacheProtocol使用的是RegistryProtocol调用的方法为<code>registry/protocol/protocol.go::Export()</code></p>
+<ol>
+<li>获取注册中心url和服务暴露的url</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs go">registryUrl := getRegistryUrl(originInvoker)<br>providerUrl := getProviderUrl(originInvoker)<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>获取注册中心实例</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// zookeeper则拿到zkRegistry，Registry接口需要实现Register、Subscribe等方法</span><br>reg := proto.getRegistry(registryUrl)<br>registeredProviderUrl := getUrlToRegistry(providerUrl, registryUrl)<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>通过相应协议如Dubbo暴露服务，监听相应端口</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// export invoker</span><br>exporter := proto.doLocalExport(originInvoker, providerUrl)<br><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(proto *registryProtocol)</span> <span class="hljs-title">doLocalExport</span><span class="hljs-params">(originInvoker protocol.Invoker, providerUrl *common.URL)</span> *<span class="hljs-title">exporterChangeableWrapper</span></span> &#123;<br>	key := getCacheKey(originInvoker)<br>	cachedExporter, loaded := proto.bounds.Load(key)<br>	<span class="hljs-keyword">if</span> !loaded &#123;<br>		<span class="hljs-comment">// new Exporter</span><br>		invokerDelegate := newInvokerDelegate(originInvoker, providerUrl)<br>    <span class="hljs-comment">// 这里的Export调用的是protocol/protocolwrapped/protocol_filter_wrapper.go:Export()</span><br>		cachedExporter = newExporterChangeableWrapper(originInvoker,<br>			extension.GetProtocol(protocolwrapper.FILTER).Export(invokerDelegate))<br>		proto.bounds.Store(key, cachedExporter)<br>	&#125;<br>	<span class="hljs-keyword">return</span> cachedExporter.(*exporterChangeableWrapper)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>这里会调用ProtocolFilterWrapper的Export()函数。</p>
+<p>在这个Export()函数中，会构建InvokerChain，并调用服务配置的协议即 DubboProtocol 的 Export 方法，将上述InvokerChain真正暴露。</p>
+<blockquote>
+<p>关于调用链还没完全弄明白 Todo…</p>
+<p>应该是根据配置的内容，通过链式调用的构造，将 ProxyInvoker 层层包裹在调用链的最底部，最终返回一个调用链 invoker。</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Export service for remote invocation</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(pfw *ProtocolFilterWrapper)</span> <span class="hljs-title">Export</span><span class="hljs-params">(invoker protocol.Invoker)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">Exporter</span></span> &#123;<br>	<span class="hljs-keyword">if</span> pfw.protocol == <span class="hljs-literal">nil</span> &#123;<br>		pfw.protocol = extension.GetProtocol(invoker.GetURL().Protocol)<br>	&#125;<br>  <span class="hljs-comment">// 构造InvokerChain</span><br>	invoker = BuildInvokerChain(invoker, constant.ServiceFilterKey)<br>  <span class="hljs-comment">// 这里是DubboProtocol.Export()</span><br>	<span class="hljs-keyword">return</span> pfw.protocol.Export(invoker)<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>DubboProtocol.Export()主要做两件事：构造触发器、启动服务。</p>
+<ul>
+<li>将传入的 Invoker 调用 chain 进一步封装，封装成一个 exporter，再将这个 export 放入 map 保存。<strong>注意！这里把 exporter 放入了 SetExporterMap中，在下面服务启动的时候，会以注册事件监听器的形式将这个 exporter 取出！</strong></li>
+<li>调用 DubboProtocol 的 openServer 方法，开启一个针对特定端口的监听。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Export export dubbo service.</span><br><span class="hljs-comment">// 这里Exporter传入的是一个经过filter构造的包含调用链的Invoker与一个哈希表</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dp *DubboProtocol)</span> <span class="hljs-title">Export</span><span class="hljs-params">(invoker protocol.Invoker)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">Exporter</span></span> &#123;<br>	url := invoker.GetURL()<br>	serviceKey := url.ServiceKey()<br>	exporter := NewDubboExporter(serviceKey, invoker, dp.ExporterMap())<br>	dp.SetExporterMap(serviceKey, exporter)<br>	logger.Infof(<span class="hljs-string">&quot;[DUBBO Protocol] Export service: %s&quot;</span>, url.String())<br>	<span class="hljs-comment">// start server</span><br>  <span class="hljs-comment">// 开启了一个getty的tcp server，并放在dp.serverMap中</span><br>	dp.openServer(url)<br>  <span class="hljs-comment">// 返回exporter，业务代码在exporter.invoker.invoker.invoker...里。</span><br>	<span class="hljs-keyword">return</span> exporter<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+
+<ol start="4">
+<li>zkRegistry 调用 Registry 方法，在 zookeeper 上注册 dubboPath</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs go">err := reg.Register(registeredProviderUrl)<br><span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>  logger.Errorf(<span class="hljs-string">&quot;provider service %v register registry %v error, error message is %s&quot;</span>,<br>                providerUrl.Key(), registryUrl.Key(), err.Error())<br>  <span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br><br><span class="hljs-keyword">go</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>  <span class="hljs-keyword">if</span> err := reg.Subscribe(overriderUrl, overrideSubscribeListener); err != <span class="hljs-literal">nil</span> &#123;<br>    logger.Warnf(<span class="hljs-string">&quot;reg.subscribe(overriderUrl:%v) = error:%v&quot;</span>, overriderUrl, err)<br>  &#125;<br>&#125;()<br></code></pre></td></tr></table></figure>
+
+<p>zkRegistry类包含registry.BaseRegistry 结构，BaseRegistry 结构定义了注册器基础的功能函数，比如 Registry、Subscribe 等，但在这些默认定义的函数内部，还是会调用 facade 层（zkRegistry 层）的具体实现函数，这一设计模型能在保证已有功能函数不需要重复定义的同时，引入外层函数的实现，类似于结构体继承却又复用了代码。这一设计模式值得学习。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-keyword">type</span> zkRegistry <span class="hljs-keyword">struct</span> &#123;<br>	registry.BaseRegistry<br>	client       *gxzookeeper.ZookeeperClient<br>	listenerLock sync.Mutex<br>	listener     *zookeeper.ZkEventListener<br>	dataListener *RegistryDataListener<br>	cltLock      sync.Mutex<br>	zkPath       <span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">int</span> <span class="hljs-comment">// key = protocol://ip:port/interface</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>至此，将服务端调用 url 注册到了 zookeeper 上，而客户端如果想获取到这个 url，只需要传入特定的 dubboPath，向 zk 请求即可。 客户端可以通过注册中心获取到服务的访问方式url了，并且服务端的特定服务已经启动，已开启特定协议端口的监听。</p>
+<h2 id="四-注册触发动作"><a href="#四-注册触发动作" class="headerlink" title="四. 注册触发动作"></a>四. 注册触发动作</h2><p>上述只是启动了服务，但还没有看到触发事件的细节，在openServer()方法中会调用如下Start()方法。这里可以看到<code>tcpServer.RunEventLoop(s.newSession)</code>会创建的新会话。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Start dubbo server.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(s *Server)</span> <span class="hljs-title">Start</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">var</span> (<br>		addr      <span class="hljs-keyword">string</span><br>		tcpServer getty.Server<br>	)<br><br>	addr = s.addr<br>	serverOpts := []getty.ServerOption&#123;getty.WithLocalAddress(addr)&#125;<br>	<span class="hljs-keyword">if</span> s.conf.SSLEnabled &#123;<br>		serverOpts = <span class="hljs-built_in">append</span>(serverOpts, getty.WithServerSslEnabled(s.conf.SSLEnabled),<br>			getty.WithServerTlsConfigBuilder(config.GetServerTlsConfigBuilder()))<br>	&#125;<br><br>	serverOpts = <span class="hljs-built_in">append</span>(serverOpts, getty.WithServerTaskPool(gxsync.NewTaskPoolSimple(s.conf.GrPoolSize)))<br><br>	tcpServer = getty.NewTCPServer(serverOpts...)<br>  <span class="hljs-comment">// newSession</span><br>	tcpServer.RunEventLoop(s.newSession)<br>	logger.Debugf(<span class="hljs-string">&quot;s bind addr&#123;%s&#125; ok!&quot;</span>, s.addr)<br>	s.tcpServer = tcpServer<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>新会话中很重要的一个配置是 EventListener，传入的是 DubboServer 的默认的rpcHandler。<code>session.SetEventListener(s.rpcHandler)</code>注册的rpcHandler 有一个实现好的 OnMessage 函数，根据 getty 的 API，当 client 调用该端口时，会触发 OnMessage。这一函数实现了在 getty session 接收到 rpc 调用后的一系列处理：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// OnMessage get request from getty client, update the session reqNum and reply response to client</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(h *RpcServerHandler)</span> <span class="hljs-title">OnMessage</span><span class="hljs-params">(session getty.Session, pkg <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;<br>  ...<br>  ...<br>  <br>  <span class="hljs-comment">// 解析传入的pkg</span><br>  decodeResult, drOK := pkg.(*remoting.DecodeResult)<br>  req := decodeResult.Result.(*remoting.Request)<br>  <br>  <span class="hljs-comment">// 通过req的Data直接转换为Invocation</span><br>  invoc, ok := req.Data.(*invocation.RPCInvocation)<br>  <br>  <span class="hljs-comment">// 设置Attachment</span><br>  attachments := invoc.Attachments()<br>	attachments[constant.LocalAddr] = session.LocalAddr()<br>	attachments[constant.RemoteAddr] = session.RemoteAddr()<br>  <br>  result := h.server.requestHandler(invoc)<br> 	...<br>  ...<br>  resp.Result = result<br>	reply(session, resp)<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>requestHandler在DubboProtocol中被设置为<code>handler:=func(invocation *invocation.RPCInvocation) protocol.RPCResult &#123;return doHandleRequest(invocation)&#125; </code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">doHandleRequest</span><span class="hljs-params">(rpcInvocation *invocation.RPCInvocation)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">RPCResult</span></span> &#123;<br>  <span class="hljs-comment">// 由之前构造的ExporterMap通过ServiceKey拿到exporter</span><br>	exporter, _ := dubboProtocol.ExporterMap().Load(rpcInvocation.ServiceKey())<br>	result := protocol.RPCResult&#123;&#125;<br>	<span class="hljs-keyword">if</span> exporter == <span class="hljs-literal">nil</span> &#123;<br>		err := fmt.Errorf(<span class="hljs-string">&quot;don&#x27;t have this exporter, key: %s&quot;</span>, rpcInvocation.ServiceKey())<br>		logger.Errorf(err.Error())<br>		result.Err = err<br>		<span class="hljs-comment">// reply(session, p, hessian.PackageResponse)</span><br>		<span class="hljs-keyword">return</span> result<br>	&#125;<br>  <span class="hljs-comment">// 通过exporter拿到invoker</span><br>	invoker := exporter.(protocol.Exporter).GetInvoker()<br>	<span class="hljs-keyword">if</span> invoker != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-comment">// FIXME</span><br>		ctx := rebuildCtx(rpcInvocation)<br>    <br>    <span class="hljs-comment">// 通过Invoke方法调用服务！</span><br>		invokeResult := invoker.Invoke(ctx, rpcInvocation)<br>		<span class="hljs-keyword">if</span> err := invokeResult.Error(); err != <span class="hljs-literal">nil</span> &#123;<br>			result.Err = invokeResult.Error()<br>			<span class="hljs-comment">// p.Header.ResponseStatus = hessian.Response_OK</span><br>			<span class="hljs-comment">// p.Body = hessian.NewResponse(nil, err, result.Attachments())</span><br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			result.Rest = invokeResult.Result()<br>			<span class="hljs-comment">// p.Header.ResponseStatus = hessian.Response_OK</span><br>			<span class="hljs-comment">// p.Body = hessian.NewResponse(res, nil, result.Attachments())</span><br>		&#125;<br>		result.Attrs = invokeResult.Attachments()<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		result.Err = fmt.Errorf(<span class="hljs-string">&quot;don&#x27;t have the invoker, key: %s&quot;</span>, rpcInvocation.ServiceKey())<br>	&#125;<br>	<span class="hljs-keyword">return</span> result<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>整个被调过程一气呵成。实现了从 getty.Session 的调用事件，到经过层层封装的 invoker 的调用。</p>
+<p>至此，一次RPC调用得以正确返回。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>个人认为想要深入理解RPC框架，可以先参考极客兔兔的7天写一个RPC框架，在那个教程里，其实对于Service的抽象和Dubbo是基本一致的，不过Dubbo在Service层之下由Config、Proxy、Registry等层会进一步封装，更加复杂，但通过这样的层层封装将复杂性不暴露给上一层。</p>
+<p>简单来说调用过程就是</p>
+<blockquote>
+<p>请求—&gt;invocation—&gt;服务key—&gt;exporterMap.get(key)—&gt;exporter—&gt;invoker—&gt;invoker.invoke(invocation)–&gt;执行服务</p>
+</blockquote>
+<ul>
+<li><strong>关于 Invoker 的层层封装</strong></li>
+</ul>
+<p>能把一次调用的所有参数抽象成一次 invocation；</p>
+<p>能把一个协议抽象成针对 invoke 的封装；</p>
+<p>能把针对一次 invoke 所做出的特定改变封装到 invoke 函数内部，可以降低模块之间的耦合性。层层封装逻辑更加清晰。</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/777450">Dubbo-go 源码笔记（一）Server 端开启服务过程</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    
+                      <a class="hover-with-bg" href="/tags/RPC/">RPC</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/03/Raft/">
+                        <span class="hidden-mobile">MIT6.824 -> Raft</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
