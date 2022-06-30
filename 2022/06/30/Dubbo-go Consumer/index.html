@@ -16,16 +16,16 @@
   <meta name="author" content="Leo Shen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。">
+    <meta name="description" content="本文为Dubbogo客户端调用过程分析。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dubbo-go Consumer">
 <meta property="og:url" content="http://yoursite.com/2022/06/30/Dubbo-go%20Consumer/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。">
+<meta property="og:description" content="本文为Dubbogo客户端调用过程分析。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/Dubbo/subscribe.png">
 <meta property="article:published_time" content="2022-06-30T15:49:00.000Z">
-<meta property="article:modified_time" content="2022-06-30T16:44:45.731Z">
+<meta property="article:modified_time" content="2022-06-30T16:48:13.505Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="RPC">
@@ -235,14 +235,14 @@
               </p>
             
             <div class="markdown-body">
-              <blockquote>
-<p>此文基本算是转载了<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/eb2aHvILemPPm3QSc5nqlw">志信的源码分析博客</a></p>
-</blockquote>
-<p>本文为Dubbogo客户端调用过程分析。</p>
+              <p>本文为Dubbogo客户端调用过程分析。</p>
 <span id="more"></span>
 
 <blockquote>
-<p>可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。</p>
+<p>此文基本算是转载了<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/eb2aHvILemPPm3QSc5nqlw">志信的源码分析博客</a></p>
+</blockquote>
+<blockquote>
+<p>服务端暴露服务和客户端远程调用服务<strong>最大的区别</strong>是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。</p>
 </blockquote>
 <p>其实客户端调用的逻辑就是将用户定义的RPCService对应的函数重写，重写后的函数已经包含实现了远程调用逻辑的 invoker。</p>
 <p>接下来，就要通过阅读源码，看看 dubbo-go 是如何做到的。</p>
