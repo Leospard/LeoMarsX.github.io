@@ -1,0 +1,518 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" href="/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Leo Shen">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。  可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。  其实客户端调用的逻辑就是将用户定义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dubbo-go Consumer">
+<meta property="og:url" content="http://yoursite.com/2022/05/13/Dubbo-go%20Consumer/index.html">
+<meta property="og:site_name" content="Leo的博客">
+<meta property="og:description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。  可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。  其实客户端调用的逻辑就是将用户定义">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220630121625528.png">
+<meta property="article:published_time" content="2022-05-13T11:33:00.000Z">
+<meta property="article:modified_time" content="2022-06-30T15:48:32.721Z">
+<meta property="article:author" content="Leo Shen">
+<meta property="article:tag" content="微服务">
+<meta property="article:tag" content="RPC">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220630121625528.png">
+  
+  
+  <title>Dubbo-go Consumer - Leo的博客</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"yoursite.com","root":"/","version":"1.8.14","typing":{"enable":true,"typeSpeed":60,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":true}},"search_path":"/local-search.xml"};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.1"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Leo Shen</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/default.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Dubbo-go Consumer">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-05-13 19:33" pubdate>
+        2022年5月13日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      18k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      152 分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Dubbo-go Consumer</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：几秒前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <blockquote>
+<p>此文基本算是转载了<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/eb2aHvILemPPm3QSc5nqlw">志信的源码分析博客</a></p>
+</blockquote>
+<p>本文为Dubbogo客户端调用过程分析。</p>
+<blockquote>
+<p>可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。</p>
+</blockquote>
+<p>其实客户端调用的逻辑就是将用户定义的RPCService对应的函数重写，重写后的函数已经包含实现了远程调用逻辑的 invoker。</p>
+<p>接下来，就要通过阅读源码，看看 dubbo-go 是如何做到的。</p>
+<h3 id="一-加载配置：将Service封装入ReferenceConfig"><a href="#一-加载配置：将Service封装入ReferenceConfig" class="headerlink" title="一. 加载配置：将Service封装入ReferenceConfig"></a><strong>一. 加载配置：将Service封装入ReferenceConfig</strong></h3><p>同样调用<code>config.Load()</code>读入配置文件</p>
+<p>这次我们只关注consumer的Load()操作，这也是最关键的操作：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></div></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(cc *ConsumerConfig)</span> <span class="hljs-title">Load</span><span class="hljs-params">()</span></span> &#123;<br>	<span class="hljs-keyword">for</span> key, ref := <span class="hljs-keyword">range</span> cc.References &#123;<br>		<span class="hljs-keyword">if</span> ref.Generic != <span class="hljs-string">&quot;&quot;</span> &#123;<br>			genericService := generic.NewGenericService(key)<br>			SetConsumerService(genericService)<br>		&#125;<br>		rpcService := GetConsumerService(key)<br>		<span class="hljs-keyword">if</span> rpcService == <span class="hljs-literal">nil</span> &#123;<br>			logger.Warnf(<span class="hljs-string">&quot;%s does not exist!&quot;</span>, key)<br>			<span class="hljs-keyword">continue</span><br>		&#125;<br>		ref.id = key<br>    <span class="hljs-comment">// 获取远程 Service URL，实现可供调用的 invoker</span><br>		ref.Refer(rpcService)<br>		ref.Implement(rpcService)<br>	&#125;<br>  <br>  <span class="hljs-comment">// 等待三秒钟所有 invoker 就绪</span><br>	...<br>  ...	<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p><code>Refer</code>和<code>Implement</code>是最重要的两个方法，接下来着重介绍。</p>
+<h3 id="二-Refer-获取远程-Service-URL，实现可供调用的-invoker"><a href="#二-Refer-获取远程-Service-URL，实现可供调用的-invoker" class="headerlink" title="二. Refer()获取远程 Service URL，实现可供调用的 invoker"></a><strong>二. Refer()获取远程 Service URL，实现可供调用的 invoker</strong></h3><p>上述的 <code>ref.Refer(rpcService)</code> 完成的就是这部分的操作。</p>
+<ol>
+<li>构造注册 url</li>
+</ol>
+<p>和 server 端类似，存在注册 url 和服务 url，dubbo 习惯将服务 url 作为注册 url 的 sub。</p>
+<ol start="2">
+<li>registryProtocol 获取到 zkRegistry 实例，进一步 Refer</li>
+<li>构造 directory（包含较复杂的异步操作）</li>
+<li>构造带有集群策略的 clusterinvoker</li>
+<li>在 zookeeper 上注册当前 client</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Refer retrieves invokers from urls.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(rc *ReferenceConfig)</span> <span class="hljs-title">Refer</span><span class="hljs-params">(srv <span class="hljs-keyword">interface</span>&#123;&#125;)</span></span> &#123;<br>	<span class="hljs-comment">// If adaptive service is enabled,</span><br>	<span class="hljs-comment">// the cluster and load balance should be overridden to &quot;adaptivesvc&quot; and &quot;p2c&quot; respectively.</span><br>	<span class="hljs-keyword">if</span> rc.rootConfig.Consumer.AdaptiveService &#123;<br>		rc.Cluster = constant.ClusterKeyAdaptiveService<br>		rc.Loadbalance = constant.LoadBalanceKeyP2C<br>	&#125;<br><br>	<span class="hljs-comment">// cfgURL is an interface-level invoker url, in the other words, it represents an interface.</span><br>	cfgURL := common.NewURLWithOptions(<br>		common.WithPath(rc.InterfaceName),<br>		common.WithProtocol(rc.Protocol),<br>		common.WithParams(rc.getURLMap()),<br>		common.WithParamsValue(constant.BeanNameKey, rc.id),<br>		common.WithParamsValue(constant.MetadataTypeKey, rc.metaDataType),<br>	)<br><br>	SetConsumerServiceByInterfaceName(rc.InterfaceName, srv)<br>	<span class="hljs-keyword">if</span> rc.ForceTag &#123;<br>		cfgURL.AddParam(constant.ForceUseTag, <span class="hljs-string">&quot;true&quot;</span>)<br>	&#125;<br>	rc.postProcessConfig(cfgURL)<br><br>	<span class="hljs-comment">// retrieving urls from config, and appending the urls to rc.urls</span><br>	<span class="hljs-keyword">if</span> rc.URL != <span class="hljs-string">&quot;&quot;</span> &#123; <span class="hljs-comment">// use user-specific urls</span><br>		<span class="hljs-comment">/*</span><br><span class="hljs-comment">			 Two types of URL are allowed for rc.URL:</span><br><span class="hljs-comment">				1. direct url: server IP, that is, no need for a registry anymore</span><br><span class="hljs-comment">				2. registry url</span><br><span class="hljs-comment">			 They will be handled in different ways:</span><br><span class="hljs-comment">			 For example, we have a direct url and a registry url:</span><br><span class="hljs-comment">				1. &quot;tri://localhost:10000&quot; is a direct url</span><br><span class="hljs-comment">				2. &quot;registry://localhost:2181&quot; is a registry url.</span><br><span class="hljs-comment">			 Then, rc.URL looks like a string separated by semicolon: &quot;tri://localhost:10000;registry://localhost:2181&quot;.</span><br><span class="hljs-comment">			 The result of urlStrings is a string array: []string&#123;&quot;tri://localhost:10000&quot;, &quot;registry://localhost:2181&quot;&#125;.</span><br><span class="hljs-comment">		*/</span><br>		urlStrings := gxstrings.RegSplit(rc.URL, <span class="hljs-string">&quot;\\s*[;]+\\s*&quot;</span>)<br>		<span class="hljs-keyword">for</span> _, urlStr := <span class="hljs-keyword">range</span> urlStrings &#123;<br>			serviceURL, err := common.NewURL(urlStr)<br>			<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>				<span class="hljs-built_in">panic</span>(fmt.Sprintf(<span class="hljs-string">&quot;url configuration error,  please check your configuration, user specified URL %v refer error, error message is %v &quot;</span>, urlStr, err.Error()))<br>			&#125;<br>			<span class="hljs-keyword">if</span> serviceURL.Protocol == constant.RegistryProtocol &#123; <span class="hljs-comment">// serviceURL in this branch is a registry protocol</span><br>				serviceURL.SubURL = cfgURL<br>				rc.urls = <span class="hljs-built_in">append</span>(rc.urls, serviceURL)<br>			&#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// serviceURL in this branch is the target endpoint IP address</span><br>				<span class="hljs-keyword">if</span> serviceURL.Path == <span class="hljs-string">&quot;&quot;</span> &#123;<br>					serviceURL.Path = <span class="hljs-string">&quot;/&quot;</span> + rc.InterfaceName<br>				&#125;<br>				<span class="hljs-comment">// replace params of serviceURL with params of cfgUrl</span><br>				<span class="hljs-comment">// other stuff, e.g. IP, port, etc., are same as serviceURL</span><br>				newURL := common.MergeURL(serviceURL, cfgURL)<br>				rc.urls = <span class="hljs-built_in">append</span>(rc.urls, newURL)<br>			&#125;<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// use registry configs</span><br>    <span class="hljs-comment">// 配置读入注册中心的信息</span><br>		rc.urls = loadRegistries(rc.RegistryIDs, rc.rootConfig.Registries, common.CONSUMER)<br>		<span class="hljs-comment">// set url to regURLs</span><br>		<span class="hljs-keyword">for</span> _, regURL := <span class="hljs-keyword">range</span> rc.urls &#123;<br>			regURL.SubURL = cfgURL<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// Get invokers according to rc.urls</span><br>	<span class="hljs-keyword">var</span> (<br>		invoker protocol.Invoker<br>		regURL  *common.URL<br>	)<br>	invokers := <span class="hljs-built_in">make</span>([]protocol.Invoker, <span class="hljs-built_in">len</span>(rc.urls))<br>	<span class="hljs-keyword">for</span> i, u := <span class="hljs-keyword">range</span> rc.urls &#123;<br>    <span class="hljs-comment">// 获取registryProtocol实例，调用其Refer方法，传入新构建好的regURL</span><br>		<span class="hljs-keyword">if</span> u.Protocol == constant.ServiceRegistryProtocol &#123;<br>			invoker = extension.GetProtocol(<span class="hljs-string">&quot;registry&quot;</span>).Refer(u)<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			invoker = extension.GetProtocol(u.Protocol).Refer(u)<br>		&#125;<br><br>		<span class="hljs-keyword">if</span> rc.URL != <span class="hljs-string">&quot;&quot;</span> &#123;<br>			invoker = protocolwrapper.BuildInvokerChain(invoker, constant.ReferenceFilterKey)<br>		&#125;<br><br>		invokers[i] = invoker<br>		<span class="hljs-keyword">if</span> u.Protocol == constant.RegistryProtocol &#123;<br>			regURL = u<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// TODO(hxmhlt): decouple from directory, config should not depend on directory module</span><br>	<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(invokers) == <span class="hljs-number">1</span> &#123;<br>		rc.invoker = invokers[<span class="hljs-number">0</span>]<br>		<span class="hljs-keyword">if</span> rc.URL != <span class="hljs-string">&quot;&quot;</span> &#123;<br>			hitClu := constant.ClusterKeyFailover<br>			<span class="hljs-keyword">if</span> u := rc.invoker.GetURL(); u != <span class="hljs-literal">nil</span> &#123;<br>				hitClu = u.GetParam(constant.ClusterKey, constant.ClusterKeyZoneAware)<br>			&#125;<br>			cluster, err := extension.GetCluster(hitClu)<br>			<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>				<span class="hljs-built_in">panic</span>(err)<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				rc.invoker = cluster.Join(static.NewDirectory(invokers))<br>			&#125;<br>		&#125;<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		<span class="hljs-keyword">var</span> hitClu <span class="hljs-keyword">string</span><br>		<span class="hljs-keyword">if</span> regURL != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-comment">// for multi-subscription scenario, use &#x27;zone-aware&#x27; policy by default</span><br>			hitClu = constant.ClusterKeyZoneAware<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-comment">// not a registry url, must be direct invoke.</span><br>			hitClu = constant.ClusterKeyFailover<br>			<span class="hljs-keyword">if</span> u := invokers[<span class="hljs-number">0</span>].GetURL(); u != <span class="hljs-literal">nil</span> &#123;<br>				hitClu = u.GetParam(constant.ClusterKey, constant.ClusterKeyZoneAware)<br>			&#125;<br>		&#125;<br>		cluster, err := extension.GetCluster(hitClu)<br>		<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-built_in">panic</span>(err)<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			rc.invoker = cluster.Join(static.NewDirectory(invokers))<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-comment">// publish consumer&#x27;s metadata</span><br>	publishServiceDefinition(cfgURL)<br>	<span class="hljs-comment">// create proxy</span><br>	<span class="hljs-keyword">if</span> rc.Async &#123;<br>		callback := GetCallback(rc.id)<br>		rc.pxy = extension.GetProxyFactory(rc.rootConfig.Consumer.ProxyFactory).GetAsyncProxy(rc.invoker, callback, cfgURL)<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		rc.pxy = extension.GetProxyFactory(rc.rootConfig.Consumer.ProxyFactory).GetProxy(rc.invoker, cfgURL)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来，已经拿到的 url 将被传递给 RegistryProtocol，进一步 refer。</p>
+<p><code>invoker = extension.GetProtocol(&quot;registry&quot;).Refer(u)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Refer provider service from registry center</span><br><span class="hljs-comment">// 拿到的是配置文件registries的url，他能够生成一个invoker = 指向目的addr，以供客户端直接调用。</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(proto *registryProtocol)</span> <span class="hljs-title">Refer</span><span class="hljs-params">(url *common.URL)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">Invoker</span></span> &#123;<br>	registryUrl := url<br>  <span class="hljs-comment">// 这里拿到的是referenceConfig，serviceUrl里面包含了Reference的所有信息，包含interfaceName、method等等</span><br>	serviceUrl := registryUrl.SubURL<br>	<span class="hljs-keyword">if</span> registryUrl.Protocol == constant.RegistryProtocol &#123;<br>    <span class="hljs-comment">// 替换成了具体的值，比如&quot;zookeeper&quot;</span><br>		registryUrl.Protocol = registryUrl.GetParam(constant.RegistryKey, <span class="hljs-string">&quot;&quot;</span>)<br>	&#125;<br><br>	reg := proto.getRegistry(url)<br>  <br>	<span class="hljs-comment">// 到这里，获取到了reg实例 zookeeper的registry</span><br>  <span class="hljs-comment">// 1. 根据Register的实例zkRegistry和传入的regURL新建一个directory</span><br>  <span class="hljs-comment">// 这一步存在复杂的异步逻辑，从注册中心拿到了目的service的真实addr，获取了invoker并放入directory，</span><br>  <span class="hljs-comment">// 这一步将在下面详细给出步骤</span><br>	<span class="hljs-comment">// new registry directory for store service url from registry</span><br>	directory, err := extension.GetDefaultRegistryDirectory(registryUrl, reg)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		logger.Errorf(<span class="hljs-string">&quot;consumer service %v create registry directory error, error message is %s, and will return nil invoker!&quot;</span>,<br>			serviceUrl.String(), err.Error())<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>	&#125;<br>  <br>   <span class="hljs-comment">// 2. DoRegister 在zk上注册当前client service</span><br>	err = reg.Register(serviceUrl)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		logger.Errorf(<span class="hljs-string">&quot;consumer service %v register registry %v error, error message is %s&quot;</span>,<br>			serviceUrl.String(), registryUrl.String(), err.Error())<br>	&#125;<br>  <br>  <span class="hljs-comment">// 3. new cluster invoker，将directory写入集群，获得具有集群策略的invoker</span><br>	<span class="hljs-comment">// new cluster invoker</span><br>	clusterKey := serviceUrl.GetParam(constant.ClusterKey, constant.DefaultCluster)<br>	cluster, err := extension.GetCluster(clusterKey)<br>	<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-built_in">panic</span>(err)<br>	&#125;<br>	invoker := cluster.Join(directory)<br>	<span class="hljs-keyword">return</span> invoker<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>上述的 <code>extension.GetDefaultRegistryDirectory(&amp;registryUrl, reg)</code> 函数，本质上调用了已经注册好的 <code>NewRegistryDirectory</code> 函数:</p>
+<p>首先构造了一个注册 directory，开启协程调用其 subscribe 函数，传入 serviceURL。</p>
+<p>这个 directory 目前包含了对应的 zkRegistry，以及传入的 URL，它的 cacheInvokers 部分是空的。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// file: registry/directory/directory.go</span><br><span class="hljs-comment">// NewRegistryDirectory will create a new RegistryDirectory</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">NewRegistryDirectory</span><span class="hljs-params">(url *common.URL, registry registry.Registry)</span> <span class="hljs-params">(directory.Directory, error)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> url.SubURL == <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span>, perrors.Errorf(<span class="hljs-string">&quot;url is invalid, suburl can not be nil&quot;</span>)<br>	&#125;<br>	logger.Debugf(<span class="hljs-string">&quot;new RegistryDirectory for service :%s.&quot;</span>, url.Key())<br>	dir := &amp;RegistryDirectory&#123;<br>		Directory:        base.NewDirectory(url),<br>		cacheInvokers:    []protocol.Invoker&#123;&#125;,<br>		cacheInvokersMap: &amp;sync.Map&#123;&#125;,<br>		serviceType:      url.SubURL.Service(),<br>		registry:         registry,<br>	&#125;<br><br>	dir.consumerURL = dir.getConsumerUrl(url.SubURL)<br><br>	<span class="hljs-keyword">if</span> routerChain, err := chain.NewRouterChain(); err == <span class="hljs-literal">nil</span> &#123;<br>		dir.Directory.SetRouterChain(routerChain)<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		logger.Warnf(<span class="hljs-string">&quot;fail to create router chain with url: %s, err is: %v&quot;</span>, url.SubURL, err)<br>	&#125;<br><br>	dir.consumerConfigurationListener = newConsumerConfigurationListener(dir)<br><br>	<span class="hljs-keyword">go</span> dir.subscribe(url.SubURL)<br>	<span class="hljs-keyword">return</span> dir, <span class="hljs-literal">nil</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>进入 dir.subscribe(url.SubURL) 这个异步函数，它调用了 zkRegistry 的 Subscribe 方法,与此同时将自己作为 ConfigListener 传入。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// subscribe from registry</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dir *RegistryDirectory)</span> <span class="hljs-title">subscribe</span><span class="hljs-params">(url *common.URL)</span></span> &#123;<br>	logger.Debugf(<span class="hljs-string">&quot;subscribe service :%s for RegistryDirectory.&quot;</span>, url.Key())<br>  <span class="hljs-comment">// 增加两个监听</span><br>	dir.consumerConfigurationListener.addNotifyListener(dir)<br>	dir.referenceConfigurationListener = newReferenceConfigurationListener(dir, url)<br>  <span class="hljs-comment">// subscribe订阅</span><br>	<span class="hljs-keyword">if</span> err := dir.registry.Subscribe(url, dir); err != <span class="hljs-literal">nil</span> &#123;<br>		logger.Error(<span class="hljs-string">&quot;registry.Subscribe(url:%v, dir:%v) = error:%v&quot;</span>, url, dir, err)<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>上述传递自身的这个 Listener 需要实现 Notify 方法，进而在作为参数传入内部之后，可以被异步地调用 Notify，将内部触发的异步事件“传递出来”，再进一步处理加工。</p>
+<p>Notify 回调链，以事件的形式向外传递，最终落到 directory 上的时候，已经是成型的 <strong>newInvokers</strong> 了。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Notify monitor changes from registry,and update the cacheServices</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dir *RegistryDirectory)</span> <span class="hljs-title">Notify</span><span class="hljs-params">(event *registry.ServiceEvent)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> event == <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	dir.refreshInvokers(event)<br>&#125;<br><br><span class="hljs-comment">// refreshInvokers refreshes service&#x27;s events.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dir *RegistryDirectory)</span> <span class="hljs-title">refreshInvokers</span><span class="hljs-params">(event *registry.ServiceEvent)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> event != <span class="hljs-literal">nil</span> &#123;<br>		logger.Debugf(<span class="hljs-string">&quot;refresh invokers with %+v&quot;</span>, event)<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		logger.Debug(<span class="hljs-string">&quot;refresh invokers with nil&quot;</span>)<br>	&#125;<br><br>	<span class="hljs-keyword">var</span> oldInvoker []protocol.Invoker<br>	<span class="hljs-keyword">if</span> event != <span class="hljs-literal">nil</span> &#123;<br>		oldInvoker, _ = dir.cacheInvokerByEvent(event)<br>	&#125;<br>	dir.setNewInvokers()<br>	<span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> oldInvoker &#123;<br>		<span class="hljs-keyword">if</span> v != <span class="hljs-literal">nil</span> &#123;<br>			v.Destroy()<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>逻辑图如下</p>
+<img src="/Users/leo/Library/Application Support/typora-user-images/image-20220630121625528.png" srcset="/img/loading.gif" lazyload alt="image-20220630121625528" style="zoom:50%;" />
+
+<p>至此，经过上述操作，已经拿到了 server 端 Invokers，放入了 directory 的 cacheinvokers 数组里面缓存。</p>
+<p>后续的操作对应本文从 url 到 invoker 的过程的最后一步，由 directory 生成带有特性集群策略的 invoker。</p>
+<p><code>invoker := cluster.Join(directory)</code></p>
+<p>dubbo-go 框架默认选择 failover 策略。</p>
+<p>Join 函数的实现就是如下函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">newFailoverClusterInvoker</span><span class="hljs-params">(directory directory.Directory)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">Invoker</span></span> &#123;<br>	<span class="hljs-keyword">return</span> &amp;failoverClusterInvoker&#123;<br>		BaseClusterInvoker: base.NewBaseClusterInvoker(directory),<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>既然返回了一个 invoker，我们查看一下 failoverClusterInvoker 的 Invoker 方法，看它是如何将集群策略封装到 Invoker 函数内部的：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(invoker *failoverClusterInvoker)</span> <span class="hljs-title">Invoke</span><span class="hljs-params">(ctx context.Context, invocation protocol.Invocation)</span> <span class="hljs-title">protocol</span>.<span class="hljs-title">Result</span></span> &#123;<br>	<span class="hljs-keyword">var</span> (<br>		result    protocol.Result<br>		invoked   []protocol.Invoker<br>		providers []<span class="hljs-keyword">string</span><br>		ivk       protocol.Invoker<br>	)<br>  <span class="hljs-comment">// 调用List方法拿到directory缓存的所有invokers</span><br>	invokers := invoker.Directory.List(invocation)<br>	<span class="hljs-keyword">if</span> err := invoker.CheckInvokers(invokers, invocation); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span> &amp;protocol.RPCResult&#123;Err: err&#125;<br>	&#125;<br>	<span class="hljs-comment">// 获取来自用户方向传入的参数</span><br>	methodName := invocation.ActualMethodName()<br>	retries := getRetries(invokers, methodName)<br>	loadBalance := base.GetLoadBalance(invokers[<span class="hljs-number">0</span>], methodName)<br><br>  <span class="hljs-comment">// 重要！这里是集群策略的体现，失败后重试！</span><br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt;= retries; i++ &#123;<br>		<span class="hljs-comment">// Reselect before retry to avoid a change of candidate `invokers`.</span><br>		<span class="hljs-comment">// <span class="hljs-doctag">NOTE:</span> if `invokers` changed, then `invoked` also lose accuracy.</span><br>		<span class="hljs-keyword">if</span> i &gt; <span class="hljs-number">0</span> &#123;<br>			<span class="hljs-keyword">if</span> err := invoker.CheckWhetherDestroyed(); err != <span class="hljs-literal">nil</span> &#123;<br>				<span class="hljs-keyword">return</span> &amp;protocol.RPCResult&#123;Err: err&#125;<br>			&#125;<br><br>			invokers = invoker.Directory.List(invocation)<br>			<span class="hljs-keyword">if</span> err := invoker.CheckInvokers(invokers, invocation); err != <span class="hljs-literal">nil</span> &#123;<br>				<span class="hljs-keyword">return</span> &amp;protocol.RPCResult&#123;Err: err&#125;<br>			&#125;<br>		&#125;<br>    <span class="hljs-comment">// 这里是负载均衡策略的体现！选择特定ivk进行调用。</span><br>		ivk = invoker.DoSelect(loadBalance, invocation, invokers, invoked)<br>		<span class="hljs-keyword">if</span> ivk == <span class="hljs-literal">nil</span> &#123;<br>			<span class="hljs-keyword">continue</span><br>		&#125;<br>		invoked = <span class="hljs-built_in">append</span>(invoked, ivk)<br>		<span class="hljs-comment">// DO INVOKE</span><br>		result = ivk.Invoke(ctx, invocation)<br>		<span class="hljs-keyword">if</span> result.Error() != <span class="hljs-literal">nil</span> &#123;<br>			providers = <span class="hljs-built_in">append</span>(providers, ivk.GetURL().Key())<br>			<span class="hljs-keyword">continue</span><br>		&#125;<br>		<span class="hljs-keyword">return</span> result<br>	&#125;<br>	...<br>  ...<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+
+<p>现在我们有了可以打通的 invokers，但还不能直接调用，因为 invoker 的入参是 invocation，而调用函数使用的是具体的参数列表，需要通过一层 proxy 来规范入参和出参。回到<code>func (rc *ReferenceConfig) Refer(...)</code>中可以发现最后会新建一个默认 proxy，放置在 rc.proxy 内，以供后续使用。</p>
+<p>proxy 的作用是将用户定义的函数参数列表，转化为抽象的 invocation 传入 Invoker，进行调用。</p>
+<h3 id="三-将调用逻辑以代理函数的形式写入-RPCService"><a href="#三-将调用逻辑以代理函数的形式写入-RPCService" class="headerlink" title="三. 将调用逻辑以代理函数的形式写入 RPCService"></a>三. <strong>将调用逻辑以代理函数的形式写入 RPCService</strong></h3><p>上面完成了 ref.Refer(rpcService)，下面回到另一个重要的方法<code>ref.Implement(rpcService)</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(p *Proxy)</span> <span class="hljs-title">Implement</span><span class="hljs-params">(v common.RPCService)</span></span> &#123;<br>	p.once.Do(<span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span> &#123;<br>		p.implement(p, v)<br>		p.rpc = v<br>	&#125;)<br>&#125;<br><span class="hljs-comment">// Implement 实现的过程，就是proxy根据函数名和返回值，通过调用invoker构造出拥有远程调用逻辑的代理函数</span><br><span class="hljs-comment">// DefaultProxyImplementFunc the default function for proxy impl</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">DefaultProxyImplementFunc</span><span class="hljs-params">(p *Proxy, v common.RPCService)</span></span> &#123;<br>	<span class="hljs-comment">// check parameters, incoming interface must be a elem&#x27;s pointer.</span><br>	valueOf := reflect.ValueOf(v)<br><br>	valueOfElem := valueOf.Elem()<br><br>	makeDubboCallProxy := <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(methodName <span class="hljs-keyword">string</span>, outs []reflect.Type)</span> <span class="hljs-title">func</span><span class="hljs-params">(in []reflect.Value)</span> []<span class="hljs-title">reflect</span>.<span class="hljs-title">Value</span></span> &#123;<br>		<span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">(in []reflect.Value)</span> []<span class="hljs-title">reflect</span>.<span class="hljs-title">Value</span></span> &#123;<br>			<span class="hljs-keyword">var</span> (<br>				err            error<br>				inv            *invocation_impl.RPCInvocation<br>				inIArr         []<span class="hljs-keyword">interface</span>&#123;&#125;<br>				inVArr         []reflect.Value<br>				reply          reflect.Value<br>				replyEmptyFlag <span class="hljs-keyword">bool</span><br>			)<br>			<span class="hljs-keyword">if</span> methodName == <span class="hljs-string">&quot;Echo&quot;</span> &#123;<br>				methodName = <span class="hljs-string">&quot;$echo&quot;</span><br>			&#125;<br><br>			<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(outs) == <span class="hljs-number">2</span> &#123; <span class="hljs-comment">// return (reply, error)</span><br>				<span class="hljs-keyword">if</span> outs[<span class="hljs-number">0</span>].Kind() == reflect.Ptr &#123;<br>					reply = reflect.New(outs[<span class="hljs-number">0</span>].Elem())<br>				&#125; <span class="hljs-keyword">else</span> &#123;<br>					reply = reflect.New(outs[<span class="hljs-number">0</span>])<br>				&#125;<br>			&#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">// only return error</span><br>				replyEmptyFlag = <span class="hljs-literal">true</span><br>			&#125;<br><br>			start := <span class="hljs-number">0</span><br>			end := <span class="hljs-built_in">len</span>(in)<br>			invCtx := context.Background()<br>			<span class="hljs-comment">// retrieve the context from the first argument if existed</span><br>			<span class="hljs-keyword">if</span> end &gt; <span class="hljs-number">0</span> &#123;<br>				<span class="hljs-keyword">if</span> in[<span class="hljs-number">0</span>].Type().String() == <span class="hljs-string">&quot;context.Context&quot;</span> &#123;<br>					<span class="hljs-keyword">if</span> !in[<span class="hljs-number">0</span>].IsNil() &#123;<br>						<span class="hljs-comment">// the user declared context as method&#x27;s parameter</span><br>						invCtx = in[<span class="hljs-number">0</span>].Interface().(context.Context)<br>					&#125;<br>					start += <span class="hljs-number">1</span><br>				&#125;<br>			&#125;<br><br>			<span class="hljs-keyword">if</span> end-start &lt;= <span class="hljs-number">0</span> &#123;<br>				inIArr = []<span class="hljs-keyword">interface</span>&#123;&#125;&#123;&#125;<br>				inVArr = []reflect.Value&#123;&#125;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> v, ok := in[start].Interface().([]<span class="hljs-keyword">interface</span>&#123;&#125;); ok &amp;&amp; end-start == <span class="hljs-number">1</span> &#123;<br>				inIArr = v<br>				inVArr = []reflect.Value&#123;in[start]&#125;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				inIArr = <span class="hljs-built_in">make</span>([]<span class="hljs-keyword">interface</span>&#123;&#125;, end-start)<br>				inVArr = <span class="hljs-built_in">make</span>([]reflect.Value, end-start)<br>				index := <span class="hljs-number">0</span><br>				<span class="hljs-keyword">for</span> i := start; i &lt; end; i++ &#123;<br>					inIArr[index] = in[i].Interface()<br>					inVArr[index] = in[i]<br>					index++<br>				&#125;<br>			&#125;<br><br>			inv = invocation_impl.NewRPCInvocationWithOptions(invocation_impl.WithMethodName(methodName),<br>				invocation_impl.WithArguments(inIArr),<br>				invocation_impl.WithCallBack(p.callback), invocation_impl.WithParameterValues(inVArr))<br>			<span class="hljs-keyword">if</span> !replyEmptyFlag &#123;<br>				inv.SetReply(reply.Interface())<br>			&#125;<br><br>			<span class="hljs-keyword">for</span> k, value := <span class="hljs-keyword">range</span> p.attachments &#123;<br>				inv.SetAttachment(k, value)<br>			&#125;<br><br>			<span class="hljs-comment">// add user setAttachment. It is compatibility with previous versions.</span><br>			atm := invCtx.Value(constant.AttachmentKey)<br>			<span class="hljs-keyword">if</span> m, ok := atm.(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">string</span>); ok &#123;<br>				<span class="hljs-keyword">for</span> k, value := <span class="hljs-keyword">range</span> m &#123;<br>					inv.SetAttachment(k, value)<br>				&#125;<br>			&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> m2, ok2 := atm.(<span class="hljs-keyword">map</span>[<span class="hljs-keyword">string</span>]<span class="hljs-keyword">interface</span>&#123;&#125;); ok2 &#123;<br>				<span class="hljs-comment">// it is support to transfer map[string]interface&#123;&#125;. It refers to dubbo-java 2.7.</span><br>				<span class="hljs-keyword">for</span> k, value := <span class="hljs-keyword">range</span> m2 &#123;<br>					inv.SetAttachment(k, value)<br>				&#125;<br>			&#125;<br>      <br>			<span class="hljs-comment">// 触发Invoker 之前已经将cluster_invoker放入proxy，使用Invoke方法，通过getty远程过程调用</span><br>			result := p.invoke.Invoke(invCtx, inv)<br>			err = result.Error()<br>			<span class="hljs-comment">// cause is raw user level error</span><br>			cause := perrors.Cause(err)<br>			<span class="hljs-keyword">if</span> err != <span class="hljs-literal">nil</span> &#123;<br>				<span class="hljs-comment">// if some error happened, it should be log some info in the separate file.</span><br>				<span class="hljs-keyword">if</span> throwabler, ok := cause.(java_exception.Throwabler); ok &#123;<br>					logger.Warnf(<span class="hljs-string">&quot;[CallProxy] invoke service throw exception: %v , stackTraceElements: %v&quot;</span>, cause.Error(), throwabler.GetStackTrace())<br>				&#125; <span class="hljs-keyword">else</span> &#123;<br>					<span class="hljs-comment">// entire error is only for printing, do not return, because user would not want to deal with massive framework-level error message</span><br>					logger.Warnf(<span class="hljs-string">&quot;[CallProxy] received rpc err: %v&quot;</span>, err)<br>				&#125;<br>			&#125; <span class="hljs-keyword">else</span> &#123;<br>				logger.Debugf(<span class="hljs-string">&quot;[CallProxy] received rpc result successfully: %s&quot;</span>, result)<br>			&#125;<br>			<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(outs) == <span class="hljs-number">1</span> &#123;<br>				<span class="hljs-keyword">return</span> []reflect.Value&#123;reflect.ValueOf(&amp;cause).Elem()&#125;<br>			&#125;<br>			<span class="hljs-keyword">if</span> <span class="hljs-built_in">len</span>(outs) == <span class="hljs-number">2</span> &amp;&amp; outs[<span class="hljs-number">0</span>].Kind() != reflect.Ptr &#123;<br>				<span class="hljs-keyword">return</span> []reflect.Value&#123;reply.Elem(), reflect.ValueOf(&amp;cause).Elem()&#125;<br>			&#125;<br>			<span class="hljs-keyword">return</span> []reflect.Value&#123;reply, reflect.ValueOf(&amp;cause).Elem()&#125;<br>		&#125;<br>	&#125;<br><br>	<span class="hljs-keyword">if</span> err := refectAndMakeObjectFunc(valueOfElem, makeDubboCallProxy); err != <span class="hljs-literal">nil</span> &#123;<br>		logger.Errorf(<span class="hljs-string">&quot;The type or combination type of RPCService %T must be a pointer of a struct. error is %s&quot;</span>, v, err)<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>Implemt主要完成在代理函数中实现由参数列表生成 Invocation 的逻辑与在代理函数实现调用 Invoker 的逻辑</p>
+<p>然后在最后<code>refectAndMakeObjectFunc</code>函数中将代理函数替换为原始RPCService对应函数（<code>f.Set(reflect.MakeFunc(f.Type(), makeDubboCallProxy(methodName, funcOuts)))</code>）。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">refectAndMakeObjectFunc</span><span class="hljs-params">(valueOfElem reflect.Value, makeDubboCallProxy <span class="hljs-keyword">func</span>(methodName <span class="hljs-keyword">string</span>, outs []reflect.Type)</span> <span class="hljs-title">func</span><span class="hljs-params">(in []reflect.Value)</span> []<span class="hljs-title">reflect</span>.<span class="hljs-title">Value</span>) <span class="hljs-title">error</span></span> &#123;<br>	typeOf := valueOfElem.Type()<br>	<span class="hljs-comment">// check incoming interface, incoming interface&#x27;s elem must be a struct.</span><br>	<span class="hljs-keyword">if</span> typeOf.Kind() != reflect.Struct &#123;<br>		<span class="hljs-keyword">return</span> errors.New(<span class="hljs-string">&quot;invalid type kind&quot;</span>)<br>	&#125;<br>	numField := valueOfElem.NumField()<br>	<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; numField; i++ &#123;<br>		t := typeOf.Field(i)<br>		methodName := t.Tag.Get(<span class="hljs-string">&quot;dubbo&quot;</span>)<br>		<span class="hljs-keyword">if</span> methodName == <span class="hljs-string">&quot;&quot;</span> &#123;<br>			methodName = t.Name<br>		&#125;<br>		f := valueOfElem.Field(i)<br>		<span class="hljs-keyword">if</span> f.Kind() == reflect.Func &amp;&amp; f.IsValid() &amp;&amp; f.CanSet() &#123;<br>			outNum := t.Type.NumOut()<br><br>			<span class="hljs-keyword">if</span> outNum != <span class="hljs-number">1</span> &amp;&amp; outNum != <span class="hljs-number">2</span> &#123;<br>				logger.Warnf(<span class="hljs-string">&quot;method %s of mtype %v has wrong number of in out parameters %d; needs exactly 1/2&quot;</span>,<br>					t.Name, t.Type.String(), outNum)<br>				<span class="hljs-keyword">continue</span><br>			&#125;<br><br>			<span class="hljs-comment">// The latest return type of the method must be error.</span><br>			<span class="hljs-keyword">if</span> returnType := t.Type.Out(outNum - <span class="hljs-number">1</span>); returnType != typError &#123;<br>				logger.Warnf(<span class="hljs-string">&quot;the latest return type %s of method %q is not error&quot;</span>, returnType, t.Name)<br>				<span class="hljs-keyword">continue</span><br>			&#125;<br><br>			funcOuts := <span class="hljs-built_in">make</span>([]reflect.Type, outNum)<br>			<span class="hljs-keyword">for</span> i := <span class="hljs-number">0</span>; i &lt; outNum; i++ &#123;<br>				funcOuts[i] = t.Type.Out(i)<br>			&#125;<br><br>      <span class="hljs-comment">// 调用make函数，传入函数名和返回值，获得能调用远程的proxy，将这个proxy替换掉原来的函数位置</span><br>			<span class="hljs-comment">// do method proxy here:</span><br>			f.Set(reflect.MakeFunc(f.Type(), makeDubboCallProxy(methodName, funcOuts)))<br>			logger.Debugf(<span class="hljs-string">&quot;set method [%s]&quot;</span>, methodName)<br>		&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> f.IsValid() &amp;&amp; f.CanSet() &#123;<br>			<span class="hljs-comment">// for struct combination</span><br>			valueOfSub := reflect.New(t.Type)<br>			valueOfElemInterface := valueOfSub.Elem()<br>			<span class="hljs-keyword">if</span> valueOfElemInterface.Type().Kind() == reflect.Struct &#123;<br>				<span class="hljs-keyword">if</span> err := refectAndMakeObjectFunc(valueOfElemInterface, makeDubboCallProxy); err != <span class="hljs-literal">nil</span> &#123;<br>					<span class="hljs-keyword">return</span> err<br>				&#125;<br>				f.Set(valueOfElemInterface)<br>			&#125;<br>		&#125;<br>	&#125;<br>	<span class="hljs-keyword">return</span> <span class="hljs-literal">nil</span><br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>最后直接调用用户定义的 RPCService 的函数，此处实际调用的是经过重写入的函数代理，所以就能实现远程调用了。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+                    
+                      <a class="hover-with-bg" href="/tags/RPC/">RPC</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/05/13/Dubbo-go%20Provider/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Dubbo-go Provider</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/04/03/Raft/">
+                        <span class="hidden-mobile">MIT6.824 -> Raft</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

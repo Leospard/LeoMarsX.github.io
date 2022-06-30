@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yoursite.com/picture/Dubbo/surface.png">
 <meta property="article:published_time" content="2022-05-13T11:33:00.000Z">
-<meta property="article:modified_time" content="2022-06-20T09:26:12.620Z">
+<meta property="article:modified_time" content="2022-06-29T18:10:25.040Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="RPC">
@@ -230,7 +230,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 小时前
+                  本文最后更新于：1 天前
                 
               </p>
             
@@ -242,7 +242,7 @@
 <p>当拿到一款框架之后，一种不错的源码阅读方式大致如下：从运行最基础的 helloworld demo 源码开始 —&gt; 再查看配置文件 —&gt; 开启各种依赖服务（比如zk、consul） —&gt; 开启服务端 —&gt; 再到通过 client 调用服务端 —&gt; 打印完整请求日志和回包。调用成功之后，再根据框架的设计模型，从配置文件解析开始，自顶向下递阅读整个框架的调用栈。                                                                                                                  ——志信</p>
 </blockquote>
 <p>由于Dubbo是一个服务端暴露接口的实现服务，消费端远程调用服务端提供的服务的一个RPC框架，所以分析源码也将分别从服务端服务是如何暴露的、消费端是如何调用服务的两个方面进行分析</p>
-<h3 id="一-加载配置：将Service封装入ServiceConfig（着重服务provider端）"><a href="#一-加载配置：将Service封装入ServiceConfig（着重服务provider端）" class="headerlink" title="一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）"></a>一. 加载配置：将Service封装入ServiceConfig（着重服务provider端）</h3><p>运行dubbo-sample中的helloworld示例demo，这是demo的服务端提供了GreeterProvider接口的实现，客户端则去调用该接口服务。</p>
+<h3 id="一-加载配置：将Service封装入ServiceConfig"><a href="#一-加载配置：将Service封装入ServiceConfig" class="headerlink" title="一. 加载配置：将Service封装入ServiceConfig"></a>一. 加载配置：将Service封装入ServiceConfig</h3><p>运行dubbo-sample中的helloworld示例demo，这是demo的服务端提供了GreeterProvider接口的实现，客户端则去调用该接口服务。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></div></td><td class="code"><pre><code class="hljs GO"><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span> &#123;<br>	config.SetProviderService(&amp;GreeterProvider&#123;&#125;)<br>  <span class="hljs-comment">// 读入配置文件，根据配置文件的内容，将注册的 service 实现到配置结构里，再调用 Export 暴露给特定的 registry，进而开启特定的 service 进行对应端口的 tcp 监听，成功启动并且暴露服务。</span><br>	<span class="hljs-keyword">if</span> err := config.Load(); err != <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-built_in">panic</span>(err)<br>	&#125;<br>	<span class="hljs-keyword">select</span> &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <p><img src="/picture/Dubbo/frame.png" srcset="/img/loading.gif" lazyload alt="Dubbo Frame"></p>
@@ -407,8 +407,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/04/03/Raft/">
-                        <span class="hidden-mobile">MIT6.824 -> Raft</span>
+                      <a href="/2022/05/13/Dubbo-go%20Consumer/">
+                        <span class="hidden-mobile">Dubbo-go Consumer</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
