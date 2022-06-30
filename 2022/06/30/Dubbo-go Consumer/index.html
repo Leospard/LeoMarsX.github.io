@@ -16,21 +16,22 @@
   <meta name="author" content="Leo Shen">
   <meta name="keywords" content="">
   
-    <meta name="description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。  可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。  其实客户端调用的逻辑就是将用户定义">
+    <meta name="description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dubbo-go Consumer">
-<meta property="og:url" content="http://yoursite.com/2022/05/13/Dubbo-go%20Consumer/index.html">
+<meta property="og:url" content="http://yoursite.com/2022/06/30/Dubbo-go%20Consumer/index.html">
 <meta property="og:site_name" content="Leo的博客">
-<meta property="og:description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。  可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。  其实客户端调用的逻辑就是将用户定义">
+<meta property="og:description" content="此文基本算是转载了志信的源码分析博客  本文为Dubbogo客户端调用过程分析。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yoursite.com/picture/Dubbo/frame.png">
 <meta property="og:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220630121625528.png">
-<meta property="article:published_time" content="2022-05-13T11:33:00.000Z">
-<meta property="article:modified_time" content="2022-06-30T15:48:32.721Z">
+<meta property="article:published_time" content="2022-06-30T15:49:00.000Z">
+<meta property="article:modified_time" content="2022-06-30T16:25:03.980Z">
 <meta property="article:author" content="Leo Shen">
 <meta property="article:tag" content="微服务">
 <meta property="article:tag" content="RPC">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://yoursite.com/Users/leo/Library/Application%20Support/typora-user-images/image-20220630121625528.png">
+<meta name="twitter:image" content="http://yoursite.com/picture/Dubbo/frame.png">
   
   
   <title>Dubbo-go Consumer - Leo的博客</title>
@@ -177,8 +178,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2022-05-13 19:33" pubdate>
-        2022年5月13日 晚上
+      <time datetime="2022-06-30 23:49" pubdate>
+        2022年6月30日 晚上
       </time>
     </span>
   
@@ -230,7 +231,7 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：几秒前
+                  本文最后更新于：18 分钟前
                 
               </p>
             
@@ -239,6 +240,8 @@
 <p>此文基本算是转载了<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/eb2aHvILemPPm3QSc5nqlw">志信的源码分析博客</a></p>
 </blockquote>
 <p>本文为Dubbogo客户端调用过程分析。</p>
+<span id="more"></span>
+
 <blockquote>
 <p>可以类比客户端启动于服务端的启动过程。其中最大的区别是服务端通过 zk 注册服务，发布自己的ivkURL并订阅事件开启监听；而客户应该是通过zk注册组件，拿到需要调用的serviceURL，更新invoker并重写用户的RPCService，从而实现对远程过程调用细节的封装。</p>
 </blockquote>
@@ -277,7 +280,8 @@
 <p>Notify 回调链，以事件的形式向外传递，最终落到 directory 上的时候，已经是成型的 <strong>newInvokers</strong> 了。</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs go"><span class="hljs-comment">// Notify monitor changes from registry,and update the cacheServices</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dir *RegistryDirectory)</span> <span class="hljs-title">Notify</span><span class="hljs-params">(event *registry.ServiceEvent)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> event == <span class="hljs-literal">nil</span> &#123;<br>		<span class="hljs-keyword">return</span><br>	&#125;<br>	dir.refreshInvokers(event)<br>&#125;<br><br><span class="hljs-comment">// refreshInvokers refreshes service&#x27;s events.</span><br><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-params">(dir *RegistryDirectory)</span> <span class="hljs-title">refreshInvokers</span><span class="hljs-params">(event *registry.ServiceEvent)</span></span> &#123;<br>	<span class="hljs-keyword">if</span> event != <span class="hljs-literal">nil</span> &#123;<br>		logger.Debugf(<span class="hljs-string">&quot;refresh invokers with %+v&quot;</span>, event)<br>	&#125; <span class="hljs-keyword">else</span> &#123;<br>		logger.Debug(<span class="hljs-string">&quot;refresh invokers with nil&quot;</span>)<br>	&#125;<br><br>	<span class="hljs-keyword">var</span> oldInvoker []protocol.Invoker<br>	<span class="hljs-keyword">if</span> event != <span class="hljs-literal">nil</span> &#123;<br>		oldInvoker, _ = dir.cacheInvokerByEvent(event)<br>	&#125;<br>	dir.setNewInvokers()<br>	<span class="hljs-keyword">for</span> _, v := <span class="hljs-keyword">range</span> oldInvoker &#123;<br>		<span class="hljs-keyword">if</span> v != <span class="hljs-literal">nil</span> &#123;<br>			v.Destroy()<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<p>逻辑图如下</p>
+<p>逻辑图如下：</p>
+<p><img src="/picture/Dubbo/frame.png" srcset="/img/loading.gif" lazyload alt="订阅更新invoker的逻辑"></p>
 <img src="/Users/leo/Library/Application Support/typora-user-images/image-20220630121625528.png" srcset="/img/loading.gif" lazyload alt="image-20220630121625528" style="zoom:50%;" />
 
 <p>至此，经过上述操作，已经拿到了 server 端 Invokers，放入了 directory 的 cacheinvokers 数组里面缓存。</p>
@@ -330,18 +334,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/05/13/Dubbo-go%20Provider/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Dubbo-go Provider</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/04/03/Raft/">
-                        <span class="hidden-mobile">MIT6.824 -> Raft</span>
+                      <a href="/2022/05/13/Dubbo-go%20Provider/">
+                        <span class="hidden-mobile">Dubbo-go Provider</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
