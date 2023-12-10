@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>第二次实习的总结</title>
+    <link href="/2023/12/10/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%AE%9E%E4%B9%A0/"/>
+    <url>/2023/12/10/%E7%AC%AC%E4%BA%8C%E6%AC%A1%E5%AE%9E%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<p>本文记录自己的第二段实习经历。</p><blockquote><p>2022.7 - 2023.6</p></blockquote><span id="more"></span><h2 id="职位"><a href="#职位" class="headerlink" title="职位"></a>职位</h2><p>服务端研发实习生</p><h2 id="摸索"><a href="#摸索" class="headerlink" title="摸索"></a>摸索</h2><h4 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h4><ol><li>没有从大框架切入，在前期快速了解各个组件的作用。 理应在了解大框架后，从一个 createContainer 链路快速梳理整条路径，而这个梳理我是在入职三个多月才开始干，前面花了太多时间纠结小细节了。</li><li>早睡早起，经常睡眠不足导致状态不佳，千万不能报复性熬夜。</li><li>问题定义和如何解决从一开始就是不佳的。</li><li>debug 能力不足。分析日志的能力有欠缺。 【先重现问题】</li><li>成功的标准是什么？做成功的事？【我在这个团队好像并没有觉得大家有什么非常有成就感的事】</li></ol><h4 id="别人的建议"><a href="#别人的建议" class="headerlink" title="别人的建议"></a>别人的建议</h4><ul><li>一天一小PR（问题拆解）</li><li>主动跟mentor提出要多久升职的期待</li><li>读大部的巨作 + 系统化的学习</li></ul>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>感悟与记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Dubbo-go Consumer</title>
     <link href="/2022/06/30/Dubbo-go%20Consumer/"/>
     <url>/2022/06/30/Dubbo-go%20Consumer/</url>
