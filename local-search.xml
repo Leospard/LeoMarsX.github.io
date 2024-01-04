@@ -84,25 +84,6 @@
   
   
   <entry>
-    <title>CSAPP Malloc Lab &amp; Shell Lab</title>
-    <link href="/2022/02/20/CSAPP%E9%83%A8%E5%88%86Lab%E6%80%BB%E7%BB%93/"/>
-    <url>/2022/02/20/CSAPP%E9%83%A8%E5%88%86Lab%E6%80%BB%E7%BB%93/</url>
-    
-    <content type="html"><![CDATA[<p>主要为了复习面试，只针对CSAPP中的Malloc Lab与Shell Lab这两个Lab做一次复习整理。</p><span id="more"></span><blockquote><p>Todo</p></blockquote>]]></content>
-    
-    
-    
-    <tags>
-      
-      <tag>Lab</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
     <title>NAT穿透 + CS144 Lab简述</title>
     <link href="/2022/02/08/Nat%20&amp;%20CS144/"/>
     <url>/2022/02/08/Nat%20&amp;%20CS144/</url>
@@ -154,27 +135,6 @@
     <tags>
       
       <tag>感悟与记录</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>MIT6.S081 Lab复习</title>
-    <link href="/2021/10/20/MIT6.S081%E9%83%A8%E5%88%86Lab%E6%80%BB%E7%BB%93/"/>
-    <url>/2021/10/20/MIT6.S081%E9%83%A8%E5%88%86Lab%E6%80%BB%E7%BB%93/</url>
-    
-    <content type="html"><![CDATA[<p>这一个多月学习了MIT6.S081，基本完成了课程的Lab，但是可惜有一半左右的Lab都参考了他人的博客。本文主要记录那些写得不扎实的Lab，以作复习。</p><span id="more"></span><h2 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h2><h2 id="页表"><a href="#页表" class="headerlink" title="页表"></a>页表</h2><h2 id="各种延迟技术（带上mmap一起）"><a href="#各种延迟技术（带上mmap一起）" class="headerlink" title="各种延迟技术（带上mmap一起）"></a>各种延迟技术（带上mmap一起）</h2><h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><h2 id="文件系统与网络驱动"><a href="#文件系统与网络驱动" class="headerlink" title="文件系统与网络驱动"></a>文件系统与网络驱动</h2>]]></content>
-    
-    
-    
-    <tags>
-      
-      <tag>Lab</tag>
-      
-      <tag>操作系统</tag>
       
     </tags>
     
@@ -251,25 +211,6 @@
     <tags>
       
       <tag>感悟与记录</tag>
-      
-    </tags>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>云平台管理系统</title>
-    <link href="/2020/08/26/%E4%BA%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/"/>
-    <url>/2020/08/26/%E4%BA%91%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</url>
-    
-    <content type="html"><![CDATA[<p>保研期间干的一个小活，纯属记录给自己看。但最后没去这个实验室，这个活交付一部分后也就不了了之了。</p><span id="more"></span><p>实现功能非常简单，就是调用各个云计算平台如(openstack,cloudstack)的API接口，对不同平台进行一个统一的管理。</p><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>学长将openstack部署在了内网之上，所以我将前端部署在跳板机上，后端部署在openstack控制节点之上从而方便日志功能查看的实现。其余功能还是调用API实现。 </p><h4 id="主要内容"><a href="#主要内容" class="headerlink" title="主要内容"></a>主要内容</h4><blockquote><p>服务器搭建<br>layui框架使用<br>cURL简介<br>正则表达式与php正则使用<br>整体框架设计</p></blockquote><p><strong><em>TODO…..</em></strong></p>]]></content>
-    
-    
-    
-    <tags>
-      
-      <tag>小东西</tag>
       
     </tags>
     
