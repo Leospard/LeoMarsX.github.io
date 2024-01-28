@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>LakeHouse</title>
+    <link href="/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/"/>
+    <url>/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>TODO</p></blockquote><span id="more"></span><p>Hadoop HDFS -&gt; Hive(metastore) -&gt; Delta Lake etc…</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>感悟与记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Serverless 浅谈</title>
     <link href="/2024/01/20/Serverless%E6%B5%85%E8%96%84%E6%80%9D%E8%80%83/"/>
     <url>/2024/01/20/Serverless%E6%B5%85%E8%96%84%E6%80%9D%E8%80%83/</url>
