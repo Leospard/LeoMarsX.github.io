@@ -8,7 +8,7 @@
     <link href="/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/"/>
     <url>/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/</url>
     
-    <content type="html"><![CDATA[<blockquote><p>TODO</p></blockquote><span id="more"></span><p>Hadoop HDFS -&gt; Hive(metastore) -&gt; Delta Lake etc…</p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>TODO</p></blockquote><span id="more"></span><p>Hadoop HDFS -&gt; Hive(metastore) -&gt; Delta Lake etc…</p><p>Focus on <strong>ACID + Schema Evolution + Scalable Metadata + Time Travel</strong></p>]]></content>
     
     
     
