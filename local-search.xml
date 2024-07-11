@@ -4,6 +4,25 @@
   
   
   <entry>
+    <title>金字塔原理 Tips</title>
+    <link href="/2024/07/11/%E9%87%91%E5%AD%97%E5%A1%94%E5%8E%9F%E7%90%86/"/>
+    <url>/2024/07/11/%E9%87%91%E5%AD%97%E5%A1%94%E5%8E%9F%E7%90%86/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>表达、思考、实践的逻辑</p></blockquote><span id="more"></span><p>即将开启第一份正式工作，我认为工作中主要分为技术内容和沟通协调内容，这两方面在职业生涯中都很重要。本篇文章将一点点记录我对于金字塔原理的学习，不断将工作中的新领悟更新其中。</p><h3 id="表达的逻辑"><a href="#表达的逻辑" class="headerlink" title="表达的逻辑"></a>表达的逻辑</h3><h4 id="如何表达？"><a href="#如何表达？" class="headerlink" title="如何表达？"></a>如何表达？</h4><blockquote><p>Tips: <strong>以听众的视角决定你表达的逻辑</strong>。听众听到什么样顺序的表达方式最容易理解你的表达，你就应该怎样表达。</p></blockquote><p>一般来说，普遍的规律是<strong>先主要，后次要</strong>；<strong>先抽象，后具体</strong>。</p><p>先抛出抽象 / 主要的思想，让听众产生对主要思想的思考和疑问，然后以具体、支持主要思想的次要思想去解答听众的疑问。这样的<strong>疑问 / 回答式</strong>反馈，可以从上至下一层层解答，抽丝剥茧给予清晰逻辑的表达。在每层的回答时，需要注意各观点思想之间的<strong>抽象关系</strong>，让听众先理解关系会让其更容易在脑海中编织出网状结构，明确后续要表达的<strong>内容</strong>是什么。举个例子，往往在入职一家公司时，能知道自己工作在整个链路中的角色，服务什么上下游，就更容易明白自己要做的内容。</p><p>总结一下，表达的逻辑主要要遵循 <strong><em>结论先行，自上而下表达；先阐述关系，再讲内容</em></strong> 。这就是普遍听众能够接受的逻辑。当然，也要具体问题具体分析，这里是最多数的情况。</p><h4 id="如何构建金字塔？"><a href="#如何构建金字塔？" class="headerlink" title="如何构建金字塔？"></a>如何构建金字塔？</h4><p>面对一系列要表达的问题观点，我们需要对要表达的事物进行<strong>分类</strong>，再找出其中的逻辑关系进一步向上<strong>抽象</strong>，从而构建出金字塔式结构进行表达。</p><p>这需要大量的练习，如何分类如何抽象。在计算机世界中，抽象也是一个非常重要的能力。有一句经典的话叫计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决。这个中间层如何设计我理解考验的就是抽象的能力，能够同时向上向下收拢出一道标准的接口。</p><h3 id="思考的逻辑"><a href="#思考的逻辑" class="headerlink" title="思考的逻辑"></a>思考的逻辑</h3><blockquote><p>TODO</p></blockquote><p>思考时很难直接产生金字塔结构，这个时候是</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>感悟与记录</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>LakeHouse</title>
     <link href="/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/"/>
     <url>/2024/04/20/%E6%95%B0%E6%8D%AE%E6%B9%96/</url>
@@ -23,11 +42,11 @@
   
   
   <entry>
-    <title>Serverless 计算与存储</title>
+    <title>Serverless 浅谈</title>
     <link href="/2024/01/20/Serverless%E6%B5%85%E8%96%84%E6%80%9D%E8%80%83/"/>
     <url>/2024/01/20/Serverless%E6%B5%85%E8%96%84%E6%80%9D%E8%80%83/</url>
     
-    <content type="html"><![CDATA[<blockquote><p>TODO</p></blockquote><span id="more"></span><p>Serverless 计算产品</p><p>Serverless 存储产品</p><p>面向用户？</p><p>下云才是节省成本？</p><p>Serverless 是不是就是最终范式了。</p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>TODO</p></blockquote><span id="more"></span><p>Serverless 计算产品</p><p>Serverless 存储产品</p><p>面向用户？</p><p>下云才是节省成本？</p><p>Serverless 是不是就是最终范式了。</p><p>典型在线业务的 FaaS vs K8s</p><p>缩容更快，扩容如果波动不大其实效果不明显。</p><p>快启动 FaaS 稍有启动优势，慢启动场景FaaS和K8s都没啥用。</p>]]></content>
     
     
     
